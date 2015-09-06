@@ -1,0 +1,9 @@
+{{ if .current_user.Admin }}
+  {{ template "app/views/admin.html.got" . }}
+{{ end }}
+<nav>
+  <ul><li><a href="/">Home</a></li>
+  </ul>
+</nav>
+  
+  

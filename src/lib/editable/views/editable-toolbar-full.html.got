@@ -1,0 +1,28 @@
+<ul class="toolbar content-editable-toolbar">
+     <li><a title="Style as Header 1" href="#" id="formatblock" data-format="h1">H1</a></li>
+     <li><a title="Style as Header 2" href="#" id="formatblock" data-format="h2">H2</a></li>
+     <li><a title="Style as Header 3" href="#" id="formatblock" data-format="h3">H3</a></li>
+     <li><a title="Style as Header 4" href="#" id="formatblock" data-format="h4">H4</a></li>
+      <li><a title="Style as Header 5" href="#" id="formatblock" data-format="h5">H5</a></li>
+     <li><a title="Style as Paragraph" href="#" id="formatblock" data-format="p">P</a></li>
+
+     <li><a title="Style as Bold" href="#" id="Bold"><b>B</b></a></li>
+     <li><a title="Style as Italic" href="#" id="Italic"><i>I</i></a></li>
+     <li><a title="Insert a link" href="#" id="createLink">∞</a></li>
+    <li><a title="Insert Ordered List" href="#" id="insertorderedlist">
+        <span class="button-ol">1 –<br>2 –</span>
+    </a></li>
+    <li><a title="Insert Unordered List" href="#" id="insertunorderedlist">
+        <span class="button-ul">● –<br>● –</span>
+    </a></li>
+
+     <li><a title="Range Text Left" href="#" id="justifyLeft">←</a></li>
+     <li><a title="Range Text Right" href="#" id="justifyRight">→</a></li>
+     <li><a title="Center Text" href="#" id="justifyCenter">↔</a></li>
+ 
+     <li><a title="Style as Quotation" href="#" id="formatblock" data-format="blockquote"><span class="button-blockquote">”</span></a></li>
+    <li><a title="Style as Code" href="#" id="formatblock" data-format="pre"><span class="button-code">code</span></a></li>
+
+     <li class=""><a title="View HTML source" href="#" id="showCode">&lt;&gt;</a></li>
+</ul>
+<div class="clear"></div>

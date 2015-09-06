@@ -1,0 +1,2 @@
+<a href="/" class="logo"><img src="/assets/images/app/logo.png"></a>
+<h1>{{ .title }}</h1>

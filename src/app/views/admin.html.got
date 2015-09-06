@@ -1,0 +1,13 @@
+<nav class="admin_nav {{ if dev }}dev{{ end }}">
+    
+    <ul class="inline admin_links">
+        {{ with .admin_links }}
+            <li>{{ . }}</li>
+        {{ end }}
+    </ul>
+    
+    <ul class="inline main_list">
+        <li><a href="/">Home</a></li>
+    </ul>
+    
+</nav>

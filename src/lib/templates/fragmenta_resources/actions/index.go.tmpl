@@ -1,0 +1,79 @@
+package [[ .fragmenta_resource ]]actions
+
+import (
+	"net/http"
+    "strings"
+
+	"github.com/fragmenta/router"
+	"github.com/fragmenta/view"
+
+	"[[ .fragmenta_app_path ]]/[[ .fragmenta_resources ]]"
+    "[[ .fragmenta_app_path ]]/lib/authorise"
+)
+
+// HandleIndex displays a list of [[ .fragmenta_resources ]]
+func HandleIndex(context router.Context) {
+
+	// Authorize
+	if !authorise.Path(context) {
+		view.RenderStatus(context, http.StatusUnauthorized)
+		return
+	}
+
+	// Setup context for template
+	view := view.New(context)
+
+	// Build a query
+    q := [[ .fragmenta_resources ]].Query()
+    
+    // Show only published (defaults to showing all)
+    // q.Apply(status.WherePublished)
+
+    
+	// Order by required order, or default to id asc
+	switch context.Param("order") {
+
+	case "1":
+		q.Order("created desc")
+
+	case "2":
+		q.Order("updated desc")
+
+	case "3":
+		q.Order("name asc")
+
+	default:
+		q.Order("id asc")
+        
+	}
+
+    
+	// Filter if necessary - this assumes name and summary cols
+	filter := context.Param("filter")
+	if len(filter) > 0 {
+		filter = strings.Replace(filter, "&", "", -1)
+		filter = strings.Replace(filter, " ", "", -1)
+		filter = strings.Replace(filter, " ", " & ", -1)
+		q.Where("( to_tsvector(name) || to_tsvector(summary) @@ to_tsquery(?) )", filter)
+	}
+    
+
+	// Fetch the [[ .fragmenta_resources ]]
+    var results []*[[ .fragmenta_resources ]].[[ .Fragmenta_Resource ]]
+	err := q.Fetch(&results)
+	if err != nil {
+		context.Logf("#error indexing [[ .fragmenta_resources ]] %s", err)
+		view.RenderError(context, err)
+		return
+	}
+    
+    
+
+	// Serve template
+    view.AddKey("filter", filter)
+	view.AddKey("[[ .fragmenta_resources ]]", results)
+
+
+	view.Render(context)
+
+}

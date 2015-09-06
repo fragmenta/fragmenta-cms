@@ -1,0 +1,37 @@
+package [[ .fragmenta_resource ]]actions
+
+import (
+	"net/http"
+
+	"github.com/fragmenta/router"
+	"github.com/fragmenta/view"
+
+	"[[ .fragmenta_app_path ]]/[[ .fragmenta_resources ]]"
+    "[[ .fragmenta_app_path ]]/lib/authorise"
+)
+
+// HandleShow displays a single [[ .fragmenta_resource ]]
+func HandleShow(context router.Context) {
+
+	// Setup context for template
+	view := view.New(context)
+
+	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(context.ParamInt("id"))
+	if err != nil {
+		view.RenderError(context, err)
+		return
+	}
+
+	// Authorize
+	if !authorise.PathAndResource(context,[[ .fragmenta_resource ]]) {
+		view.RenderStatus(context, http.StatusUnauthorized)
+		return
+	}
+
+	// Serve template
+	view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
+
+
+	view.Render(context)
+
+}

@@ -1,0 +1,124 @@
+/* Editable.js styling */
+
+
+.toolbar {
+  list-style: none;
+  min-height: 4rem;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+}
+
+
+.toolbar li {
+  padding: 0;
+  margin: 0;
+  float: left;
+  position: relative;
+}
+
+
+.toolbar li a {
+  margin: 0;
+  width: 4rem;
+  height: 4rem;
+  line-height: 4rem;
+  display: block;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-left: none;
+  margin-top: -1px;
+  overflow: hidden;
+  top: 0;
+  background-color: #fff;
+}
+
+
+.toolbar li.right {
+  float: right;
+  border-left: 1px solid #ccc;
+}
+
+
+.toolbar li:first-child {
+}
+
+
+.toolbar li a:hover {
+  background-color: #dedede;
+}
+
+
+.toolbar li.clear {
+  clear: both;
+}
+
+
+.toolbar .button-blockquote {
+  font-size: 2em;
+  min-width: 4rem;
+  position: relative;
+  top: 0.28em;
+}
+
+
+.toolbar .button-ol {
+  font-size: 0.7em;
+  line-height: 1.6em;
+  top: 0.4rem;
+  position: relative;
+  display: block;
+}
+
+
+.toolbar .button-ul {
+  font-size: 0.7em;
+  line-height: 1.6em;
+  top: 0.4rem;
+  position: relative;
+  display: block;
+}
+
+
+.toolbar .button-code {
+  font-size: 0.7em;
+  font-family: monospace;
+}
+
+
+.content-editable {
+  border: 1px solid #ccc;
+  margin-top: -0.3rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  z-index: 2;
+  position: relative;
+}
+
+
+.content-editable:focus {
+  outline: 0;
+}
+
+
+.padded-content-editable {
+  padding: 1rem;
+  background-color: #fff;
+}
+
+
+.page_content {
+  clear: both;
+}
+
+
+.content-textarea {
+  width: 100%;
+  min-height: 50em;
+  background-color: #222;
+  color: #ddd;
+  font: 14px/1.5em 'Consolas',  'Monaco',  'Lucida Console',  'Liberation Mono',  'Mono',  'Courier New',  monospace;
+  padding: 2rem;
+  border-radius: 0;
+}
+

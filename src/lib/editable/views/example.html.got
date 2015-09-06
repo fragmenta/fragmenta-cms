@@ -1,0 +1,7 @@
+<!-- example of usage of editable on a textarea -->
+<div class="page-content">
+   <label>Page Content</label>
+   {{ template "lib/editable/views/editable-toolbar.html.got" }}
+   <textarea name="text" class="content-textarea" id="page-content-textarea">{{.page.Text}}</textarea>
+   <div contenteditable class="content-editable" id="page-content-editable">{{html .page.Text}}</div>
+</div>

@@ -1,0 +1,65 @@
+package [[ .fragmenta_resource ]]actions
+
+import (
+	"net/http"
+
+	"github.com/fragmenta/model/url"
+	"github.com/fragmenta/router"
+	"github.com/fragmenta/view"
+
+	"[[ .fragmenta_app_path ]]/[[ .fragmenta_resources ]]"
+    "[[ .fragmenta_app_path ]]/lib/authorise"
+)
+
+// HandleCreateShow serves the create form via GET for [[ .fragmenta_resources ]]
+func HandleCreateShow(context router.Context) {
+
+	// Authorize
+	if !authorise.Path(context) {
+		view.RenderStatus(context, http.StatusUnauthorized)
+		return
+	}
+
+	// Setup
+	view := view.New(context)
+	[[ .fragmenta_resource ]] := [[ .fragmenta_resources ]].New()
+	view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
+
+	// Serve
+	view.Render(context)
+}
+
+// HandleCreate handles the POST of the create form for [[ .fragmenta_resources ]]
+func HandleCreate(context router.Context) {
+
+	// Authorize
+	if !authorise.Path(context) {
+		view.RenderStatus(context, http.StatusUnauthorized)
+		return
+	}
+
+	// Setup context
+	params, err := context.Params()
+	if err != nil {
+		view.New(context).RenderError(context, err)
+		return
+	}
+
+	id, err := [[ .fragmenta_resources ]].Create(params.Map())
+	if err != nil {
+		context.Logf("#error creating [[ .fragmenta_resource ]],%s", err)
+    	view.New(context).RenderError(context, err)
+    	return
+	}
+    
+    // Log creation
+    context.Logf("#info Created [[ .fragmenta_resource ]] id,%d", id)
+	
+	// Redirect to the new [[ .fragmenta_resource ]]
+	m, err := [[ .fragmenta_resources ]].Find(id)
+	if err != nil {
+		context.Logf("#error creating [[ .fragmenta_resource ]],%s", err)
+	}
+
+	router.Redirect(context, url.Index(m))
+}

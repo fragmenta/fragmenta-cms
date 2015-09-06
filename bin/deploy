@@ -1,0 +1,16 @@
+#!/bin/sh
+# A simple shell script to deploy via ansible playlists
+# Use an ansible playbook which copies files up and then restarts the server
+echo "UPLOADING...";
+
+# choose a playbook
+playbook="./fragmenta-app.yml"
+if [ "$1" == "production" ]; then
+    playbook="./fragmenta-app-production.yml"
+fi
+
+# Upload
+echo "Using ansible playbook at $playbook";
+ansible-playbook -t "upload" "$playbook";
+
+exit 0;

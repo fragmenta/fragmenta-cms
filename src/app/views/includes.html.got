@@ -1,0 +1,6 @@
+{{ style "normalize.min" }}
+{{ style "skeleton.min" }}
+{{ style "app" }}
+
+{{ script "dom.min" }}
+{{ script "app" }}
