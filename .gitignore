@@ -2,6 +2,7 @@
 /bin
 /log
 /secrets
+/db
 
 # ignore compiled app group
 /public/assets/*/app-*
