@@ -217,12 +217,17 @@ func (m *Tag) Children() []*Tag {
 	return tagsList
 }
 
-// We  calculate this using our dotted ids (number of dots is level) which are saved on update
+// Level returns our depth in the tag hierarchy as an int from 0 at root up
 func (m *Tag) Level() int {
-	return strings.Count(m.DottedIds, ".")
+	if len(m.DottedIds) > 0 {
+		return strings.Count(m.DottedIds, ".")
+	}
+
+	return 0
+
 }
 
-// Calculate the dotted ids for this tag from parents (requires an array of all tag ids)
+// CalculateDottedIds recalculates the dotted ids for this tag from parents (requires an array of all tag ids)
 func (m *Tag) CalculateDottedIds(tags []*Tag) string {
 	dottedIds := ""
 

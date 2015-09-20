@@ -1,6 +1,7 @@
 <div class="row users_form">
-<form method="post" enctype="multipart/form-data">
-    <div class="inline_fields">
+<form method="post" enctype="multipart/form-data" class="resource-update-form">
+  
+    <section class="inline-fields">
     {{ select "Status" "status" .user.Status .user.StatusOptions }}
     {{ select "Role" "role" .user.Role .user.RoleOptions }}
     {{ field "Email" "email" .user.Email }}
@@ -9,19 +10,19 @@
     {{ field "Title" "summary" .user.Summary }}
     </div>
     
-    <div class="field clear">
+    <section class="field clear">
         <label>Profile Image</label>
         <input id="image" type="file" name="image">
     </div>
    
-    <div class="page_content">
+    <section class="page-content">
         <label>Profile</label>
         {{ template "lib/editable/views/editable-toolbar.html.got"}}
         <textarea name="profile" class="content-textarea" id="profile-content-textarea">{{.user.Profile}}</textarea>
         <div contenteditable class="content-editable padded-content-editable" id="profile-content-editable">{{html .user.Profile}}</div>
      </div>
      
-     <div class="page_content">
+     <section class="page-content">
          <label>Text</label>
          {{ template "lib/editable/views/editable-toolbar.html.got"}}
          <textarea name="text" class="content-textarea" id="user-content-textarea">{{.user.Text}}</textarea>
@@ -29,8 +30,8 @@
       </div>
    
    
-    <div class="actions">
+    <section class="actions">
         <input type="submit" class="button" value="Save">
-    </div>
+    </section>
 </form>
 </div>

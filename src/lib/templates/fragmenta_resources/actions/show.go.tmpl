@@ -18,7 +18,8 @@ func HandleShow(context router.Context) error {
 	}
 
 	// Authorise access
-	if !authorise.Resource(context,[[ .fragmenta_resource ]]) {
+	err = authorise.Resource(context,[[ .fragmenta_resource ]]) 
+    if err != nil {
 		return router.NotAuthorizedError(err)	
     }
 

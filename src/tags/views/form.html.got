@@ -7,8 +7,8 @@
     {{ field "Summary" "summary" .tag.Summary }}
     {{ field "Url" "url" .tag.Url }}
 
-    <div class="actions">
+    <section class="actions">
         <input type="submit" class="button" value="Save">
-    </div>
+    </section>
 </form>
 </div>

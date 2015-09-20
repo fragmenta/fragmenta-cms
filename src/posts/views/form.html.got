@@ -1,0 +1,28 @@
+<div class="row posts_form">
+<form method="post" class="resource-update-form">
+  
+  <section class="actions">
+      <input type="submit" class="button" value="Save">
+  </section>
+  
+    <section class="inline-fields">
+    {{ select "Status" "status" .post.Status .post.StatusOptions }}
+    {{ selectarray "Author" "author_id" .post.AuthorId .users }}
+    {{ field "Name" "name" .post.Name }}
+    </section>
+    
+    <section class="wide-fields">
+    {{ field "Summary" "summary" .post.Summary }}
+    </section>
+  
+    <section class="text clear padded">
+      <label>Post Content</label>
+      {{ template "lib/editable/views/editable-toolbar.html.got"}}
+      <textarea name="text" class="content-textarea">{{.post.Text}}</textarea>
+      <div contenteditable class="content-editable">{{html .post.Text}}</div>
+      
+    </section>
+    
+
+</form>
+</div>

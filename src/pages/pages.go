@@ -53,6 +53,7 @@ func New() *Page {
 	page.Model.Init()
 	page.Status = status.Draft
 	page.TableName = "pages"
+	page.Text = "<section class=\"padded\"><h1>Title</h1><p>Text</p></section>"
 	return page
 }
 

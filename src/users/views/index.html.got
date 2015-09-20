@@ -1,6 +1,7 @@
-<article>
+<section class="padded">
 <h1>Users</h1>
-<form accept-charset="UTF-8" action="/users" method="get" class="filter_form">
+<form accept-charset="UTF-8" action="/users" method="get" class="filter-form">
+  <a class="button" href="/users/create">Add User</a>
       <input type="search" name="filter" class="right" placeholder="Search..." value="{{ .filter }}">
 </form>
 
@@ -13,4 +14,4 @@
       {{ template "users/views/row.html.got" $0 }}
     {{ end }}
 </table>
-</article>
+</section>

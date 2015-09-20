@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/fragmenta/fragmenta-cms/src/posts/actions"
 	"github.com/fragmenta/router"
 
 	"github.com/fragmenta/fragmenta-cms/src/pages/actions"
@@ -15,11 +16,22 @@ func setupRoutes(r *router.Router) {
 	r.FileHandler = fileHandler
 	r.ErrorHandler = errHandler
 
-	// Add a files route to handle static images under files - nginx deals with this in production
+	// Add a files route to handle static images under files
+	// - nginx deals with this in production - perhaps only do this in dev?
 	r.Add("/files/{path:.*}", fileHandler)
+	r.Add("/favicon.ico", fileHandler)
 
 	// Add the home page route
 	r.Add("/", pageactions.HandleHome)
+
+	r.Add("/blog", postactions.HandleBlog)
+	r.Add("/posts", postactions.HandleIndex)
+	r.Add("/posts/create", postactions.HandleCreateShow)
+	r.Add("/posts/create", postactions.HandleCreate).Post()
+	r.Add("/posts/{id:[0-9]+}/update", postactions.HandleUpdateShow)
+	r.Add("/posts/{id:[0-9]+}/update", postactions.HandleUpdate).Post()
+	r.Add("/posts/{id:[0-9]+}/destroy", postactions.HandleDestroy).Post()
+	r.Add("/posts/{id:[0-9]+}", postactions.HandleShow)
 
 	// Standard REST handlers for tags
 	r.Add("/tags", tagactions.HandleIndex)

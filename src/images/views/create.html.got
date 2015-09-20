@@ -1,4 +1,4 @@
-<article>
+<section class="padded">
 <h1>Create Image</h1>
 {{ template "images/views/form.html.got" . }}
-</article>
+</section>

@@ -1,25 +1,27 @@
-<form method="post" class="nopadding">
+<form method="post"  class="resource-update-form">
+      
+       <section class="actions padded">
+           <input type="submit" class="button" value="Save">
+           <a class="button grey" href="javascript:history.back()">Cancel</a>
+       </section>
      
-       <section class="inline_fields">
+       <section class="inline-fields padded">
        {{ select "Status" "status" .page.Status .page.StatusOptions }}
        {{ selectarray "Template" "template" .page.Template .page.TemplateOptions }}
        {{ field "Page URL" "url" .page.Url }}
        {{ field "Page Name" "name" .page.Name }}
        </section>
        
-       <section class="wide_fields">
+       <section class="wide-fields padded">
        {{ field "Page Summary" "summary" .page.Summary }}
        </section>
        
-       <section class="page_content">
+       <section class="page-content">
            <label>Page Content</label>
            {{ template "lib/editable/views/editable-toolbar.html.got"}}
            <textarea name="text" class="content-textarea" id="page-content-textarea">{{.page.Text}}</textarea>
            <div contenteditable class="content-editable" id="page-content-editable">{{html .page.Text}}</div>
         </section>
-       
-        <section class="actions">
-            <input type="submit" class="button" value="Save">
-        </section>
+  
 
 </form>

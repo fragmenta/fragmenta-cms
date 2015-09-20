@@ -1,4 +1,4 @@
-<article>
+<section class="padded">
 <h1>{{ .tag.Name }}</h1>
 <div class="text">
     {{ if .tag.Parent }}
@@ -10,4 +10,4 @@
   <p>Parents: {{ .tag.DottedIds }}</p>
 	<p>Url: {{ .tag.Url }}</p>
 </div>
-</article>
+</section>

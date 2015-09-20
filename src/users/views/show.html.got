@@ -1,4 +1,4 @@
-<article>
+<section class="padded">
    <div class="section user_profile">
         <div class="row">
             <div class="three columns">
@@ -12,4 +12,4 @@
     <div class="section">
          {{ html .user.Text }}
     </div>
-</article>
+</section>

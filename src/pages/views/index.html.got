@@ -1,10 +1,11 @@
-<article class="padded">
+<section class="padded">
+<h1>Pages</h1>
 
-<form accept-charset="UTF-8" action="/pages" method="get" class="filter_form">
+
+<form accept-charset="UTF-8" action="/pages" method="get" class="filter-form">
+<a class="button" href="/pages/create">Add Page</a>
 <input type="search" name="filter" class="right" placeholder="Search..." value="{{ .filter }}">
 </form>
- 
-<h1>Pages</h1>
 
 <table class="data-table">
     {{ template "pages/views/row.html.got" empty }}
@@ -14,7 +15,6 @@
       {{ set $0 "page" $m }}
       {{ template "pages/views/row.html.got" $0 }}
     {{ end }}
-
 </table>
 
-</article>
+</section>

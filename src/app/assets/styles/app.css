@@ -83,13 +83,26 @@ code {
   border:none;
   font-size:1em;
   font-weight:200;
+  height:3.8rem;
+  line-height:3.8rem;
+  padding:0rem 2rem;
 }
 
 .button:hover, button:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover {
   color:#eee;
 }
 
+.button.grey {
+  background-color:#aaa;
+}
 
+.button.small {
+  height:3rem;
+  line-height:3rem;
+  font-size:0.9em;
+  padding:0rem 1rem;
+  margin:0;
+}
 
 ul.list {
   list-style:disc;
@@ -157,7 +170,7 @@ section {
   clear:both;
   display:block;
   padding:1rem 2rem;
-  margin:0 auto;
+  margin:1rem auto;
 }
 
 section.home {
@@ -178,39 +191,11 @@ section.feature a, section.feature h3, section.feature h4, section.feature h5 {
 }
 
 section.padded {
+  padding:0 2rem;
+  max-width:80em;
+}
+
+section.narrow {
+  padding:0 2rem;
   max-width:50em;
-  margin:1rem auto 0 auto;
 }
-
-/*  TODO:perhaps reconsider? */
-article form {
-  padding:1rem 4rem;
-}
-
-article form.nopadding {
-  padding:0;
-}
-
-label {
-  color:#555;
-  font-weight:normal;
-}
-
-.admin_links {
-  float:right;
-}
-
-.inline_fields .field {
-  float:left;
-  margin-right:3rem;
-}
-
-.wide_fields .field {
-  clear:both;
-}
-
-.wide_fields input {
-  
-  width:100%;
-}
-

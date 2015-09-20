@@ -7,7 +7,7 @@
     <td>Actions</td>
 </tr>
 {{ else }}
-<tr class="{{ if odd $.i }}odd{{end}}">
+<tr class="{{ if odd .i }}odd{{end}}">
     <td><a href="{{.page.Url}}">{{.page.Url}}</a></td>
     <td>{{ .page.Name }}</td>
     <td>{{ time .page.UpdatedAt }}</td>

@@ -17,11 +17,11 @@ img.logo  {
   height:100px;
 }
 
-.page_content {
+.page-content {
   padding:0;
   margin:0;
 }
 
-.page_content label {
+.page-content label {
   padding-left:2rem;
 }

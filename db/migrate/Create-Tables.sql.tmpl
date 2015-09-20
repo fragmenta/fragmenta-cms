@@ -1,5 +1,4 @@
 /* Setup tables for cms */
-
 CREATE TABLE fragmenta_metadata (
     id SERIAL NOT NULL,
     updated_at timestamp,
@@ -10,7 +9,6 @@ CREATE TABLE fragmenta_metadata (
 
 ALTER TABLE fragmenta_metadata OWNER TO "[[.fragmenta_db_user]]";
 
-DROP TABLE users;
 CREATE TABLE users (
     id SERIAL NOT NULL,
     created_at timestamp,
@@ -35,7 +33,6 @@ CREATE TABLE users (
 ALTER TABLE users OWNER TO "[[.fragmenta_db_user]]";
 
 
-DROP TABLE pages;
 CREATE TABLE pages (
     id SERIAL NOT NULL,
     created_at timestamp,
@@ -53,7 +50,6 @@ CREATE TABLE pages (
 ALTER TABLE pages OWNER TO "[[.fragmenta_db_user]]";
 
 
-DROP TABLE tags;
 CREATE TABLE tags (
     id SERIAL NOT NULL,
     created_at timestamp,
@@ -62,22 +58,19 @@ CREATE TABLE tags (
     updated_by int,
     status int,
     parent_id int,
+    dotted_ids text,
     url text,
     name text,
     summary text
 );
 ALTER TABLE tags OWNER TO "[[.fragmenta_db_user]]";
 
-DROP TABLE pages_tags;
 CREATE TABLE pages_tags (
    page_id int NOT NULL,
    tag_id int NOT NULL
 );
 ALTER TABLE pages_tags OWNER TO "[[.fragmenta_db_user]]";
 
-
-
-DROP TABLE images;
 CREATE TABLE images (
 id SERIAL NOT NULL,
 created_at timestamp,
@@ -89,9 +82,27 @@ sort integer
 );
 ALTER TABLE images OWNER TO "[[.fragmenta_db_user]]";
 
-DROP TABLE images_pages;
 CREATE TABLE images_pages (
    image_id int NOT NULL,
    page_id int NOT NULL
 );
 ALTER TABLE images_pages OWNER TO "[[.fragmenta_db_user]]";
+
+
+CREATE TABLE posts (
+id SERIAL NOT NULL,
+created_at timestamp,
+updated_at timestamp,
+status int,
+author_id integer,
+name text,
+summary text,
+text text
+);
+ALTER TABLE posts OWNER TO "[[.fragmenta_db_user]]";
+
+CREATE TABLE images_posts (
+   image_id int NOT NULL,
+   post_id int NOT NULL
+);
+ALTER TABLE images_posts OWNER TO "[[.fragmenta_db_user]]";

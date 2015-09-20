@@ -1,0 +1,110 @@
+/*  FORMS */
+article form {
+  padding:1rem 0;
+}
+
+article form.nopadding {
+  padding:0;
+}
+
+label {
+  color:#555;
+  font-weight:normal;
+}
+
+.admin_links {
+  float:right;
+}
+
+.inline-fields .field {
+  float:left;
+  margin-right:3rem;
+}
+
+.wide-fields .field {
+  clear:both;
+}
+
+.wide-fields input {
+  width:100%;
+}
+
+.resource-update-form {
+  position:relative;
+}
+
+section.actions {
+  clear:both;
+  padding:0;
+    text-align:center;
+}
+
+section.actions .button {
+  margin-left:2rem;
+}
+
+
+@media(min-width:1000px){
+
+  section.actions {
+    text-align:right;
+    margin-top:-6.5rem;
+  }
+  
+  section.actions .button {
+    float:right;
+  }
+  
+}
+
+
+section.admin-bar-actions {
+  position:absolute;
+  top:0;
+  right:0;
+  margin:0;
+  padding:0.4rem 1rem;
+}
+
+
+
+/*  TABLES */
+
+.data-table {
+  width:100%;
+}
+
+.data-table tr td {
+  padding:0.5rem 1rem;
+}
+
+.data-table tr.odd  {
+  background-color:#eaeaea;
+}
+
+.data-table tr.level_1.odd, .data-table tr.level_2.odd, .data-table tr.level_3.odd, .data-table tr.level_4.odd {
+  background-color:#fafafa;
+}
+
+.data-table tr.level_1 td:first-child {
+    padding-left:2rem;
+}
+
+.data-table tr.level_2 td:first-child {
+    padding-left:3rem;
+}
+
+.data-table tr.level_3 td:first-child {
+    padding-left:4rem;
+}
+.data-table tr.level_4 td:first-child {
+    padding-left:5rem;
+}
+
+.filter-form {
+  clear:both;
+}
+
+.filter-form input {
+  float:right;
+}

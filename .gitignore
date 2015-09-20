@@ -1,5 +1,7 @@
 .DS_Store
 /bin
-/db
 /log
 /secrets
+
+# ignore compiled app group
+/public/assets/*/app-*

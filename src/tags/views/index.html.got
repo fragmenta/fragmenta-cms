@@ -1,9 +1,13 @@
-<article>
+<section class="padded">
 <h1>Tags</h1>
-<form accept-charset="UTF-8" action="/tags" method="get" class="filter_form">
-      <input type="search" name="filter" class="right" placeholder="Search..." value="{{ .filter }}">
+
+<form accept-charset="UTF-8" action="/tags" method="get" class="filter-form">
+    <a class="button" href="/tags/create">Add Tag</a>
+    <input type="search" name="filter" class="right" placeholder="Search..." value="{{ .filter }}">
 </form>
+
 <table class="data-table">
+    {{ template "tags/views/row.html.got" empty }}
     {{ $0 := . }}
     {{ range $i,$m :=  .tags }}
     {{ set $0 "i" $i }}
@@ -11,4 +15,4 @@
     {{ template "tags/views/row.html.got" $0 }}
     {{ end }}
 </table>
-</article>
+</section>

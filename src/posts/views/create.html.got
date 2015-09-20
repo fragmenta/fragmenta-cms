@@ -1,0 +1,4 @@
+<section class="padded">
+<h1>Create Post</h1>
+{{ template "posts/views/form.html.got" . }}
+</section>

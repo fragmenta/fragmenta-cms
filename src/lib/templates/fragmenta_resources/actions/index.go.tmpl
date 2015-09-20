@@ -51,14 +51,11 @@ func HandleIndex(context router.Context) error {
     
 
 	// Fetch the [[ .fragmenta_resources ]]
-    var results []*[[ .fragmenta_resources ]].[[ .Fragmenta_Resource ]]
-	err := q.Fetch(&results)
+    results, err := [[ .fragmenta_resources ]].FindAll(q)
 	if err != nil {
 		return router.InternalError(err)		
 	}
     
-    
-
 	// Render the template
 	view := view.New(context)
     view.AddKey("filter", filter)

@@ -3,7 +3,6 @@ package [[ .fragmenta_resource ]]actions
 import (
 	
 	"github.com/fragmenta/router"
-	"github.com/fragmenta/view"
 
 	"[[ .fragmenta_app_path ]]/[[ .fragmenta_resources ]]"
     "[[ .fragmenta_app_path ]]/lib/authorise"
@@ -19,7 +18,8 @@ func HandleDestroy(context router.Context) error {
     }
 
 	// Authorise destroy [[ .fragmenta_resource ]]
-	if !authorise.Resource(context,[[ .fragmenta_resource ]]) {
+	err = authorise.Resource(context,[[ .fragmenta_resource ]]) 
+    if err != nil {
 		return router.NotAuthorizedError(err)	
     }
 

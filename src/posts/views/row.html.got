@@ -1,0 +1,18 @@
+{{ if not .post.Id }}
+    <tr class="data-table-head">
+        <td>Status</td>
+        <td>Created</td>
+        <td>Name</td>
+        <td>Summary</td>
+        <td>Actions</td>
+    </tr>
+{{ else }}
+    <tr {{ if odd .i }}class="odd"{{end}}>
+      <td>{{ .post.StatusDisplay }}</td>
+      <td>{{ time .post.CreatedAt }}</td>
+    
+        <td><a href="{{ .post.URLShow }}">{{ .post.Name }}</a></td>
+        <td><a href="{{ .post.URLShow }}">{{ .post.Summary }}</a></td>
+        <td><a href="{{ .post.URLUpdate }}">Edit Post</a></td>
+    </tr>
+{{ end }}

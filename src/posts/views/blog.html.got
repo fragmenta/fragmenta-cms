@@ -1,0 +1,7 @@
+<section class="blog padded">
+{{ $0 := . }}
+{{ range .posts }}
+   {{ set $0 "post" . }}
+   {{ template "posts/views/post.html.got" $0 }}
+{{ end }}
+</section>

@@ -6,9 +6,9 @@
     {{ field "Email" "email" "" "text" }}
     {{ field "Password" "password" "" "password" "type=password" }}
 
-    <div class="actions">
+    <section class="actions">
         <input type="submit" class="button" value="Login">
-    </div>
+    </section>
 </form>
 </div>
 </div>
