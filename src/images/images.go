@@ -8,11 +8,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 	"github.com/fragmenta/model"
 	"github.com/fragmenta/model/file"
 	"github.com/fragmenta/model/validate"
 	"github.com/fragmenta/query"
+
+	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
 // Image represents an image on disk
@@ -29,8 +30,8 @@ func AllowedParams() []string {
 	return []string{"status", "name", "path", "sort"}
 }
 
-// New creates a image from database columns - used by query in creating objects
-func (m *Image) New(cols map[string]interface{}) *Image {
+// NewWithColumns creates a image from database columns - used by query in creating objects
+func NewWithColumns(cols map[string]interface{}) *Image {
 
 	image := New()
 	image.Id = validate.Int(cols["id"])
@@ -40,6 +41,17 @@ func (m *Image) New(cols map[string]interface{}) *Image {
 	image.Name = validate.String(cols["name"])
 	image.Path = validate.String(cols["path"])
 	image.Sort = validate.Int(cols["sort"])
+
+	return image
+}
+
+// New sets up a new image with default values
+func New() *Image {
+	image := &Image{}
+	image.Model.Init()
+	image.TableName = "images"
+	image.Status = status.Published
+	image.Sort = 1
 
 	return image
 }
@@ -96,7 +108,7 @@ func (m *Image) Update(params map[string]string) error {
 	// Remove params not in AllowedParams
 	params = model.CleanParams(params, AllowedParams())
 
-	err := ValidateParams(params)
+	err := validateParams(params)
 	if err != nil {
 		return err
 	}
@@ -120,8 +132,8 @@ func (m *Image) OwnedBy(id int64) bool {
 	return true
 }
 
-// ValidateParams checks these parameters conform to expectations
-func ValidateParams(unsafeParams map[string]string) error {
+// validateParams checks these parameters conform to expectations
+func validateParams(unsafeParams map[string]string) error {
 
 	// Now check params are as we expect
 	err := validate.Length(unsafeParams["id"], 0, -1)
@@ -132,24 +144,13 @@ func ValidateParams(unsafeParams map[string]string) error {
 	return err
 }
 
-// New sets up a new image with default values
-func New() *Image {
-	image := &Image{}
-	image.Model.Init()
-	image.TableName = "images"
-	image.Status = status.Published
-	image.Sort = 1
-
-	return image
-}
-
 // Create inserts a new image record in the database and returns the id
 func Create(params map[string]string, fh *multipart.FileHeader) (int64, error) {
 
 	// Remove params not in AllowedParams
 	params = model.CleanParams(params, AllowedParams())
 
-	err := ValidateParams(params)
+	err := validateParams(params)
 	if err != nil {
 		return 0, err
 	}
@@ -203,7 +204,7 @@ func Find(id int64) (*Image, error) {
 	if err != nil {
 		return nil, err
 	}
-	return New().New(result), nil
+	return NewWithColumns(result), nil
 }
 
 // FindAll fetches all results for this query
@@ -218,7 +219,7 @@ func FindAll(q *query.Query) ([]*Image, error) {
 	// Return an array of pages constructed from the results
 	var imageList []*Image
 	for _, r := range results {
-		image := New().New(r)
+		image := NewWithColumns(r)
 		imageList = append(imageList, image)
 	}
 

@@ -6,7 +6,7 @@ import (
 	"github.com/fragmenta/view"
 
 	"[[ .fragmenta_app_path ]]/[[ .fragmenta_resources ]]"
-  "[[ .fragmenta_app_path ]]/lib/authorise"
+    "[[ .fragmenta_app_path ]]/lib/authorise"
 )
 
 // HandleCreateShow serves the create form via GET for [[ .fragmenta_resources ]]
@@ -18,13 +18,11 @@ func HandleCreateShow(context router.Context) error {
 		return router.NotAuthorizedError(err)	
 	}
 
-	// Setup
+	// Render the template
 	view := view.New(context)
 	[[ .fragmenta_resource ]] := [[ .fragmenta_resources ]].New()
 	view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
-
-	// Serve
-  return view.Render()
+    return view.Render()
 }
 
 // HandleCreate handles the POST of the create form for [[ .fragmenta_resources ]]
@@ -32,8 +30,9 @@ func HandleCreate(context router.Context) error {
 
 	// Authorise
 	err := authorise.Path(context)
-if err != nil {
-		return router.NotAuthorizedError(err)	}
+    if err != nil {
+		return router.NotAuthorizedError(err)	
+    }
 
 	// Setup context
 	params, err := context.Params()
@@ -43,18 +42,16 @@ if err != nil {
 
 	id, err := [[ .fragmenta_resources ]].Create(params.Map())
 	if err != nil {
-		context.Logf("#error creating [[ .fragmenta_resource ]],%s", err)
-    	view.New(context).RenderError(context, err)
-    	return
+        return router.InternalError(err)
 	}
     
-  // Log creation
-  context.Logf("#info Created [[ .fragmenta_resource ]] id,%d", id)
+    // Log creation
+    context.Logf("#info Created [[ .fragmenta_resource ]] id,%d", id)
 	
 	// Redirect to the new [[ .fragmenta_resource ]]
 	m, err := [[ .fragmenta_resources ]].Find(id)
 	if err != nil {
-		context.Logf("#error creating [[ .fragmenta_resource ]],%s", err)
+        return router.InternalError(err)
 	}
 
 	return router.Redirect(context, m.URLIndex())

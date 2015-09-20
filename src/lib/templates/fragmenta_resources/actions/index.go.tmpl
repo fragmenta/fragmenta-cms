@@ -1,8 +1,7 @@
 package [[ .fragmenta_resource ]]actions
 
 import (
-
-    "strings"
+   "strings"
 
 	"github.com/fragmenta/router"
 	"github.com/fragmenta/view"
@@ -16,18 +15,12 @@ func HandleIndex(context router.Context) error {
 
 	// Authorise
 	err := authorise.Path(context)
-if err != nil {
-		return router.NotAuthorizedError(err)	}
-
-	// Setup context for template
-	view := view.New(context)
+    if err != nil {
+		return router.NotAuthorizedError(err)	
+    }
 
 	// Build a query
     q := [[ .fragmenta_resources ]].Query()
-    
-    // Show only published (defaults to showing all)
-    // q.Apply(status.WherePublished)
-
     
 	// Order by required order, or default to id asc
 	switch context.Param("order") {
@@ -61,17 +54,15 @@ if err != nil {
     var results []*[[ .fragmenta_resources ]].[[ .Fragmenta_Resource ]]
 	err := q.Fetch(&results)
 	if err != nil {
-		context.Logf("#error indexing [[ .fragmenta_resources ]] %s", err)
 		return router.InternalError(err)		
 	}
     
     
 
-	// Serve template
+	// Render the template
+	view := view.New(context)
     view.AddKey("filter", filter)
 	view.AddKey("[[ .fragmenta_resources ]]", results)
-
-
-  return view.Render()
+    return view.Render()
 
 }

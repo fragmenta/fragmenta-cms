@@ -1,3 +1,4 @@
+// Package pages represents the page resource on disk
 package pages
 
 import (
@@ -11,7 +12,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
-// Page models the pages
+// Page handles saving and retreiving pages from the database
 type Page struct {
 	model.Model
 	status.ModelStatus
@@ -161,7 +162,7 @@ func (m *Page) Destroy() error {
 func (m *Page) TemplateOptions() []helpers.SelectableOption {
 	var options []helpers.SelectableOption
 
-	// We could instead iterate the possible views from view.Templates
+	// We could instead iterate the possible views from view.Templates, that might be better
 	options = append(options, helpers.SelectableOption{Name: "Page", Value: "pages/views/show.html.got"})
 	options = append(options, helpers.SelectableOption{Name: "About Page", Value: "pages/views/show/about.html.got"})
 

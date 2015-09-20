@@ -15,11 +15,11 @@ func HandleUpdateShow(context router.Context) error {
     // Find the [[ .fragmenta_resource ]]
 	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(context.ParamInt("id"))
 	if err != nil {
-		context.Logf("#error finding [[ .fragmenta_resource ]] %s", err)
-		return router.NotFoundError(err)	}
+		return router.NotFoundError(err)	
+    }
 
 	// Authorise update [[ .fragmenta_resource ]]
-	if !authorise.Resource(context,[[ .fragmenta_resource ]]) {
+	if !authorise.Resource(context, [[ .fragmenta_resource ]]) {
 		return router.NotAuthorizedError(err)	
     }
 
@@ -35,12 +35,13 @@ func HandleUpdate(context router.Context) error {
 	// Find the [[ .fragmenta_resource ]]
 	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(context.ParamInt("id"))
 	if err != nil {
-		context.Logf("#error finding [[ .fragmenta_resource ]] %s", err)
-		return router.NotFoundError(err)	}
+		return router.NotFoundError(err)	
+    }
 
 	// Authorise update [[ .fragmenta_resource ]]
-	if !authorise.Resource(context,[[ .fragmenta_resource ]]) {
-		return router.NotAuthorizedError(err)	}
+	if !authorise.Resource(context, [[ .fragmenta_resource ]]) {
+		return router.NotAuthorizedError(err)	
+    }
 
 	// Update the [[ .fragmenta_resource ]] from params
 	params, err := context.Params()

@@ -6,11 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 	"github.com/fragmenta/model"
 	"github.com/fragmenta/model/validate"
 	"github.com/fragmenta/query"
 	"github.com/fragmenta/view/helpers"
+
+	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
 // The tags model type
@@ -32,7 +33,7 @@ func AllowedParams() []string {
 }
 
 // Create a tag from database columns - used by query in creating objects
-func (m *Tag) New(cols map[string]interface{}) *Tag {
+func NewWithColumns(cols map[string]interface{}) *Tag {
 
 	tag := New()
 	tag.Id = validate.Int(cols["id"])
@@ -69,7 +70,7 @@ func Create(params map[string]string) (int64, error) {
 	// Remove params not in AllowedParams
 	params = model.CleanParams(params, AllowedParams())
 
-	err := ValidateParams(params)
+	err := validateParams(params)
 	if err != nil {
 		return 0, err
 	}
@@ -81,13 +82,85 @@ func Create(params map[string]string) (int64, error) {
 	return Query().Insert(params)
 }
 
+// Create a new query relation referencing this model
+func Query() *query.Query {
+	return query.New("tags", "id")
+}
+
+// Create a new query for all models, setting a default order
+func All() *query.Query {
+	return Query().Order("updated_at desc, created_at desc, id desc")
+}
+
+func RootTags() *query.Query {
+	return Query().Where("parent_id IS NULL OR parent_id = 0")
+}
+
+// A shortcut for the common where query on tags
+func Where(format string, args ...interface{}) *query.Query {
+	return Query().Where(format, args...)
+}
+
+func Ordered(q *query.Query) *query.Query {
+	return q.Order("name asc")
+}
+
+// Request a single record by id in params
+func Find(id int64) (*Tag, error) {
+	result, err := Query().Where("id=?", id).FirstResult()
+	if err != nil {
+		return nil, err
+	}
+	return NewWithColumns(result), nil
+}
+
+// Fetch all results for this query
+func FindAll(q *query.Query) ([]*Tag, error) {
+
+	// Fetch query.Results from query
+	results, err := q.Results()
+	if err != nil {
+		return nil, err
+	}
+
+	// Return an array of pages constructed from the results
+	var tagList []*Tag
+	for _, r := range results {
+		tag := NewWithColumns(r)
+		tagList = append(tagList, tag)
+	}
+
+	return tagList, nil
+}
+
+// Check these parameters conform to AcceptedParams, and pass validation
+func validateParams(unsafeParams map[string]string) error {
+
+	// Now check params are as we expect
+	err := validate.Length(unsafeParams["id"], 0, -1)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+// Return the parent tag (if any)
+func (m *Tag) Parent() *Tag {
+	t, err := Find(m.ParentId)
+	if err != nil {
+		return nil
+	}
+	return t
+}
+
 // Update this tag
 func (m *Tag) Update(params map[string]string) error {
 
 	// Remove params not in AllowedParams
 	params = model.CleanParams(params, AllowedParams())
 
-	err := ValidateParams(params)
+	err := validateParams(params)
 	if err != nil {
 		return err
 	}
@@ -110,78 +183,6 @@ func (m *Tag) Update(params map[string]string) error {
 // Delete this tag
 func (m *Tag) Destroy() error {
 	return Query().Where("id=?", m.Id).Delete()
-}
-
-// Check these parameters conform to AcceptedParams, and pass validation
-func ValidateParams(unsafeParams map[string]string) error {
-
-	// Now check params are as we expect
-	err := validate.Length(unsafeParams["id"], 0, -1)
-	if err != nil {
-		return err
-	}
-
-	return err
-}
-
-// Create a new query relation referencing this model
-func Query() *query.Query {
-	return query.New("tags", "id")
-}
-
-// Create a new query for all models, setting a default order
-func All() *query.Query {
-	return Query().Order("updated_at desc, created_at desc, id desc")
-}
-
-func PitchTypes() *query.Query {
-	return Query().Where("parent_id=3")
-}
-
-// A shortcut for the common where query on tags
-func Where(format string, args ...interface{}) *query.Query {
-	return Query().Where(format, args...)
-}
-
-func Ordered(q *query.Query) *query.Query {
-	return q.Order("name asc")
-}
-
-// Request a single record by id in params
-func Find(id int64) (*Tag, error) {
-	result, err := Query().Where("id=?", id).FirstResult()
-	if err != nil {
-		return nil, err
-	}
-	return New().New(result), nil
-}
-
-// Fetch all results for this query
-func FindAll(q *query.Query) ([]*Tag, error) {
-
-	// Fetch query.Results from query
-	results, err := q.Results()
-	if err != nil {
-		return nil, err
-	}
-
-	// Return an array of pages constructed from the results
-	var tagList []*Tag
-	for _, r := range results {
-		tag := New().New(r)
-		tagList = append(tagList, tag)
-	}
-
-	return tagList, nil
-}
-
-// Return the parent tag (if any)
-func (m *Tag) Parent() *Tag {
-	t, err := Find(m.ParentId)
-	if err != nil {
-		return nil
-	}
-	return t
 }
 
 // Return a list of tags suitable for parent options in a tag parent select
@@ -237,8 +238,4 @@ func (m *Tag) CalculateDottedIds(tags []*Tag) string {
 	}
 
 	return dottedIds
-}
-
-func RootTags() *query.Query {
-	return Query().Where("parent_id IS NULL OR parent_id = 0")
 }

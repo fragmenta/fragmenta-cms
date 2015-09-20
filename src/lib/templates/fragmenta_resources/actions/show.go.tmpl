@@ -1,8 +1,6 @@
 package [[ .fragmenta_resource ]]actions
 
 import (
-
-
 	"github.com/fragmenta/router"
 	"github.com/fragmenta/view"
 
@@ -13,22 +11,19 @@ import (
 // HandleShow displays a single [[ .fragmenta_resource ]]
 func HandleShow(context router.Context) error {
 
-	// Setup context for template
-	view := view.New(context)
-
+	// Find the [[ .fragmenta_resource ]]
 	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(context.ParamInt("id"))
 	if err != nil {
 		return router.InternalError(err)		
 	}
 
-	// Authorise
+	// Authorise access
 	if !authorise.Resource(context,[[ .fragmenta_resource ]]) {
-		return router.NotAuthorizedError(err)	}
+		return router.NotAuthorizedError(err)	
+    }
 
-	// Serve template
-	view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
-
-
-  return view.Render()
-
+	// Render the template
+	view := view.New(context)
+    view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
+    return view.Render()
 }

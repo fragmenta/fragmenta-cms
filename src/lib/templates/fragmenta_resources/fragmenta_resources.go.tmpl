@@ -1,24 +1,30 @@
-// The [[ .fragmenta_resources ]] package
+// Package [[ .fragmenta_resources ]] represents the [[ .fragmenta_resource ]] resource
 package [[ .fragmenta_resources ]]
 
 import (
-    "time"
-    
-	"github.com/fragmenta/query"
+	"time"
+
 	"github.com/fragmenta/model"
-    "github.com/fragmenta/model/validate"
-    "github.com/fragmenta/fragmenta-cms/src/lib/status"
+	"github.com/fragmenta/model/validate"
+	"github.com/fragmenta/query"
+
+	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
-// The [[ .fragmenta_resources ]] model type
+// [[ .Fragmenta_Resource ]] handles saving and retreiving [[ .fragmenta_resources ]] from the database
 type [[ .Fragmenta_Resource ]] struct {
 	model.Model
-    status.ModelStatus
+	status.ModelStatus
 [[ .fragmenta_fields ]]
 }
 
-// Create a [[ .fragmenta_resource ]] from database columns - used by query in creating objects
-func (m *[[ .Fragmenta_Resource ]]) New(cols map[string]interface{}) *[[ .Fragmenta_Resource ]] {
+// AllowedParams returns an array of allowed param keys
+func AllowedParams() []string {
+	return []string{"status", [[ .fragmenta_columns ]]}
+}
+
+// NewWithColumns creates a new [[ .fragmenta_resource ]] instance and fills it with data from the database cols provided
+func NewWithColumns(cols map[string]interface{}) *[[ .Fragmenta_Resource ]] {
 
 	[[ .fragmenta_resource ]] := New()
 	[[ .fragmenta_resource ]].Id = validate.Int(cols["id"])
@@ -26,45 +32,47 @@ func (m *[[ .Fragmenta_Resource ]]) New(cols map[string]interface{}) *[[ .Fragme
 	[[ .fragmenta_resource ]].UpdatedAt = validate.Time(cols["updated_at"])
     [[ .fragmenta_resource ]].Status = validate.Int(cols["status"])
 [[ .fragmenta_new_fields ]]
-    
+
 	return [[ .fragmenta_resource ]]
 }
 
-// Update this [[ .fragmenta_resource ]]
-func (m *[[ .Fragmenta_Resource ]]) Update(params map[string]string) error {
+// New creates and initialises a new [[ .fragmenta_resource ]] instance
+func New() *[[ .Fragmenta_Resource ]] {
+	[[ .fragmenta_resource ]] := &[[ .Fragmenta_Resource ]]{}
+	[[ .fragmenta_resource ]].Model.Init()
+	[[ .fragmenta_resource ]].Status = status.Draft
+	[[ .fragmenta_resource ]].TableName = "[[ .fragmenta_resources ]]"
+	return [[ .fragmenta_resource ]]
+}
 
-	err := ValidateParams(params)
+// Create inserts a new record in the database using params, and returns the newly created id
+func Create(params map[string]string) (int64, error) {
+
+	// Remove params not in AllowedParams
+	params = model.CleanParams(params, AllowedParams())
+
+	// Check params for invalid values
+	err := validateParams(params)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-    // Make sure updated_at is set to the current time
+	// Update date params
+	params["created_at"] = query.TimeString(time.Now().UTC())
 	params["updated_at"] = query.TimeString(time.Now().UTC())
 
-	return Query().Where("id=?", m.Id).Update(params)
+	return Query().Insert(params)
 }
 
-// Delete this [[ .fragmenta_resource ]]
-func (m *[[ .Fragmenta_Resource ]]) Destroy() error {
-	return Query().Where("id=?", m.Id).Delete()
-}
+// validateParams checks these params pass validation checks
+func validateParams(params map[string]string) error {
 
-// Which parameters does this model allow to be edited in forms?
-func AcceptedParams() []string {
-	return []string{"id","status",[[ .fragmenta_columns ]]}
-}
-
-// Check these parameters conform to AcceptedParams, and pass validation
-func ValidateParams(unsafeParams map[string]string) error {
-
-	// First check for params we don't accept - we fail if we receive columns we don't expect
-	_, err := validate.CleanParams(unsafeParams, AcceptedParams())
+	// Now check params are as we expect
+	err := validate.Length(params["id"], 0, -1)
 	if err != nil {
 		return err
 	}
-
-	// Now check params are as we expect
-	err = validate.Length(unsafeParams["id"], 0, -1)
+	err = validate.Length(params["name"], 0, 255)
 	if err != nil {
 		return err
 	}
@@ -72,47 +80,69 @@ func ValidateParams(unsafeParams map[string]string) error {
 	return err
 }
 
-// Set up a new [[ .fragmenta_resource ]] with default values
-func New() *[[ .Fragmenta_Resource ]] {
-	[[ .fragmenta_resource ]] := &[[ .Fragmenta_Resource ]]{}
-	[[ .fragmenta_resource ]].Model.Init()
-	[[ .fragmenta_resource ]].TableName = "[[ .fragmenta_resources ]]"
-    [[ .fragmenta_resource ]].Status = status.Draft
-	
-	return [[ .fragmenta_resource ]]
-}
-
-// Insert a new [[ .fragmenta_resource ]]
-func Create(params map[string]string) (int64, error) {
-	err := ValidateParams(params)
-	if err != nil {
-		return 0, err
-	}
-
-	// Update/add some params by default
-	params["created_at"] = query.TimeString(time.Now().UTC())
-	params["updated_at"] = query.TimeString(time.Now().UTC())
-
-	return Query().Insert(params)
-}
-
-// Create a new query relation referencing this model
-func Query() *query.Query {
-	return query.New("[[ .fragmenta_resources ]]","id")
-}
-
-// A shortcut for the common where query on [[ .fragmenta_resources ]]
-func Where(format string, args ...interface{}) *query.Query {
-	return Query().Where(format, args...)
-}
-
-// Request a single record by id in params
+// Find returns a single record by id in params
 func Find(id int64) (*[[ .Fragmenta_Resource ]], error) {
 	result, err := Query().Where("id=?", id).FirstResult()
 	if err != nil {
 		return nil, err
 	}
-	return New().New(result), nil
+	return NewWithColumns(result), nil
 }
 
+// FindAll returns all results for this query
+func FindAll(q *query.Query) ([]*[[ .Fragmenta_Resource ]], error) {
 
+	// Fetch query.Results from query
+	results, err := q.Results()
+	if err != nil {
+		return nil, err
+	}
+
+	// Return an array of [[ .fragmenta_resources ]] constructed from the results
+	var [[ .fragmenta_resources ]] []*[[ .Fragmenta_Resource ]]
+	for _, cols := range results {
+		p := NewWithColumns(cols)
+		[[ .fragmenta_resources ]] = append([[ .fragmenta_resources ]], p)
+	}
+
+	return [[ .fragmenta_resources ]], nil
+}
+
+// Query returns a new query for [[ .fragmenta_resources ]]
+func Query() *query.Query {
+	p := New()
+	return query.New(p.TableName, p.KeyName)
+}
+
+// Published returns a query for all [[ .fragmenta_resources ]] with status >= published
+func Published() *query.Query {
+	return Query().Where("status>=?", status.Published)
+}
+
+// Where returns a Where query for [[ .fragmenta_resources ]] with the arguments supplied
+func Where(format string, args ...interface{}) *query.Query {
+	return Query().Where(format, args...)
+}
+
+// Update sets the record in the database from params
+func (m *[[ .Fragmenta_Resource ]]) Update(params map[string]string) error {
+
+	// Remove params not in AllowedParams
+	params = model.CleanParams(params, AllowedParams())
+
+	// Check params for invalid values
+	err := validateParams(params)
+	if err != nil {
+		return err
+	}
+
+	// Update date params
+	params["updated_at"] = query.TimeString(time.Now().UTC())
+
+	return Query().Where("id=?", m.Id).Update(params)
+}
+
+// Destroy removes the record from the database
+func (m *[[ .Fragmenta_Resource ]]) Destroy() error {
+	return Query().Where("id=?", m.Id).Delete()
+}

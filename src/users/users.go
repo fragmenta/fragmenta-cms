@@ -7,10 +7,11 @@ import (
 	"time"
 
 	"github.com/fragmenta/auth"
-	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 	"github.com/fragmenta/model"
 	"github.com/fragmenta/model/validate"
 	"github.com/fragmenta/query"
+
+	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
 // User represents a user of the service
@@ -34,7 +35,7 @@ func AllowedParams() []string {
 }
 
 // New create a user from database columns - used by query in creating objects
-func (m *User) New(cols map[string]interface{}) *User {
+func NewWithColumns(cols map[string]interface{}) *User {
 
 	user := New()
 	user.Id = validate.Int(cols["id"])
@@ -50,84 +51,6 @@ func (m *User) New(cols map[string]interface{}) *User {
 	user.Title = validate.String(cols["title"])
 	user.ImageID = validate.Int(cols["image_id"])
 	return user
-}
-
-// Update this user
-func (m *User) Update(params map[string]string) error {
-
-	// Remove params not in AllowedParams
-	params = model.CleanParams(params, AllowedParams())
-
-	err := ValidateParams(params)
-	if err != nil {
-		return err
-	}
-
-	// Make sure updated_at is set to the current time
-	params["updated_at"] = query.TimeString(time.Now().UTC())
-
-	return Query().Where("id=?", m.Id).Update(params)
-}
-
-// Destroy this user
-func (m *User) Destroy() error {
-	return Query().Where("id=?", m.Id).Delete()
-}
-
-// URLShow returns the url for this user
-func (m *User) URLShow() string {
-	return fmt.Sprintf("/users/%d-%s", m.Id, m.ToSlug(m.Name))
-}
-
-// SelectName returns the name which should be used for select options
-func (m *User) SelectName() string {
-	return m.Name
-}
-
-// Keywords returns meta keywords for this user
-func (m *User) Keywords() string {
-	return fmt.Sprintf("%s %s", m.Name, m.Summary)
-}
-
-// ValidateParams these parameters conform to AcceptedParams, and pass validation
-func ValidateParams(unsafeParams map[string]string) error {
-
-	// Now check params are as we expect
-	err := validate.Length(unsafeParams["id"], 0, -1)
-	if err != nil {
-		return err
-	}
-
-	err = validate.Length(unsafeParams["name"], 3, 100)
-	if err != nil {
-		return err
-	}
-
-	err = validate.Length(unsafeParams["email"], 3, 100)
-	if err != nil {
-		return err
-	}
-
-	// Password may be blank
-	if len(unsafeParams["password"]) > 0 {
-		// Report error for length between 0 and 5 chars
-		err = validate.Length(unsafeParams["password"], 5, 100)
-		if err != nil {
-			return err
-		}
-
-		ep, err := auth.EncryptPassword(unsafeParams["password"])
-		if err != nil {
-			return err
-		}
-		unsafeParams["encrypted_password"] = ep
-
-	}
-
-	// Finally, always delete the password param
-	delete(unsafeParams, "password")
-
-	return err
 }
 
 // New sets up a new user with default values
@@ -150,7 +73,7 @@ func Create(params map[string]string) (int64, error) {
 	// Remove params not in AllowedParams
 	params = model.CleanParams(params, AllowedParams())
 
-	err := ValidateParams(params)
+	err := validateParams(params)
 	if err != nil {
 		return 0, err
 	}
@@ -192,7 +115,7 @@ func Find(id int64) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-	return New().New(result), nil
+	return NewWithColumns(result), nil
 }
 
 // FindEmail requests a single record by email
@@ -201,7 +124,7 @@ func FindEmail(email string) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-	return New().New(result), nil
+	return NewWithColumns(result), nil
 }
 
 // First the first result for this query
@@ -211,7 +134,7 @@ func First(q *query.Query) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-	return New().New(result), nil
+	return NewWithColumns(result), nil
 }
 
 // Fetch all results for this query
@@ -226,7 +149,7 @@ func FindAll(q *query.Query) ([]*User, error) {
 	// Return an array of pages constructed from the results
 	var userList []*User
 	for _, r := range results {
-		user := New().New(r)
+		user := NewWithColumns(r)
 		userList = append(userList, user)
 	}
 
@@ -241,4 +164,82 @@ func Exists(e string) bool {
 	}
 
 	return (count > 0)
+}
+
+// validateParams these parameters conform to AcceptedParams, and pass validation
+func validateParams(unsafeParams map[string]string) error {
+
+	// Now check params are as we expect
+	err := validate.Length(unsafeParams["id"], 0, -1)
+	if err != nil {
+		return err
+	}
+
+	err = validate.Length(unsafeParams["name"], 3, 100)
+	if err != nil {
+		return err
+	}
+
+	err = validate.Length(unsafeParams["email"], 3, 100)
+	if err != nil {
+		return err
+	}
+
+	// Password may be blank
+	if len(unsafeParams["password"]) > 0 {
+		// Report error for length between 0 and 5 chars
+		err = validate.Length(unsafeParams["password"], 5, 100)
+		if err != nil {
+			return err
+		}
+
+		ep, err := auth.EncryptPassword(unsafeParams["password"])
+		if err != nil {
+			return err
+		}
+		unsafeParams["encrypted_password"] = ep
+
+	}
+
+	// Finally, always delete the password param
+	delete(unsafeParams, "password")
+
+	return err
+}
+
+// Update this user
+func (m *User) Update(params map[string]string) error {
+
+	// Remove params not in AllowedParams
+	params = model.CleanParams(params, AllowedParams())
+
+	err := validateParams(params)
+	if err != nil {
+		return err
+	}
+
+	// Make sure updated_at is set to the current time
+	params["updated_at"] = query.TimeString(time.Now().UTC())
+
+	return Query().Where("id=?", m.Id).Update(params)
+}
+
+// Destroy this user
+func (m *User) Destroy() error {
+	return Query().Where("id=?", m.Id).Delete()
+}
+
+// URLShow returns the url for this user
+func (m *User) URLShow() string {
+	return fmt.Sprintf("/users/%d-%s", m.Id, m.ToSlug(m.Name))
+}
+
+// SelectName returns the name which should be used for select options
+func (m *User) SelectName() string {
+	return m.Name
+}
+
+// Keywords returns meta keywords for this user
+func (m *User) Keywords() string {
+	return fmt.Sprintf("%s %s", m.Name, m.Summary)
 }

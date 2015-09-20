@@ -24,8 +24,7 @@ func HandleShow(context router.Context) error {
 	}
 
 	// Render the page
-	view := view.New(context)
-	return renderPage(context, view, page)
+	return renderPage(context, page)
 }
 
 // HandleShowPath serves requests to a custom page url
@@ -57,15 +56,12 @@ func HandleShowPath(context router.Context) error {
 		}
 	}
 
-	view := view.New(context)
-	return renderPage(context, view, page)
+	return renderPage(context, page)
 }
 
-func renderPage(context router.Context, view *view.Renderer, page *pages.Page) error {
+func renderPage(context router.Context, page *pages.Page) error {
 
-	if page.Template != "pages/views/show.html.got" {
-
-	}
+	view := view.New(context)
 
 	// Setup context for template
 	if page.Template != "" {

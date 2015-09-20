@@ -1,8 +1,6 @@
 package [[ .fragmenta_resource ]]actions
 
 import (
-
-
 	
 	"github.com/fragmenta/router"
 	"github.com/fragmenta/view"
@@ -14,14 +12,16 @@ import (
 // HandleDestroy handles a DESTROY request for [[ .fragmenta_resources ]]
 func HandleDestroy(context router.Context) error {
 
-	// Set the [[ .fragmenta_resource ]] on the context for checking
+	// Find the [[ .fragmenta_resource ]]
 	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(context.ParamInt("id"))
 	if err != nil {
-		return router.NotFoundError(err)	}
+		return router.NotFoundError(err)	
+    }
 
-	// Authorise
+	// Authorise destroy [[ .fragmenta_resource ]]
 	if !authorise.Resource(context,[[ .fragmenta_resource ]]) {
-		return router.NotAuthorizedError(err)	}
+		return router.NotAuthorizedError(err)	
+    }
 
 	// Destroy the [[ .fragmenta_resource ]]
 	[[ .fragmenta_resource ]].Destroy()
