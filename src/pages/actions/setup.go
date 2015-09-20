@@ -14,7 +14,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
-// HandleShow shows the setup page at /fragmenta/setup
+// HandleShowSetup shows the setup page at /fragmenta/setup
 func HandleShowSetup(context router.Context) error {
 
 	// Setup context for template
@@ -90,7 +90,7 @@ func HandleSetup(context router.Context) error {
 		"status": "100",
 		"name":   "About Us",
 		"url":    "/about",
-		"text":   "<h1>About us</h1><p>About us</p>",
+		"text":   "<section class=\"narrow\"><h1>About us</h1><p>About us</p></section>",
 	}
 	_, err = pages.Create(params)
 	if err != nil {
@@ -100,7 +100,7 @@ func HandleSetup(context router.Context) error {
 		"status": "100",
 		"name":   "Privacy Policy",
 		"url":    "/privacy",
-		"text":   "<h1>Privacy Policy</h1><p>We respect your privacy.</p>",
+		"text":   "<section class=\"narrow\"><h1>Privacy Policy</h1><p>We respect your privacy.</p></section>",
 	}
 	_, err = pages.Create(params)
 	if err != nil {
@@ -111,6 +111,7 @@ func HandleSetup(context router.Context) error {
 	return router.Redirect(context, "/")
 }
 
+// nameFromEmail grabs a name from an email address
 func nameFromEmail(e string) string {
 	// Split email on @, and separate by removing . or _
 	parts := strings.Split(e, "@")
@@ -123,6 +124,7 @@ func nameFromEmail(e string) string {
 	return e
 }
 
+// missingUsersAndPages returns true if we have 0 users and 0 pages
 func missingUsersAndPages() bool {
 
 	pageCount, err := pages.Query().Count()

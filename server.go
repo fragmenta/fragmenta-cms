@@ -10,10 +10,19 @@ import (
 
 func main() {
 
+	// If we have no config, bootstrap first by generating config/migrations
+	if app.RequiresBootStrap() {
+		err := app.Bootstrap()
+		if err != nil {
+			fmt.Printf("Error bootstrapping server %s\n", err)
+			return
+		}
+	}
+
 	// Setup server
 	server, err := server.New()
 	if err != nil {
-		fmt.Printf("Error creating server %s", err)
+		fmt.Printf("Error creating server %s\n", err)
 		return
 	}
 

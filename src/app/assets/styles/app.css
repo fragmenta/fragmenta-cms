@@ -77,6 +77,18 @@ code {
   clear:both;
 }
 
+.left {
+  text-align:left;
+}
+
+.right {
+  text-align:right;
+}
+
+.center {
+  text-align:center;
+}
+
 .button, button, input[type="submit"], input[type="reset"], input[type="button"] {
   color:#fff;
   background-color:#05afe7;
