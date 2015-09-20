@@ -1,0 +1,20 @@
+<article class="padded">
+
+<form accept-charset="UTF-8" action="/pages" method="get" class="filter_form">
+<input type="search" name="filter" class="right" placeholder="Search..." value="{{ .filter }}">
+</form>
+ 
+<h1>Pages</h1>
+
+<table class="data-table">
+    {{ template "pages/views/row.html.got" empty }}
+    {{ $0 := . }}
+    {{ range $i,$m := .pages }}
+      {{ set $0 "i" $i }}
+      {{ set $0 "page" $m }}
+      {{ template "pages/views/row.html.got" $0 }}
+    {{ end }}
+
+</table>
+
+</article>

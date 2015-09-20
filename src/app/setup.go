@@ -10,11 +10,13 @@ import (
 	"github.com/fragmenta/server/log"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-app/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
 )
 
+// appAssets holds a reference to our assets for use in asset setup
 var appAssets *assets.Collection
 
+// Setup sets up our application
 func Setup(server *server.Server) {
 
 	// Setup log
@@ -37,6 +39,10 @@ func Setup(server *server.Server) {
 
 	// Setup our authentication and authorisation
 	authorise.Setup(server)
+
+	// Add a prefilter to store the current user on the context, so that we only fetch it once
+	// We use this below in Resource, and also in views to determine current user attributes
+	router.AddFilter(authorise.CurrentUserFilter)
 
 	// Setup our router and handlers
 	setupRoutes(router)
@@ -73,26 +79,20 @@ func setupAssets(server *server.Server) {
 }
 
 func setupView(server *server.Server) {
-	// Set up our own func map here if required
-	//funcs := view.DefaultHelpers
-	//view.Helpers = funcs
+	defer server.Timef("#info Finished loading templates in %s", time.Now())
+
 	view.Production = server.Production()
-
-	started := time.Now()
 	err := view.LoadTemplates()
-
 	if err != nil {
 		server.Fatalf("Error reading templates %s", err)
 	}
-
-	// Log time taken loading templates
-	end := time.Since(started).String()
-	server.Logf("#info Parsed templates in %s", end)
 
 }
 
 // Setup db - at present query pkg manages this...
 func setupDatabase(server *server.Server) {
+	defer server.Timef("#info Finished opening in %s database %s for user %s", time.Now(), server.Config("db"), server.Config("db_user"))
+
 	config := server.Configuration()
 	options := map[string]string{
 		"adapter":  config["db_adapter"],
@@ -107,7 +107,5 @@ func setupDatabase(server *server.Server) {
 	if err != nil {
 		server.Fatalf("Error reading database %s", err)
 	}
-
-	server.Logf("#info Opened database at %s for user %s", server.Config("db"), server.Config("db_user"))
 
 }

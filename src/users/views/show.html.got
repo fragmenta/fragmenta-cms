@@ -1,0 +1,15 @@
+<article>
+   <div class="section user_profile">
+        <div class="row">
+            <div class="three columns">
+              {{ template "users/views/user.html.got" . }}
+            </div>
+            <div class="nine columns bio_text">
+               {{ html .user.Profile }}
+            </div>
+        </div>
+    </div>
+    <div class="section">
+         {{ html .user.Text }}
+    </div>
+</article>

@@ -2,13 +2,15 @@ package sms
 
 import (
 	"fmt"
-	"net/http"
+
 	"net/url"
 	"strings"
 )
 
 // TODO At present we only support sending via twilio
 //  we should put services into adapters, and load the relevant one
+// FIXME: this should create a type, which we attach these vars/functions to
+// rather than using package variables (see view)
 
 // The SMS service user (must be set before first sending)
 var user string

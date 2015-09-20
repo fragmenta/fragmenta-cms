@@ -1,0 +1,4 @@
+<article>
+<h1>Create Tag</h1>
+{{ template "tags/views/form.html.got" . }}
+</article>

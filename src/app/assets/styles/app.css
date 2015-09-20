@@ -1,10 +1,15 @@
+@font-face {
+  font-family: Lato
+  src: url(/assets/fonts/lato.ttf);
+}
+
 body {
-    font:1.8em/1.6  "Lato",  "Roboto",  "Helvetica Neue",,Arial,sans-serif;
+    font:1.6em/2  "Lato",  "Roboto",  "Helvetica Neue",Arial,sans-serif;
 }
 
 h1,h2,h3,h4,h5,h6 {
     letter-spacing:normal;
-    color:#222;
+     color:#666;
     font-weight:300;
     font-style:normal;
     margin: 0.8rem 0 0.5rem 0; 
@@ -23,15 +28,15 @@ h1 {
 }
 
 h2 {
-  color:#333;
+  color:#555;
 }
 
 h2 b {
-  color:#666;
+  color:#888;
 }
 
 h3 {
-  
+ 
 }
 
 h4 {
@@ -72,13 +77,18 @@ code {
   clear:both;
 }
 
-
-.button,.button:hover {
-  border:1px solid #fff;
-  font-size:1.4rem;
-  line-height:2rem;
-  padding:0.5rem 1.5rem;
+.button, button, input[type="submit"], input[type="reset"], input[type="button"] {
+  color:#fff;
+  background-color:#05afe7;
+  border:none;
+  font-size:1em;
+  font-weight:200;
 }
+
+.button:hover, button:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover {
+  color:#eee;
+}
+
 
 
 ul.list {
@@ -97,8 +107,9 @@ ul.inline, nav ul {
 
 ul.inline li, nav ul li {
   display: inline-block;
-  padding:0 2rem;
   white-space: nowrap;
+  padding:0 2rem;
+  margin:0 0 0.2rem 0;
 }
 
 header a {
@@ -110,7 +121,6 @@ header a:hover {
 }
 
 header {
-  height:4rem;
   margin:0 0 0 0;
   color:#fff;
   border-bottom:2px solid #f1e42a;
@@ -120,7 +130,7 @@ header {
 
 footer {
   clear:both;
-  font-size:0.8em;
+  font-size:0.9em;
   text-align:center;
   padding:2rem 0 1rem 0;
   margin:4rem 0 0 0;
@@ -128,12 +138,23 @@ footer {
   border-bottom:2px solid #f49a18;
 }
 
+nav {
+    clear:both;
+    font-weight:100;
+}
+
+nav.admin {
+  background-color:#000;
+}
+
 article {
   clear:both;
   padding:0;
+  min-height:50rem;
 }
 
 section {
+  clear:both;
   display:block;
   padding:1rem 2rem;
   margin:0 auto;
@@ -145,15 +166,51 @@ section.home {
 }
 
 section.feature {
-  padding:0;
+  padding:0 0.5rem 0.5rem 0.5rem;
   background-color:#05afe7;
   color:#fff;
   width:100%;
   text-align:center;
 }
 
-.logo img {
-  display:block;
-  margin:2rem auto;
-  height:100px;
+section.feature a, section.feature h3, section.feature h4, section.feature h5 {
+  color:#fff;
 }
+
+section.padded {
+  max-width:50em;
+  margin:1rem auto 0 auto;
+}
+
+/*  TODO:perhaps reconsider? */
+article form {
+  padding:1rem 4rem;
+}
+
+article form.nopadding {
+  padding:0;
+}
+
+label {
+  color:#555;
+  font-weight:normal;
+}
+
+.admin_links {
+  float:right;
+}
+
+.inline_fields .field {
+  float:left;
+  margin-right:3rem;
+}
+
+.wide_fields .field {
+  clear:both;
+}
+
+.wide_fields input {
+  
+  width:100%;
+}
+

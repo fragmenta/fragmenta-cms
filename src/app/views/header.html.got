@@ -2,7 +2,11 @@
   {{ template "app/views/admin.html.got" . }}
 {{ end }}
 <nav>
-  <ul><li><a href="/">Home</a></li>
+  <ul>
+    <li><a href="/">Fragmenta</a></li>
+    <li><a href="/install">Install</a></li>
+    <li><a href="/docs">Docs</a></li>
+    <li><a href="https://github.com/fragmenta">Github</a></li>
   </ul>
 </nav>
   

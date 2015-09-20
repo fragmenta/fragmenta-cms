@@ -1,0 +1,15 @@
+{{ if .customer.Id }}
+   <tr class="{{if odd $.i}}odd{{end}}">
+       <td>{{ .customer.Email }}</td>
+       <td>{{ .customer.Name }}</td>
+       <td><a href="/users/{{.customer.Id}}/contact">Contact</a></td>
+       <td><a href="/users/{{.customer.Id}}">Details</a></td>
+   </tr>
+{{ else }} 
+    <tr>
+        <td>Email</td>
+        <td>Name</td>
+        <td>Actions</td>
+        <td></td>
+    </tr>
+{{ end }}

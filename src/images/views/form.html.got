@@ -1,0 +1,18 @@
+<div class="row images_form">
+<form method="post" >
+<div class="twothird">
+    {{ select "Status" "status" .image.Status .image.StatusOptions }}
+    {{ field "Name" "name" .image.Name }}
+    {{ field "Sort" "sort" .image.Sort }}
+  
+  
+  
+    <div class="actions">
+        <input type="submit" class="button" value="Save">
+        {{ if gt .image.Id 0 }}
+         <a class="button red" href="/images/{{.image.Id}}/destroy" {{ if .redirect }} data-redirect="{{.redirect}}#images" {{ end }} method="delete">Delete</a>
+        {{ end }}
+    </div>
+</div>
+</form>
+</div>

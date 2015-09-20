@@ -1,0 +1,13 @@
+<section class="padded">
+      <h1>{{.title}}</h1>
+      <p>{{.message}}</p>
+      {{ if .file }}
+      <p>File:{{.file}}</p>
+      {{ end }}
+      {{ if .error }}
+       <pre><code>
+      Error:{{.error}}
+      </code></pre>
+      {{ end }}
+      <p><a href="/users/login" class="button">Login</a></p>   
+</section>

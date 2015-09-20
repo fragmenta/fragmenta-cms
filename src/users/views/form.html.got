@@ -1,0 +1,36 @@
+<div class="row users_form">
+<form method="post" enctype="multipart/form-data">
+    <div class="inline_fields">
+    {{ select "Status" "status" .user.Status .user.StatusOptions }}
+    {{ select "Role" "role" .user.Role .user.RoleOptions }}
+    {{ field "Email" "email" .user.Email }}
+    {{ field "Password" "password" "" "password" "type=password" }}
+    {{ field "Name" "name" .user.Name }}
+    {{ field "Title" "summary" .user.Summary }}
+    </div>
+    
+    <div class="field clear">
+        <label>Profile Image</label>
+        <input id="image" type="file" name="image">
+    </div>
+   
+    <div class="page_content">
+        <label>Profile</label>
+        {{ template "lib/editable/views/editable-toolbar.html.got"}}
+        <textarea name="profile" class="content-textarea" id="profile-content-textarea">{{.user.Profile}}</textarea>
+        <div contenteditable class="content-editable padded-content-editable" id="profile-content-editable">{{html .user.Profile}}</div>
+     </div>
+     
+     <div class="page_content">
+         <label>Text</label>
+         {{ template "lib/editable/views/editable-toolbar.html.got"}}
+         <textarea name="text" class="content-textarea" id="user-content-textarea">{{.user.Text}}</textarea>
+         <div contenteditable class="content-editable padded-content-editable" id="user-content-editable">{{html .user.Text}}</div>
+      </div>
+   
+   
+    <div class="actions">
+        <input type="submit" class="button" value="Save">
+    </div>
+</form>
+</div>

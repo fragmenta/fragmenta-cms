@@ -1,0 +1,5 @@
+<article>
+<h1>Update Image</h1>
+   <img src="/{{ .image.SmallPath }}" class="right">
+   {{ template "images/views/form.html.got" . }}
+</article>

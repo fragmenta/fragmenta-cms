@@ -1,0 +1,4 @@
+<div class="page">
+{{ html .page.Text }}
+</div>
+<p>Example special template - need to consider how best to do this? Perhaps instead have a themes dir which you load template choices from?</p>

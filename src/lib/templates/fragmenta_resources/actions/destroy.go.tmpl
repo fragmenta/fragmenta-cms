@@ -1,9 +1,9 @@
 package [[ .fragmenta_resource ]]actions
 
 import (
-	"net/http"
 
-	"github.com/fragmenta/model/url"
+
+	
 	"github.com/fragmenta/router"
 	"github.com/fragmenta/view"
 
@@ -12,24 +12,20 @@ import (
 )
 
 // HandleDestroy handles a DESTROY request for [[ .fragmenta_resources ]]
-func HandleDestroy(context router.Context) {
+func HandleDestroy(context router.Context) error {
 
 	// Set the [[ .fragmenta_resource ]] on the context for checking
 	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(context.ParamInt("id"))
 	if err != nil {
-		view.RenderStatus(context, http.StatusNotFound)
-		return
-	}
+		return router.NotFoundError(err)	}
 
-	// Authorize
-	if !authorise.PathAndResource(context,[[ .fragmenta_resource ]]) {
-		view.RenderStatus(context, http.StatusUnauthorized)
-		return
-	}
+	// Authorise
+	if !authorise.Resource(context,[[ .fragmenta_resource ]]) {
+		return router.NotAuthorizedError(err)	}
 
 	// Destroy the [[ .fragmenta_resource ]]
 	[[ .fragmenta_resource ]].Destroy()
 
 	// Redirect to [[ .fragmenta_resources ]] root
-	router.Redirect(context, url.Index([[ .fragmenta_resource ]]))
+	return router.Redirect(context, [[ .fragmenta_resource ]].URLIndex())
 }

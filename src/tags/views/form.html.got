@@ -1,0 +1,14 @@
+<div class="row tags_form">
+<form  method="post" >
+    {{ select "Parent" "parent_id" .tag.ParentId .tag.ParentTagOptions }}
+    {{ select "Status" "status" .tag.Status .tag.StatusOptions }}
+  
+    {{ field "Name" "name" .tag.Name }}
+    {{ field "Summary" "summary" .tag.Summary }}
+    {{ field "Url" "url" .tag.Url }}
+
+    <div class="actions">
+        <input type="submit" class="button" value="Save">
+    </div>
+</form>
+</div>

@@ -1,7 +1,7 @@
 package [[ .fragmenta_resource ]]actions
 
 import (
-	"net/http"
+
     "strings"
 
 	"github.com/fragmenta/router"
@@ -12,13 +12,12 @@ import (
 )
 
 // HandleIndex displays a list of [[ .fragmenta_resources ]]
-func HandleIndex(context router.Context) {
+func HandleIndex(context router.Context) error {
 
-	// Authorize
-	if !authorise.Path(context) {
-		view.RenderStatus(context, http.StatusUnauthorized)
-		return
-	}
+	// Authorise
+	err := authorise.Path(context)
+if err != nil {
+		return router.NotAuthorizedError(err)	}
 
 	// Setup context for template
 	view := view.New(context)
@@ -63,8 +62,7 @@ func HandleIndex(context router.Context) {
 	err := q.Fetch(&results)
 	if err != nil {
 		context.Logf("#error indexing [[ .fragmenta_resources ]] %s", err)
-		view.RenderError(context, err)
-		return
+		return router.InternalError(err)		
 	}
     
     
@@ -74,6 +72,6 @@ func HandleIndex(context router.Context) {
 	view.AddKey("[[ .fragmenta_resources ]]", results)
 
 
-	view.Render(context)
+  return view.Render()
 
 }

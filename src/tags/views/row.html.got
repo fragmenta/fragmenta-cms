@@ -1,0 +1,20 @@
+{{ if .tag }}
+<tr>
+    <td>Name</td>
+    <td>Url</td>
+    <td>Id</td>
+    <td>DottedId</td>
+    <td>Actions</td>
+</tr>
+{{ else }}
+<tr class="level_{{ .tag.Level }} {{if odd $.i}}odd{{end}}">
+    <td>{{ .tag.Name }}</td>
+    <td>{{ .tag.Url }}</td>
+    <td>{{ .tag.Id }}</td>
+    <td>{{ .tag.DottedIds }}</td>
+    <td><a href="/tags/{{.tag.Id}}update">Edit</a></td>
+    {{ range $i,$m := .tag.Children }}
+      {{ template "tags/views/row.html.got" . }}
+    {{ end }}
+</tr>
+{{ end }}

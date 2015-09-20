@@ -1,0 +1,14 @@
+<article>
+<h1>Tags</h1>
+<form accept-charset="UTF-8" action="/tags" method="get" class="filter_form">
+      <input type="search" name="filter" class="right" placeholder="Search..." value="{{ .filter }}">
+</form>
+<table class="data-table">
+    {{ $0 := . }}
+    {{ range $i,$m :=  .tags }}
+    {{ set $0 "i" $i }}
+    {{ set $0 "tag" $m }}
+    {{ template "tags/views/row.html.got" $0 }}
+    {{ end }}
+</table>
+</article>

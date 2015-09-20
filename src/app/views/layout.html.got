@@ -11,8 +11,8 @@
     </header>
   
     <article>
-    {{ if .error }}
-        <div class="error_box">{{.error}}</div>
+    {{ if .warning }}
+        <div class="warning">{{.warning}}</div>
     {{ end }}
     {{ .content }}
     </article>

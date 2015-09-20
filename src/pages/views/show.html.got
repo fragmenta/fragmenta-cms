@@ -1,0 +1,3 @@
+<div class="page">
+    {{ html .page.Text }}
+</div>

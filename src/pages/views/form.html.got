@@ -1,0 +1,25 @@
+<form method="post" class="nopadding">
+     
+       <section class="inline_fields">
+       {{ select "Status" "status" .page.Status .page.StatusOptions }}
+       {{ selectarray "Template" "template" .page.Template .page.TemplateOptions }}
+       {{ field "Page URL" "url" .page.Url }}
+       {{ field "Page Name" "name" .page.Name }}
+       </section>
+       
+       <section class="wide_fields">
+       {{ field "Page Summary" "summary" .page.Summary }}
+       </section>
+       
+       <section class="page_content">
+           <label>Page Content</label>
+           {{ template "lib/editable/views/editable-toolbar.html.got"}}
+           <textarea name="text" class="content-textarea" id="page-content-textarea">{{.page.Text}}</textarea>
+           <div contenteditable class="content-editable" id="page-content-editable">{{html .page.Text}}</div>
+        </section>
+       
+        <section class="actions">
+            <input type="submit" class="button" value="Save">
+        </section>
+
+</form>

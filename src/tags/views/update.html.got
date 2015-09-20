@@ -1,0 +1,4 @@
+<article>
+<h1>Update Tag</h1>
+{{ template "tags/views/form.html.got" . }}
+</article>

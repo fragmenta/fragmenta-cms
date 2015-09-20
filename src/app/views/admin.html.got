@@ -1,4 +1,4 @@
-<nav class="admin_nav {{ if dev }}dev{{ end }}">
+<nav class="admin {{ if dev }}dev{{ end }}">
     
     <ul class="inline admin_links">
         {{ with .admin_links }}
@@ -7,7 +7,10 @@
     </ul>
     
     <ul class="inline main_list">
-        <li><a href="/">Home</a></li>
+      <li><a href="/users">Users</a></li>
+      <li><a href="/pages">Pages</a></li>
+      <li><a href="/tags">Tags</a></li>
+      <li><a href="/notes">Notes</a></li>
     </ul>
     
 </nav>

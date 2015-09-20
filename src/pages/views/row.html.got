@@ -1,0 +1,17 @@
+{{ if not .page.Id }}
+<tr>
+    <td>Url</td>
+    <td>Name</td>
+    <td>Updated</td>
+    <td>Status</td>
+    <td>Actions</td>
+</tr>
+{{ else }}
+<tr class="{{ if odd $.i }}odd{{end}}">
+    <td><a href="{{.page.Url}}">{{.page.Url}}</a></td>
+    <td>{{ .page.Name }}</td>
+    <td>{{ time .page.UpdatedAt }}</td>
+    <td>{{ .page.StatusDisplay }}</td>
+    <td><a href="{{.page.URLUpdate}}">Edit</a></td>
+</tr>
+{{ end }}

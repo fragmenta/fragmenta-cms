@@ -1,0 +1,4 @@
+<article>
+<h1>Update User</h1>
+{{ template "users/views/form.html.got" . }}
+</article>

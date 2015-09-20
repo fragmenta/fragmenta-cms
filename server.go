@@ -5,7 +5,7 @@ import (
 
 	"github.com/fragmenta/server"
 
-	"github.com/fragmenta/fragmenta-app/src/app"
+	"github.com/fragmenta/fragmenta-cms/src/app"
 )
 
 func main() {

@@ -1,0 +1,27 @@
+.setup {
+  text-align:center;
+}
+
+.setup h2 {
+  color:#f49a18;
+}
+
+.setup form input {
+  margin:1rem 0.5rem;
+}
+
+/*  HOME */
+img.logo  {
+  display:block;
+  margin:2rem auto;
+  height:100px;
+}
+
+.page_content {
+  padding:0;
+  margin:0;
+}
+
+.page_content label {
+  padding-left:2rem;
+}

@@ -1,0 +1,5 @@
+{{ if .image.Id }}
+   <a href="{{ .image.URLUpdate }}{{if .redirect }}?redirect={{.redirect}}{{ end }}" class="image_icon">
+       <img src="/{{ .image.IconPath }}">
+   </a>
+{{ end }}
