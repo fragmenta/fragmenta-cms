@@ -3,6 +3,7 @@
 /log
 /secrets
 /db
+/public/files
 
 # ignore compiled app group
 /public/assets/*/app-*
