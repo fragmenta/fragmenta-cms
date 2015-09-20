@@ -4,7 +4,7 @@
 </section>
 {{ end }}
 
-<section class="padded">
+<section class="narrow">
 <div class="text">
 {{ sanitize .post.Text }}
 </div>

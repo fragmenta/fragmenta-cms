@@ -1,4 +1,4 @@
-<section class="blog padded">
+<section class="blog narrow">
 {{ $0 := . }}
 {{ range .posts }}
    {{ set $0 "post" . }}
