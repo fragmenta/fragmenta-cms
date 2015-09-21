@@ -8,7 +8,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/tags"
 )
 
-// Serve a get request at /tags/1
+// HandleShow serves a get request at /tags/1
 func HandleShow(context router.Context) error {
 
 	// Find the resource

@@ -12,10 +12,6 @@ label {
   font-weight:normal;
 }
 
-.admin_links {
-  float:right;
-}
-
 .inline-fields .field {
   float:left;
   margin-right:3rem;

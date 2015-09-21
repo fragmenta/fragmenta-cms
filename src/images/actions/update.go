@@ -3,13 +3,12 @@ package imageactions
 import (
 	"github.com/fragmenta/router"
 	"github.com/fragmenta/view"
-	"github.com/fragmenta/view/helpers"
 
 	"github.com/fragmenta/fragmenta-cms/src/images"
 	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
 )
 
-// Serve a get request at /images/1/update (show form to update)
+// HandleUpdateShow serves a get request at /images/1/update (show form to update)
 func HandleUpdateShow(context router.Context) error {
 	// Setup context for template
 	view := view.New(context)
@@ -28,15 +27,11 @@ func HandleUpdateShow(context router.Context) error {
 
 	view.AddKey("redirect", context.Param("redirect"))
 	view.AddKey("image", image)
-	view.AddKey("admin_links", helpers.Link("Destroy Image", url.Destroy(image), "method=delete"))
-
 	return view.Render()
 }
 
-// POST or PUT /images/1/update
+// HandleUpdate handles POST or PUT /images/1/update
 func HandleUpdate(context router.Context) error {
-	// Setup context for template
-	view := view.New(context)
 
 	// Find the image
 	image, err := images.Find(context.ParamInt("id"))
@@ -63,6 +58,6 @@ func HandleUpdate(context router.Context) error {
 	}
 
 	// We redirect back to source if redirect param is set
-	return router.Redirect(context, url.Update(image))
+	return router.Redirect(context, image.URLUpdate())
 
 }

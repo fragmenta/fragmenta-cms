@@ -99,11 +99,16 @@ code {
 }
 
 .button:hover, button:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover {
-  color:#eee;
+  color:#fff;
+  text-shadow:0 0 0.4rem rgba(0,0,0,0.2)
 }
 
 .button.grey {
   background-color:#aaa;
+}
+
+.button.orange {
+  background-color:#f49a18;
 }
 
 .button.small {
@@ -112,6 +117,13 @@ code {
   font-size:0.9em;
   padding:0rem 1rem;
   margin:0;
+}
+
+.inline-buttons {
+  text-align:center;
+}
+.inline-buttons .button {
+  margin:1rem 1rem 2rem 1rem;
 }
 
 ul.list {
@@ -183,10 +195,6 @@ section {
   margin:1rem auto;
 }
 
-section.home {
-  text-align:center;
-  min-height:50rem;
-}
 
 section.feature {
   padding:0 0.5rem 0.5rem 0.5rem;
@@ -194,6 +202,7 @@ section.feature {
   color:#fff;
   width:100%;
   text-align:center;
+  margin:0 0 2rem 0;
 }
 
 section.feature a, section.feature h3, section.feature h4, section.feature h5 {

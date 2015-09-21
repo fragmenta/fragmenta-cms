@@ -7,7 +7,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/tags"
 )
 
-// POST /tags/1/destroy
+// HandleDestroy responds to POST /tags/1/destroy
 func HandleDestroy(context router.Context) error {
 
 	// Set the tag on the context for checking

@@ -1,3 +1,5 @@
+
+
 .setup {
   text-align:center;
 }
@@ -11,6 +13,13 @@
 }
 
 /*  HOME */
+
+section.header {
+  text-align:center;
+  min-height:42rem;
+}
+
+
 img.logo  {
   display:block;
   margin:2rem auto;

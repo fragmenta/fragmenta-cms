@@ -8,7 +8,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
 )
 
-// GET images/create
+// HandleCreateShow serves GET images/create
 func HandleCreateShow(context router.Context) error {
 
 	// Authorise
@@ -17,16 +17,14 @@ func HandleCreateShow(context router.Context) error {
 		return router.NotAuthorizedError(err)
 	}
 
-	// Setup
+	// Serve the template
 	view := view.New(context)
 	image := images.New()
 	view.AddKey("image", image)
-
-	// Serve
 	return view.Render()
 }
 
-// POST images/create
+// HandleCreate responds to POST images/create
 func HandleCreate(context router.Context) error {
 
 	// Authorise
@@ -35,15 +33,24 @@ func HandleCreate(context router.Context) error {
 		return router.NotAuthorizedError(err)
 	}
 
-	// Setup context
+	// We expect only one image, what about replacing the existing when updating?
+	// At present we just create a new image
+	files, err := context.ParamFiles("image")
+	if err != nil {
+		return router.InternalError(err)
+	}
+
+	if len(files) == 0 {
+		return router.NotFoundError(nil)
+	}
+
+	// Get the params
 	params, err := context.Params()
 	if err != nil {
 		return router.InternalError(err)
 	}
 
-	delete(params, "tab")
-
-	id, err := images.Create(params.Map())
+	id, err := images.Create(params.Map(), files[0])
 	if err != nil {
 		context.Logf("#error Error creating image,%s", err)
 		return router.InternalError(err)

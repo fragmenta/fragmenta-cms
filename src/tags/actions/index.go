@@ -11,7 +11,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/tags"
 )
 
-// Only required once
+// UpdateAllDottedIds is not required any more?
 func UpdateAllDottedIds() error {
 
 	// Regenerate dotted ids - we fetch all tags first to avoid db calls

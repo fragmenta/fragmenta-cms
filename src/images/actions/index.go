@@ -67,7 +67,7 @@ func HandleIndex(context router.Context) error {
 	view.AddKey("filter", filter)
 	view.AddKey("images", imagesList)
 	// Can we add these programatically?
-	view.AddKey("admin_links", helpers.Link("Create image", url.Create(images.New())))
+	view.AddKey("admin_links", helpers.Link("Create image", images.New().URLCreate()))
 
 	return view.Render()
 

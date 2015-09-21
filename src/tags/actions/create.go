@@ -8,7 +8,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/tags"
 )
 
-// GET tags/create
+// HandleCreateShow serves GET tags/create
 func HandleCreateShow(context router.Context) error {
 
 	// Authorise
@@ -26,7 +26,7 @@ func HandleCreateShow(context router.Context) error {
 	return view.Render()
 }
 
-// POST tags/create
+// HandleCreate responds to POST tags/create
 func HandleCreate(context router.Context) error {
 
 	// Authorise
@@ -60,9 +60,9 @@ func HandleCreate(context router.Context) error {
 	q := tags.Query().Select("select id,parent_id from tags").Order("id asc")
 	tagsList, err := tags.FindAll(q)
 	if err == nil {
-		dotted_params := map[string]string{}
-		dotted_params["dotted_ids"] = tag.CalculateDottedIds(tagsList)
-		tags.Query().Where("id=?", tag.Id).Update(dotted_params)
+		dottedParams := map[string]string{}
+		dottedParams["dotted_ids"] = tag.CalculateDottedIds(tagsList)
+		tags.Query().Where("id=?", tag.Id).Update(dottedParams)
 	}
 
 	return router.Redirect(context, tag.URLIndex())
