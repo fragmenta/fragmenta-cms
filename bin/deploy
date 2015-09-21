@@ -11,6 +11,6 @@ fi
 
 # Upload
 echo "Using ansible playbook at $playbook";
-# ansible-playbook -t "upload" "$playbook";
+ansible-playbook -t "upload" "$playbook";
 
 exit 0;
