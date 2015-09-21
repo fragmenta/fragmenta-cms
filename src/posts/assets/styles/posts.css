@@ -1,0 +1,28 @@
+/* CSS Styles for posts */
+
+.post-text h1 {
+  display:none;
+}
+
+.post-text {
+  max-height:20rem;
+  overflow:hidden;
+}
+
+.post-read-more {
+  display:block;
+  text-align:center;
+  background-color:#fafafa;
+  border-bottom:1px solid #dfdfdf;
+  margin-bottom:3rem;
+}
+
+@media(min-width:550px){
+  .post-text {
+    max-height:49rem;
+  }
+}
+
+.post {
+  margin:0;
+}

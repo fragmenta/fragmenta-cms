@@ -10,6 +10,9 @@ DOM.Ready(function(){
   ActivatePagerlinks();
   // Activate the map overlay
   ActivateMap();
+  
+  // Activate highlight.js on all pages
+  hljs.initHighlightingOnLoad();
 });
 
 // Perform AJAX post on click on method=post|delete anchors

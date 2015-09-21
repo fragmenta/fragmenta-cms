@@ -18,7 +18,6 @@ h1,h2,h3,h4,h5,h6 {
 h1,h2,h3 {
   font-family:Futura,"Trebuchet MS",Arial,sans-serif;
   font-style:normal;
-  font-weight:100;
   text-align:center;
 }
 
@@ -46,7 +45,6 @@ h4 {
 h5 {
   font-size:1.4rem;
   text-transform:uppercase;
-  font-weight:200;
   letter-spacing:0.1rem;
 }
 
@@ -94,7 +92,7 @@ code {
   background-color:#05afe7;
   border:none;
   font-size:1em;
-  font-weight:200;
+  font-weight:300;
   height:3.8rem;
   line-height:3.8rem;
   padding:0rem 2rem;
@@ -165,7 +163,7 @@ footer {
 
 nav {
     clear:both;
-    font-weight:100;
+    font-weight:300;
 }
 
 nav.admin {

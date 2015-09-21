@@ -4,3 +4,4 @@
 {{ sanitize .post.Text }}
 </div>
 </section>
+<a class="post-read-more" href="{{.post.URLShow}}">Read More</a>
