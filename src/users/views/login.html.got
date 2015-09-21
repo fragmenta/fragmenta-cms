@@ -1,14 +1,12 @@
-<div class="page">
-<div class="section padded">
+<section class="narrow">
 <h1>Login</h1>
 <form action="/users/login" method="post">
  
     {{ field "Email" "email" "" "text" }}
     {{ field "Password" "password" "" "password" "type=password" }}
 
-    <section class="actions">
+    <div class="actions">
         <input type="submit" class="button" value="Login">
-    </section>
+    </div>
 </form>
-</div>
-</div>
+</section>

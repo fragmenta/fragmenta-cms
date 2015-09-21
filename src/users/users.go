@@ -34,7 +34,7 @@ func AllowedParams() []string {
 	return []string{"name", "summary", "email", "status", "role", "password", "text", "title", "image_id"}
 }
 
-// New create a user from database columns - used by query in creating objects
+// NewWithColumns creates a user from database columns - used by query in creating objects
 func NewWithColumns(cols map[string]interface{}) *User {
 
 	user := New()
@@ -59,10 +59,6 @@ func New() *User {
 	user.Model.Init()
 	user.TableName = "users"
 	user.Status = status.Published
-	user.Role = 0
-	user.Name = ""
-	user.Summary = ""
-	user.Email = ""
 	user.Text = "<h3>About</h3><p>About me</p>"
 	return user
 }
@@ -109,7 +105,7 @@ func Where(format string, args ...interface{}) *query.Query {
 	return Query().Where(format, args...)
 }
 
-// Find requests a single record by id
+// Find fetches a single record by id
 func Find(id int64) (*User, error) {
 	result, err := Query().Where("id=?", id).FirstResult()
 	if err != nil {
@@ -118,7 +114,7 @@ func Find(id int64) (*User, error) {
 	return NewWithColumns(result), nil
 }
 
-// FindEmail requests a single record by email
+// FindEmail fetches a single record by email
 func FindEmail(email string) (*User, error) {
 	result, err := Query().Where("email=?", email).FirstResult()
 	if err != nil {
@@ -127,7 +123,7 @@ func FindEmail(email string) (*User, error) {
 	return NewWithColumns(result), nil
 }
 
-// First the first result for this query
+// First fetches the first result for this query
 func First(q *query.Query) (*User, error) {
 
 	result, err := q.FirstResult()
@@ -137,7 +133,7 @@ func First(q *query.Query) (*User, error) {
 	return NewWithColumns(result), nil
 }
 
-// Fetch all results for this query
+// FindAll fetches all results for this query
 func FindAll(q *query.Query) ([]*User, error) {
 
 	// Fetch query.Results from query

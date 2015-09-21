@@ -7,7 +7,7 @@
     {{ field "Email" "email" .user.Email }}
     {{ field "Password" "password" "" "password" "type=password" }}
     {{ field "Name" "name" .user.Name }}
-    {{ field "Title" "summary" .user.Summary }}
+    {{ field "Title" "title" .user.Summary }}
     </div>
     
     <section class="field clear">
@@ -18,8 +18,8 @@
     <section class="page-content">
         <label>Profile</label>
         {{ template "lib/editable/views/editable-toolbar.html.got"}}
-        <textarea name="profile" class="content-textarea" id="profile-content-textarea">{{.user.Profile}}</textarea>
-        <div contenteditable class="content-editable padded-content-editable" id="profile-content-editable">{{html .user.Profile}}</div>
+        <textarea name="summary" class="content-textarea" id="profile-content-textarea">{{.user.Summary}}</textarea>
+        <div contenteditable class="content-editable padded-content-editable" id="profile-content-editable">{{html .user.Summary}}</div>
      </div>
      
      <section class="page-content">

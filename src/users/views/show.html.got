@@ -5,7 +5,7 @@
               {{ template "users/views/user.html.got" . }}
             </div>
             <div class="nine columns bio_text">
-               {{ html .user.Profile }}
+               {{ html .user.Summary }}
             </div>
         </div>
     </div>
