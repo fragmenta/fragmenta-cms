@@ -4,9 +4,9 @@
 echo "UPLOADING...";
 
 # choose a playbook
-playbook="./fragmenta-app.yml"
+playbook="./bin/fragmenta-app.yml"
 if [ "$1" == "production" ]; then
-    playbook="./fragmenta-app-production.yml"
+    playbook="./bin/fragmenta-app-production.yml"
 fi
 
 # Upload
