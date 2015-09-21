@@ -73,6 +73,8 @@ func publicPath(p string) bool {
 	switch p {
 	case "/":
 		return true
+	case "/blog":
+		return true
 	case "/users/login":
 		return true
 	}
