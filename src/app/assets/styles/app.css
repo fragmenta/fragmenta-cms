@@ -197,12 +197,12 @@ section {
 
 
 section.feature {
-  padding:0 0.5rem 0.5rem 0.5rem;
   background-color:#05afe7;
   color:#fff;
   width:100%;
   text-align:center;
   margin:0 0 2rem 0;
+  padding:0 0 0.5rem 0;
 }
 
 section.feature a, section.feature h3, section.feature h4, section.feature h5 {
