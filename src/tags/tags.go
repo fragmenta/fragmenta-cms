@@ -37,11 +37,11 @@ func NewWithColumns(cols map[string]interface{}) *Tag {
 	tag.Id = validate.Int(cols["id"])
 	tag.CreatedAt = validate.Time(cols["created_at"])
 	tag.UpdatedAt = validate.Time(cols["updated_at"])
-	tag.ParentId = validate.Int(cols["parent_id"])
+	tag.ParentID = validate.Int(cols["parent_id"])
 	tag.Status = validate.Int(cols["status"])
 	tag.Name = validate.String(cols["name"])
 	tag.Summary = validate.String(cols["summary"])
-	tag.Url = validate.String(cols["url"])
+	tag.URL = validate.String(cols["url"])
 	tag.DottedIds = validate.String(cols["dotted_ids"])
 
 	return tag
@@ -53,8 +53,8 @@ func New() *Tag {
 	tag.Model.Init()
 	tag.TableName = "tags"
 	tag.Status = status.Draft
-	tag.ParentId = 0
-	tag.Url = ""
+	tag.ParentID = 0
+	tag.URL = ""
 	tag.Name = ""
 	tag.Summary = ""
 	tag.DisplayOrder = 100000
@@ -147,7 +147,7 @@ func validateParams(unsafeParams map[string]string) error {
 
 // Parent returns the parent tag (if any).
 func (m *Tag) Parent() *Tag {
-	t, err := Find(m.ParentId)
+	t, err := Find(m.ParentID)
 	if err != nil {
 		return nil
 	}
@@ -188,7 +188,7 @@ func (m *Tag) Destroy() error {
 // ParentTagOptions returs a list of tags suitable for parent options in a tag parent select.
 func (m *Tag) ParentTagOptions() []helpers.Option {
 
-	var options []helpers
+	var options []helpers.Option
 
 	options = append(options, helpers.Option{Id: 0, Name: "None"})
 
@@ -196,7 +196,7 @@ func (m *Tag) ParentTagOptions() []helpers.Option {
 	tagsList, err := FindAll(q)
 	if err == nil {
 		for _, t := range tagsList {
-			options = append(options, helpers.Option{Id: t.ID, Name: t.Name})
+			options = append(options, helpers.Option{Id: t.Id, Name: t.Name})
 		}
 	}
 
@@ -232,9 +232,9 @@ func (m *Tag) Level() int {
 func (m *Tag) CalculateDottedIds(tags []*Tag) string {
 	dottedIds := ""
 
-	if m.ParentId != 0 {
+	if m.ParentID != 0 {
 		for _, tag := range tags {
-			if tag.Id == m.ParentId {
+			if tag.Id == m.ParentID {
 				dottedIds = fmt.Sprintf("%s.%d", tag.CalculateDottedIds(tags), m.Id)
 				break
 			}

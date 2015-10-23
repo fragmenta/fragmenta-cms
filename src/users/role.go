@@ -25,11 +25,12 @@ func (m *User) HasRole(role string) bool {
 	case "admin":
 		return m.Role == RoleAdmin
 	}
+	return false
 }
 
 // Anon returns true if this user is anon.
 func (m *User) Anon() bool {
-	return m.HasRole(m, "anon")
+	return m.HasRole("anon")
 }
 
 // Reader returns true if this user is a reader.
