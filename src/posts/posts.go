@@ -16,7 +16,7 @@ import (
 type Post struct {
 	model.Model
 	status.ModelStatus
-	AuthorId int64
+	AuthorID int64
 	Name     string
 	Summary  string
 	Text     string

@@ -1,4 +1,3 @@
-// The tags package
 package tags
 
 import (
@@ -14,25 +13,24 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
-// The tags model type
+// Tag model type.
 type Tag struct {
 	model.Model
 	status.ModelStatus
-
-	Name         string
-	ParentId     int64
-	Summary      string
-	Url          string
-	DisplayOrder int64
 	DottedIds    string
+	Name         string
+	Summary      string
+	URL          string
+	DisplayOrder int64
+	ParentID     int64
 }
 
-// Which parameters does this model allow?
+// AllowedParams indicated what parameters this model allows.
 func AllowedParams() []string {
 	return []string{"name", "url", "summary", "parent_id", "status"}
 }
 
-// Create a tag from database columns - used by query in creating objects
+// NewWithColumns creates a tag from database columns - used by query in creating objects
 func NewWithColumns(cols map[string]interface{}) *Tag {
 
 	tag := New()
@@ -49,7 +47,7 @@ func NewWithColumns(cols map[string]interface{}) *Tag {
 	return tag
 }
 
-// Set up a new tag with default values
+// New sets up a new tag with default values.
 func New() *Tag {
 	tag := &Tag{}
 	tag.Model.Init()
@@ -64,7 +62,7 @@ func New() *Tag {
 	return tag
 }
 
-// Insert a new tag
+// Create inserts a new tag.
 func Create(params map[string]string) (int64, error) {
 
 	// Remove params not in AllowedParams
@@ -82,30 +80,32 @@ func Create(params map[string]string) (int64, error) {
 	return Query().Insert(params)
 }
 
-// Create a new query relation referencing this model
+// Query creates a new query relation referencing this model.
 func Query() *query.Query {
 	return query.New("tags", "id")
 }
 
-// Create a new query for all models, setting a default order
+// All creates a new query for all models, setting a default order.
 func All() *query.Query {
 	return Query().Order("updated_at desc, created_at desc, id desc")
 }
 
+// RootTags returns the root tags.
 func RootTags() *query.Query {
 	return Query().Where("parent_id IS NULL OR parent_id = 0")
 }
 
-// A shortcut for the common where query on tags
+// Where is a shortcut for the common where query on tags.
 func Where(format string, args ...interface{}) *query.Query {
 	return Query().Where(format, args...)
 }
 
+// Ordered returns a query result ordered by name.
 func Ordered(q *query.Query) *query.Query {
 	return q.Order("name asc")
 }
 
-// Request a single record by id in params
+// Find requests a single record by ID in params.
 func Find(id int64) (*Tag, error) {
 	result, err := Query().Where("id=?", id).FirstResult()
 	if err != nil {
@@ -114,7 +114,7 @@ func Find(id int64) (*Tag, error) {
 	return NewWithColumns(result), nil
 }
 
-// Fetch all results for this query
+// FindAll fetches all results for this query.
 func FindAll(q *query.Query) ([]*Tag, error) {
 
 	// Fetch query.Results from query
@@ -145,7 +145,7 @@ func validateParams(unsafeParams map[string]string) error {
 	return err
 }
 
-// Return the parent tag (if any)
+// Parent returns the parent tag (if any).
 func (m *Tag) Parent() *Tag {
 	t, err := Find(m.ParentId)
 	if err != nil {
@@ -154,7 +154,7 @@ func (m *Tag) Parent() *Tag {
 	return t
 }
 
-// Update this tag
+// Update this tag.
 func (m *Tag) Update(params map[string]string) error {
 
 	// Remove params not in AllowedParams
@@ -180,30 +180,30 @@ func (m *Tag) Update(params map[string]string) error {
 	return Query().Where("id=?", m.Id).Update(params)
 }
 
-// Delete this tag
+// Destroy this tag.
 func (m *Tag) Destroy() error {
 	return Query().Where("id=?", m.Id).Delete()
 }
 
-// Return a list of tags suitable for parent options in a tag parent select
+// ParentTagOptions returs a list of tags suitable for parent options in a tag parent select.
 func (m *Tag) ParentTagOptions() []helpers.Option {
 
-	options := make([]helpers.Option, 0)
+	var options []helpers
 
-	options = append(options, helpers.Option{0, "None"})
+	options = append(options, helpers.Option{Id: 0, Name: "None"})
 
 	q := Query().Order("name asc")
 	tagsList, err := FindAll(q)
 	if err == nil {
 		for _, t := range tagsList {
-			options = append(options, helpers.Option{t.Id, t.Name})
+			options = append(options, helpers.Option{Id: t.ID, Name: t.Name})
 		}
 	}
 
 	return options
 }
 
-// Return a list of child tags by querying the database
+// Children returns a list of child tags by querying the database.
 func (m *Tag) Children() []*Tag {
 
 	q := Query().Where("parent_id=?", m.Id).Order("name asc")
@@ -217,7 +217,7 @@ func (m *Tag) Children() []*Tag {
 	return tagsList
 }
 
-// Level returns our depth in the tag hierarchy as an int from 0 at root up
+// Level returns our depth in the tag hierarchy as an int from 0 at root up.
 func (m *Tag) Level() int {
 	if len(m.DottedIds) > 0 {
 		return strings.Count(m.DottedIds, ".")
@@ -227,7 +227,8 @@ func (m *Tag) Level() int {
 
 }
 
-// CalculateDottedIds recalculates the dotted ids for this tag from parents (requires an array of all tag ids)
+// CalculateDottedIds recalculates the dotted ids for this tag from parents
+// (requires an array of all tag ids).
 func (m *Tag) CalculateDottedIds(tags []*Tag) string {
 	dottedIds := ""
 

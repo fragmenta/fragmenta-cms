@@ -10,14 +10,14 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
-// GET /users/password/reset
+// HandlePasswordResetShow - GET /users/password/reset.
 func HandlePasswordResetShow(context router.Context) error {
 	view := view.New(context)
 	view.Template("users/views/password_reset.html.got")
 	return view.Render()
 }
 
-// POST /users/password/reset
+// HandlePasswordResetSend - POST /users/password/reset,
 func HandlePasswordResetSend(context router.Context) error {
 
 	// Find the user by email (if not found let them know)
@@ -48,14 +48,14 @@ func HandlePasswordResetSend(context router.Context) error {
 	return router.Redirect(context, "/users/password/sent")
 }
 
-// GET /users/password/sent
+// HandlePasswordResetSentShow - GET /users/password/sent.
 func HandlePasswordResetSentShow(context router.Context) error {
 	view := view.New(context)
 	view.Template("users/views/password.html.got")
 	return view.Render()
 }
 
-// POST /users/password?token=DEADFISH - handle password reset link
+// HandlePasswordReset - POST /users/password?token=DEADFISH - handle password reset link.
 func HandlePasswordReset(context router.Context) error {
 
 	token := context.Param("token")

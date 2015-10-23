@@ -7,7 +7,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/pages"
 )
 
-// POST /pages/1/destroy
+// HandleDestroy - POST /pages/1/destroy.
 func HandleDestroy(context router.Context) error {
 
 	// Set the page on the context for checking

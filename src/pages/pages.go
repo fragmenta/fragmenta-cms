@@ -16,7 +16,7 @@ import (
 type Page struct {
 	model.Model
 	status.ModelStatus
-	Url      string
+	URL      string
 	Name     string
 	Summary  string
 	Text     string

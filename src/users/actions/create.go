@@ -8,7 +8,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
-// GET users/create
+// HandleCreateShow - GET users/create.
 func HandleCreateShow(context router.Context) error {
 
 	// Authorise
@@ -26,7 +26,7 @@ func HandleCreateShow(context router.Context) error {
 	return view.Render()
 }
 
-// POST users/create
+// HandleCreate - POST users/create.
 func HandleCreate(context router.Context) error {
 
 	// Authorise
@@ -45,9 +45,8 @@ func HandleCreate(context router.Context) error {
 	id, err := users.Create(params.Map())
 	if err != nil {
 		return router.InternalError(err, "Error", "Sorry, an error occurred creating the user record.")
-	} else {
-		context.Logf("#info Created user id,%d", id)
 	}
+	context.Logf("#info Created user id,%d", id)
 
 	// Redirect to the new user
 	p, err := users.Find(id)

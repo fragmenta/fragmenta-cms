@@ -8,7 +8,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/pages"
 )
 
-// GET pages/create
+// HandleCreateShow - GET pages/create.
 func HandleCreateShow(context router.Context) error {
 	// Authorise
 	err := authorise.Path(context)
@@ -25,7 +25,7 @@ func HandleCreateShow(context router.Context) error {
 	return view.Render()
 }
 
-// POST pages/create
+// HandleCreate - POST pages/create.
 func HandleCreate(context router.Context) error {
 	// Authorise
 	err := authorise.Path(context)

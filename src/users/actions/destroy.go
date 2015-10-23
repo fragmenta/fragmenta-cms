@@ -7,7 +7,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
-// POST /users/1/destroy
+// HandleDestroy - POST /users/1/destroy.
 func HandleDestroy(context router.Context) error {
 
 	// Set the user on the context for checking
