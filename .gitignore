@@ -1,4 +1,5 @@
 .DS_Store
+/vendor
 /bin
 /log
 /secrets
