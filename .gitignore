@@ -4,6 +4,7 @@
 /secrets
 /db
 /public/files
+.idea/
 
 # ignore compiled app group
 /public/assets/*/app-*
