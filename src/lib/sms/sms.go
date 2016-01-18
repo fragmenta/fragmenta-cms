@@ -3,6 +3,7 @@ package sms
 import (
 	"fmt"
 
+	"net/http"
 	"net/url"
 	"strings"
 )
@@ -52,7 +53,7 @@ func Send(recipient string, message string) error {
 	}
 
 	if response.StatusCode != http.StatusCreated {
-		fmt.Sprintf("Error sending SMS:%v\n", response)
+		fmt.Printf("Error sending SMS:%v\n", response)
 		return fmt.Errorf("SMS send failed with status:%d", response.StatusCode)
 	}
 

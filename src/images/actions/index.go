@@ -11,18 +11,16 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
 )
 
-// Serve a get request at /images
-//
-//
+// HandleIndex Serves a GET request at /images
 func HandleIndex(context router.Context) error {
 
-	// Authorise
+	// Authorise.
 	err := authorise.Path(context)
 	if err != nil {
 		return router.NotAuthorizedError(err)
 	}
 
-	// Setup context for template
+	// Setup context for template.
 	view := view.New(context)
 
 	// Build a query

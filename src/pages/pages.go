@@ -16,7 +16,7 @@ import (
 type Page struct {
 	model.Model
 	status.ModelStatus
-	Url      string
+	URL      string
 	Name     string
 	Summary  string
 	Text     string
@@ -37,7 +37,7 @@ func NewWithColumns(cols map[string]interface{}) *Page {
 	page.CreatedAt = validate.Time(cols["created_at"])
 	page.UpdatedAt = validate.Time(cols["updated_at"])
 	page.Status = validate.Int(cols["status"])
-	page.Url = validate.String(cols["url"])
+	page.URL = validate.String(cols["url"])
 	page.Name = validate.String(cols["name"])
 	page.Summary = validate.String(cols["summary"])
 	page.Text = validate.String(cols["text"])

@@ -13,24 +13,39 @@ const (
 	RoleAdmin  = 100
 )
 
-// Anon returns true if this user is anon
+// HasRole indicates whether a user has the supplied role.
+func (m *User) HasRole(role string) bool {
+	switch role {
+	case "anon":
+		return m.Role == RoleAnon
+	case "reader":
+		return m.Role == RoleReader
+	case "editor":
+		return m.Role == RoleEditor
+	case "admin":
+		return m.Role == RoleAdmin
+	}
+	return false
+}
+
+// Anon returns true if this user is anon.
 func (m *User) Anon() bool {
-	return m.Role == RoleAnon
+	return m.HasRole("anon")
 }
 
-// Patient returns true if this user is Patient
+// Reader returns true if this user is a reader.
 func (m *User) Reader() bool {
-	return m.Role == RoleReader
+	return m.HasRole("reader")
 }
 
-// Expert returns true if this user is Expert
+// Editor returns true if this user is an editor.
 func (m *User) Editor() bool {
-	return m.Role == RoleEditor
+	return m.HasRole("editor")
 }
 
-// Admin returns true if this user is Admin
+// Admin returns true if this user is Admin.
 func (m *User) Admin() bool {
-	return m.Role == RoleAdmin
+	return m.HasRole("admin")
 }
 
 // RoleOptions returns an array of Role values for this model (embedders may override this and roledisplay to extend)
@@ -59,7 +74,7 @@ func Admins() *query.Query {
 	return Query().Where("role=?", RoleAdmin).Order("name asc")
 }
 
-// Admins returns a query which finds all editor users
+// Editors returns a query which finds all editor users
 func Editors() *query.Query {
 	return Query().Where("role=?", RoleEditor).Order("name asc")
 }

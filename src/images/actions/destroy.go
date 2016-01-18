@@ -7,7 +7,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
 )
 
-// POST /images/1/destroy
+// HandleDestroy handler - POST /images/1/destroy
 func HandleDestroy(context router.Context) error {
 
 	// Set the image on the context for checking

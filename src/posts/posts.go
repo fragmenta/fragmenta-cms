@@ -16,7 +16,7 @@ import (
 type Post struct {
 	model.Model
 	status.ModelStatus
-	AuthorId int64
+	AuthorID int64
 	Name     string
 	Summary  string
 	Text     string
@@ -35,7 +35,7 @@ func NewWithColumns(cols map[string]interface{}) *Post {
 	post.CreatedAt = validate.Time(cols["created_at"])
 	post.UpdatedAt = validate.Time(cols["updated_at"])
 	post.Status = validate.Int(cols["status"])
-	post.AuthorId = validate.Int(cols["author_id"])
+	post.AuthorID = validate.Int(cols["author_id"])
 	post.Name = validate.String(cols["name"])
 	post.Summary = validate.String(cols["summary"])
 	post.Text = validate.String(cols["text"])

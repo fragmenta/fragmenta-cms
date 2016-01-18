@@ -69,10 +69,10 @@ func (m *Image) SaveImageRepresentations(f multipart.File) error {
 
 	// Write out several representations of this file to disk
 	options := []file.Options{
-		file.Options{path.Join("public", m.Path), 4000, 4000, 100},
-		file.Options{path.Join("public", m.LargePath()), 2000, 2000, 70},
-		file.Options{path.Join("public", m.SmallPath()), 400, 400, 60},
-		file.Options{path.Join("public", m.IconPath()), 200, 200, 60},
+		file.Options{Path: path.Join("public", m.Path), MaxHeight: 4000, MaxWidth: 4000, Quality: 100},
+		file.Options{Path: path.Join("public", m.LargePath()), MaxHeight: 2000, MaxWidth: 2000, Quality: 70},
+		file.Options{Path: path.Join("public", m.SmallPath()), MaxHeight: 400, MaxWidth: 400, Quality: 60},
+		file.Options{Path: path.Join("public", m.IconPath()), MaxHeight: 200, MaxWidth: 200, Quality: 60},
 	}
 
 	// Make sure our path exists first
@@ -84,28 +84,31 @@ func (m *Image) SaveImageRepresentations(f multipart.File) error {
 	return file.SaveJpegRepresentations(f, options)
 }
 
-// NB this assumes that the path ends in .jpg
+// SetDefaultOriginalPath assumes that the path ends in .jpg.
 func (m *Image) SetDefaultOriginalPath() error {
 	m.Path = fmt.Sprintf("files/images/%d/%s.jpg", m.Id, file.SanitizeName(m.Name))
 	return m.Update(map[string]string{"path": m.Path})
 }
 
+// LargePath returns the image large path.
 func (m *Image) LargePath() string {
 	return strings.Replace(m.Path, ".jpg", "-large.jpg", -1)
 }
 
+// SmallPath returns the image small path.
 func (m *Image) SmallPath() string {
 	return strings.Replace(m.Path, ".jpg", "-small.jpg", -1)
 }
 
+// IconPath returns the image icon path.
 func (m *Image) IconPath() string {
 	return strings.Replace(m.Path, ".jpg", "-icon.jpg", -1)
 }
 
-// Update this image
+// Update this image.
 func (m *Image) Update(params map[string]string) error {
 
-	// Remove params not in AllowedParams
+	// Remove params not in AllowedParams.
 	params = model.CleanParams(params, AllowedParams())
 
 	err := validateParams(params)
@@ -119,23 +122,23 @@ func (m *Image) Update(params map[string]string) error {
 	return Query().Where("id=?", m.Id).Update(params)
 }
 
-// Delete this image
+// Destroy this image.
 func (m *Image) Destroy() error {
 	// We also need to delete the image files on disk
-	// TODO - delete image files on disk after image destroy
+	// TODO - delete image files on disk after image destroy.
 
 	return Query().Where("id=?", m.Id).Delete()
 }
 
-// Images permissions require a join table with users, updated on create
+// OwnedBy images permissions require a join table with users, updated on create.
 func (m *Image) OwnedBy(id int64) bool {
 	return true
 }
 
-// validateParams checks these parameters conform to expectations
+// validateParams checks these parameters conform to expectations.
 func validateParams(unsafeParams map[string]string) error {
 
-	// Now check params are as we expect
+	// Now check params are as we expect,
 	err := validate.Length(unsafeParams["id"], 0, -1)
 	if err != nil {
 		return err
@@ -144,7 +147,7 @@ func validateParams(unsafeParams map[string]string) error {
 	return err
 }
 
-// Create inserts a new image record in the database and returns the id
+// Create inserts a new image record in the database and returns the ID.
 func Create(params map[string]string, fh *multipart.FileHeader) (int64, error) {
 
 	// Remove params not in AllowedParams
@@ -155,26 +158,26 @@ func Create(params map[string]string, fh *multipart.FileHeader) (int64, error) {
 		return 0, err
 	}
 
-	// Update/add some params by default
+	// Update/add some params by default.
 	params["created_at"] = query.TimeString(time.Now().UTC())
 	params["updated_at"] = query.TimeString(time.Now().UTC())
 
 	id, err := Query().Insert(params)
 
 	if fh != nil && id != 0 {
-		// Retreive the form image data by opening the referenced tmp file
+		// Retreive the form image data by opening the referenced tmp file.
 		f, err := fh.Open()
 		if err != nil {
 			return id, err
 		}
 
-		// Now retrieve the image concerned, and save the file representations
+		// Now retrieve the image concerned, and save the file representations.
 		image, err := Find(id)
 		if err != nil {
 			return id, err
 		}
 
-		// Save files to disk using the passed in file data (if any)
+		// Save files to disk using the passed in file data (if any).
 		err = image.SaveImageRepresentations(f)
 		if err != nil {
 			return id, err
@@ -184,21 +187,22 @@ func Create(params map[string]string, fh *multipart.FileHeader) (int64, error) {
 	return id, err
 }
 
-// Query creates a new query relation referencing this model
+// Query creates a new query relation referencing this model.
 func Query() *query.Query {
 	return query.New("images", "id")
 }
 
+// Ordered returns an ordered result set.
 func Ordered() *query.Query {
 	return Query().Order("images.sort asc")
 }
 
-// Where returns a query shortcut for the common where query on images
+// Where returns a query shortcut for the common where query on images.
 func Where(format string, args ...interface{}) *query.Query {
 	return Query().Where(format, args...)
 }
 
-// Find fetches a single record by id in params
+// Find fetches a single record by id in params.
 func Find(id int64) (*Image, error) {
 	result, err := Query().Where("id=?", id).FirstResult()
 	if err != nil {
@@ -207,16 +211,16 @@ func Find(id int64) (*Image, error) {
 	return NewWithColumns(result), nil
 }
 
-// FindAll fetches all results for this query
+// FindAll fetches all results for this query.
 func FindAll(q *query.Query) ([]*Image, error) {
 
-	// Fetch query.Results from query
+	// Fetch query.Results from query.
 	results, err := q.Results()
 	if err != nil {
 		return nil, err
 	}
 
-	// Return an array of pages constructed from the results
+	// Return an array of pages constructed from the results.
 	var imageList []*Image
 	for _, r := range results {
 		image := NewWithColumns(r)
