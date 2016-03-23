@@ -52,6 +52,7 @@ func setupRoutes(r *router.Router) {
 	r.Add("/users/{id:[0-9]+}", useractions.HandleShow)
 	r.Add("/users/login", useractions.HandleLoginShow)
 	r.Add("/users/login", useractions.HandleLogin).Post()
+	r.Add("/users/logout", useractions.HandleLogout)
 	r.Add("/users/logout", useractions.HandleLogout).Post()
 	r.Add("/users/password", useractions.HandlePasswordReset).Post()
 	r.Add("/users/password/reset", useractions.HandlePasswordResetShow)
