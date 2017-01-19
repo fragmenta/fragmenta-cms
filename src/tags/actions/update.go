@@ -1,60 +1,79 @@
 package tagactions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/tags"
 )
 
-// HandleUpdateShow serves a get request at /tags/1/update (show form to update)
-func HandleUpdateShow(context router.Context) error {
+// HandleUpdateShow renders the form to update a tag.
+func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 
-	// Find the tag
-	tag, err := tags.Find(context.ParamInt("id"))
+	// Fetch the  params
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.NotFoundError(err)
+		return server.InternalError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, tag)
+	// Find the tag
+	tag, err := tags.Find(params.GetInt(tags.KeyName))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotFoundError(err)
+	}
+
+	// Authorise update tag
+	err = can.Update(tag, session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
 	}
 
 	// Render the template
-	view := view.New(context)
+	view := view.NewRenderer(w, r)
 	view.AddKey("tag", tag)
 	return view.Render()
 }
 
-// HandleUpdate serves POST or PUT /tags/1/update
-func HandleUpdate(context router.Context) error {
+// HandleUpdate handles the POST of the form to update a tag
+func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
+
+	// Fetch the  params
+	params, err := mux.Params(r)
+	if err != nil {
+		return server.InternalError(err)
+	}
 
 	// Find the tag
-	tag, err := tags.Find(context.ParamInt("id"))
+	tag, err := tags.Find(params.GetInt(tags.KeyName))
 	if err != nil {
-		return router.NotFoundError(err)
+		return server.NotFoundError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, tag)
+	// Check the authenticity token
+	err = session.CheckAuthenticity(w, r)
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return err
 	}
 
-	// Update the tag
-	params, err := context.Params()
+	// Authorise update tag
+	err = can.Update(tag, session.CurrentUser(w, r))
 	if err != nil {
-		return router.InternalError(err)
+		return server.NotAuthorizedError(err)
 	}
 
-	err = tag.Update(params.Map())
+	// Validate the params, removing any we don't accept
+	tagParams := tag.ValidateParams(params.Map(), tags.AllowedParams())
+
+	err = tag.Update(tagParams)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
 	// Redirect to tag
-	return router.Redirect(context, tag.URLShow())
+	return server.Redirect(w, r, tag.ShowURL())
 }

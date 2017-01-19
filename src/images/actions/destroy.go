@@ -1,32 +1,47 @@
 package imageactions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 
 	"github.com/fragmenta/fragmenta-cms/src/images"
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 )
 
-// POST /images/1/destroy
-func HandleDestroy(context router.Context) error {
+// HandleDestroy responds to /images/n/destroy by deleting the image.
+func HandleDestroy(w http.ResponseWriter, r *http.Request) error {
 
-	// Set the image on the context for checking
-	image, err := images.Find(context.ParamInt("id"))
+	// Fetch the  params
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.NotFoundError(err)
+		return server.InternalError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, image)
+	// Find the image
+	image, err := images.Find(params.GetInt(images.KeyName))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotFoundError(err)
+	}
+
+	// Check the authenticity token
+	err = session.CheckAuthenticity(w, r)
+	if err != nil {
+		return err
+	}
+
+	// Authorise destroy image
+	err = can.Destroy(image, session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
 	}
 
 	// Destroy the image
 	image.Destroy()
 
-	// Redirect to sites - better than images root as a default
-	// but should never be used if we have a redirect
-	return router.Redirect(context, "/sites")
+	// Redirect to images root
+	return server.Redirect(w, r, image.IndexURL())
 
 }

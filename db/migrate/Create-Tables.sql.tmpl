@@ -10,104 +10,76 @@ CREATE TABLE fragmenta_metadata (
 ALTER TABLE fragmenta_metadata OWNER TO "[[.fragmenta_db_user]]";
 
 CREATE TABLE users (
-    id SERIAL NOT NULL,
-    created_at timestamp,
-    updated_at timestamp,
-    created_by int,
-    updated_by int,
-    domain_id int,
-    status int,
-    role int,
-    email text,
-    name text,
-    title text,
-    summary text,
-    text text,
-    image_id integer,
-    encrypted_password text,
-    reset_password_token text,
-    password_reset_at timestamp,
-    confirmation_token text,
-    confirmation_token_at timestamp,
-    confirmed_at timestamp
+id SERIAL NOT NULL,
+created_at timestamp,
+updated_at timestamp,
+status integer,
+role integer,
+name text,
+email text,
+title text,
+summary text,
+text text,
+image_id integer,
+password_hash text,
+password_reset_token text,
+password_reset_at timestamp
 );
 ALTER TABLE users OWNER TO "[[.fragmenta_db_user]]";
 
-
-CREATE TABLE pages (
-    id SERIAL NOT NULL,
-    created_at timestamp,
-    updated_at timestamp,
-    domain_id int,
-    created_by int,
-    updated_by int,
-    status int,
-    url text,
-    name text,
-    summary text,
-    keywords text, 
-    text text default '<h1>Your Title</h1><p>Your text</p>',
-    template text default 'pages/views/show.html.got'
-);
-ALTER TABLE pages OWNER TO "[[.fragmenta_db_user]]";
-
-
 CREATE TABLE tags (
-    id SERIAL NOT NULL,
-    created_at timestamp,
-    updated_at timestamp,
-    domain_id int,
-    created_by int,
-    updated_by int,
-    status int,
-    parent_id int,
-    dotted_ids text,
-    url text,
-    name text,
-    summary text
+id SERIAL NOT NULL,
+created_at timestamp,
+updated_at timestamp,
+parent_id integer,
+name text,
+summary text,
+url text,
+sort integer,
+dotted_ids text,
+status integer
 );
 ALTER TABLE tags OWNER TO "[[.fragmenta_db_user]]";
 
-CREATE TABLE pages_tags (
-   page_id int NOT NULL,
-   tag_id int NOT NULL
-);
-ALTER TABLE pages_tags OWNER TO "[[.fragmenta_db_user]]";
-
+DROP TABLE IF EXISTS images;
 CREATE TABLE images (
 id SERIAL NOT NULL,
 created_at timestamp,
 updated_at timestamp,
-domain_id int,
-status int,
-name text,
+status integer,
+author_id integer,
 path text,
-sort integer
+sort integer,
+name text
 );
 ALTER TABLE images OWNER TO "[[.fragmenta_db_user]]";
 
-CREATE TABLE images_pages (
-   image_id int NOT NULL,
-   page_id int NOT NULL
+DROP TABLE IF EXISTS pages;
+CREATE TABLE pages (
+id SERIAL NOT NULL,
+created_at timestamp,
+updated_at timestamp,
+status integer,
+author_id integer,
+url text,
+name text,
+summary text,
+keywords text,
+template text,
+text text
 );
-ALTER TABLE images_pages OWNER TO "[[.fragmenta_db_user]]";
-
+ALTER TABLE images OWNER TO "[[.fragmenta_db_user]]";
 
 CREATE TABLE posts (
 id SERIAL NOT NULL,
 created_at timestamp,
 updated_at timestamp,
-domain_id int,
-status int,
+keywords text,
+template text,
+text text,
+status integer,
 author_id integer,
 name text,
-summary text,
-text text
+summary text
 );
 ALTER TABLE posts OWNER TO "[[.fragmenta_db_user]]";
-
-CREATE TABLE images_posts (
-   image_id int NOT NULL,
-   post_id int NOT NULL
-);
-ALTER TABLE images_posts OWNER TO "[[.fragmenta_db_user]]";

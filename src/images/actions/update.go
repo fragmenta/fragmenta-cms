@@ -1,63 +1,79 @@
 package imageactions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
 	"github.com/fragmenta/fragmenta-cms/src/images"
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 )
 
-// HandleUpdateShow serves a get request at /images/1/update (show form to update)
-func HandleUpdateShow(context router.Context) error {
-	// Setup context for template
-	view := view.New(context)
+// HandleUpdateShow renders the form to update a image.
+func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 
-	image, err := images.Find(context.ParamInt("id"))
+	// Fetch the  params
+	params, err := mux.Params(r)
 	if err != nil {
-		context.Logf("#error Error finding image %s", err)
-		return router.NotFoundError(err)
+		return server.InternalError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, image)
+	// Find the image
+	image, err := images.Find(params.GetInt(images.KeyName))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotFoundError(err)
 	}
 
-	view.AddKey("redirect", context.Param("redirect"))
+	// Authorise update image
+	err = can.Update(image, session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
+	}
+
+	// Render the template
+	view := view.NewRenderer(w, r)
 	view.AddKey("image", image)
 	return view.Render()
 }
 
-// HandleUpdate handles POST or PUT /images/1/update
-func HandleUpdate(context router.Context) error {
+// HandleUpdate handles the POST of the form to update a image
+func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
+
+	// Fetch the  params
+	params, err := mux.Params(r)
+	if err != nil {
+		return server.InternalError(err)
+	}
 
 	// Find the image
-	image, err := images.Find(context.ParamInt("id"))
+	image, err := images.Find(params.GetInt(images.KeyName))
 	if err != nil {
-		context.Logf("#error Error finding image %s", err)
-		return router.NotFoundError(err)
+		return server.NotFoundError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, image)
+	// Check the authenticity token
+	err = session.CheckAuthenticity(w, r)
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return err
 	}
 
-	// Update the image
-	params, err := context.Params()
+	// Authorise update image
+	err = can.Update(image, session.CurrentUser(w, r))
 	if err != nil {
-		return router.InternalError(err)
+		return server.NotAuthorizedError(err)
 	}
 
-	err = image.Update(params.Map())
+	// Validate the params, removing any we don't accept
+	imageParams := image.ValidateParams(params.Map(), images.AllowedParams())
+
+	err = image.Update(imageParams)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	// We redirect back to source if redirect param is set
-	return router.Redirect(context, image.URLUpdate())
-
+	// Redirect to image
+	return server.Redirect(w, r, image.ShowURL())
 }

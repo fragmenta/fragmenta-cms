@@ -1,69 +1,70 @@
 package imageactions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
 	"github.com/fragmenta/fragmenta-cms/src/images"
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 )
 
-// HandleCreateShow serves GET images/create
-func HandleCreateShow(context router.Context) error {
+// HandleCreateShow serves the create form via GET for images.
+func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
+
+	image := images.New()
 
 	// Authorise
-	err := authorise.Path(context)
+	err := can.Create(image, session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotAuthorizedError(err)
 	}
 
-	// Serve the template
-	view := view.New(context)
-	image := images.New()
+	// Render the template
+	view := view.NewRenderer(w, r)
 	view.AddKey("image", image)
 	return view.Render()
 }
 
-// HandleCreate responds to POST images/create
-func HandleCreate(context router.Context) error {
+// HandleCreate handles the POST of the create form for images
+func HandleCreate(w http.ResponseWriter, r *http.Request) error {
+
+	image := images.New()
+
+	// Check the authenticity token
+	err := session.CheckAuthenticity(w, r)
+	if err != nil {
+		return err
+	}
 
 	// Authorise
-	err := authorise.Path(context)
+	err = can.Create(image, session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotAuthorizedError(err)
 	}
 
-	// We expect only one image, what about replacing the existing when updating?
-	// At present we just create a new image
-	files, err := context.ParamFiles("image")
+	// Setup context
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	if len(files) == 0 {
-		return router.NotFoundError(nil)
-	}
+	// Validate the params, removing any we don't accept
+	imageParams := image.ValidateParams(params.Map(), images.AllowedParams())
 
-	// Get the params
-	params, err := context.Params()
+	id, err := image.Create(imageParams)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
-
-	id, err := images.Create(params.Map(), files[0])
-	if err != nil {
-		context.Logf("#error Error creating image,%s", err)
-		return router.InternalError(err)
-	}
-
-	// Log creation
-	context.Logf("#info Created image id,%d", id)
 
 	// Redirect to the new image
-	m, err := images.Find(id)
+	image, err = images.Find(id)
 	if err != nil {
-		context.Logf("#error Error creating image,%s", err)
+		return server.InternalError(err)
 	}
 
-	return router.Redirect(context, m.URLShow())
+	return server.Redirect(w, r, image.IndexURL())
 }

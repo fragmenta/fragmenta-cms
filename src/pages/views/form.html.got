@@ -1,27 +1,19 @@
-<form method="post"  class="resource-update-form">
-      
-       <section class="actions padded">
-           <input type="submit" class="button" value="Save">
-           <a class="button grey" href="javascript:history.back()">Cancel</a>
-       </section>
-     
-       <section class="inline-fields padded">
-       {{ select "Status" "status" .page.Status .page.StatusOptions }}
-       {{ selectarray "Template" "template" .page.Template .page.TemplateOptions }}
-       {{ field "Page URL" "url" .page.Url }}
-       {{ field "Page Name" "name" .page.Name }}
-       </section>
-       
-       <section class="wide-fields padded">
-       {{ field "Page Summary" "summary" .page.Summary }}
-       </section>
-       
-       <section class="page-content">
-           <label>Page Content</label>
-           {{ template "lib/editable/views/editable-toolbar.html.got"}}
-           <textarea name="text" class="content-textarea" id="page-content-textarea">{{.page.Text}}</textarea>
-           <div contenteditable class="content-editable" id="page-content-editable">{{html .page.Text}}</div>
-        </section>
-  
+<form method="post" class="resource-update-form pages-form">
 
+    <section class="actions">
+        <input type="submit" class="button" value="Save">
+        <a class="button grey" href="javascript:history.back()">Cancel</a>
+    </section>
+  
+    <section class="inline-fields">
+          {{ field "AuthorID" "author_id" .page.AuthorID }}
+    {{ field "Keywords" "keywords" .page.Keywords }}
+    {{ field "Name" "name" .page.Name }}
+{{ select "Status" "status" .page.Status .page.StatusOptions }}    {{ field "Summary" "summary" .page.Summary }}
+    {{ field "Template" "template" .page.Template }}
+    {{ field "Text" "text" .page.Text }}
+    {{ field "URL" "url" .page.URL }}
+
+    </section>
+    
 </form>

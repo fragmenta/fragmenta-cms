@@ -1,8 +1,7 @@
-<section class="padded">
+<article>
 <h1>{{ .image.Name }}</h1>
 <div class="text">
-	<p>Path: {{ .image.Path }}</p>
-	<p>Sort: {{ .image.Sort }}</p>
+    	<p>Name: {{ .image.Name }}</p>
 
 </div>
-</section>
+</article>

@@ -1,16 +1,20 @@
 #!/bin/sh
-# A simple shell script to deploy via ansible playlists
-# Use an ansible playbook which copies files up and then restarts the server
-echo "UPLOADING...";
 
-# choose a playbook
-playbook="./bin/fragmenta-app.yml"
-if [ "$1" == "production" ]; then
-    playbook="./bin/fragmenta-app-production.yml"
-fi
+# Upload to this destination
+SERVER="example.com"
 
-# Upload
-echo "Using ansible playbook at $playbook";
-ansible-playbook -t "upload" "$playbook";
+# Let the user know
+echo "Uploading to $SERVER...";
 
+# Upload files using rsync
+rsync -rlhzv --update -e ssh --exclude='.*' \
+"$GOPATH/src/github.com/fragmenta/fragmenta-cms" \
+"core@$SERVER:/srv/www/fragmenta-cms"
+
+# Restart the service on server
+ssh -t core@$SERVER /bin/bash <<'EOT'
+sudo systemctl restart fragmenta.service
+EOT
+
+echo "Completed"
 exit 0;

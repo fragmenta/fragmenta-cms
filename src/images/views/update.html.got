@@ -1,5 +1,4 @@
-<section class="padded">
-<h1>Update Image</h1>
-   <img src="/{{ .image.SmallPath }}" class="right">
-   {{ template "images/views/form.html.got" . }}
-</section>
+<article>
+<h1>Update Images</h1>
+{{ template "images/views/form.html.got" . }}
+</article>

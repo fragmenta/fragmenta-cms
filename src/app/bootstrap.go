@@ -91,6 +91,7 @@ func projectPathRelative(projectPath string) string {
 func generateConfig(projectPath string) error {
 	configPath := configPath()
 	prefix := path.Base(projectPath)
+	prefix = strings.Replace(prefix, "-", "_", -1)
 	log.Printf("Generating new config at %s", configPath)
 
 	ConfigProduction = map[string]string{}
@@ -106,10 +107,9 @@ func generateConfig(projectPath string) error {
 		"path":            projectPathRelative(projectPath),
 		"hmac_key":        randomKey(32),
 		"secret_key":      randomKey(32),
+		"session_name":    prefix,
 	}
 
-	// Should we ask for db prefix when setting up?
-	// hmm, in fact can we do this setup here at all!!
 	for k, v := range ConfigTest {
 		ConfigDevelopment[k] = v
 		ConfigProduction[k] = v
@@ -121,7 +121,7 @@ func generateConfig(projectPath string) error {
 
 	ConfigProduction["db"] = prefix + "_production"
 	ConfigProduction["log"] = "log/production.log"
-	ConfigProduction["port"] = "80"
+	ConfigProduction["port"] = "80" //FIXME set up for https with port 443
 	ConfigProduction["assets_compiled"] = "yes"
 	ConfigProduction["hmac_key"] = randomKey(32)
 	ConfigProduction["secret_key"] = randomKey(32)

@@ -1,14 +1,18 @@
-<div class="row tags_form">
-<form  method="post" >
-    {{ select "Parent" "parent_id" .tag.ParentId .tag.ParentTagOptions }}
-    {{ select "Status" "status" .tag.Status .tag.StatusOptions }}
-  
-    {{ field "Name" "name" .tag.Name }}
-    {{ field "Summary" "summary" .tag.Summary }}
-    {{ field "Url" "url" .tag.Url }}
+<form method="post" class="resource-update-form tags-form">
 
     <section class="actions">
         <input type="submit" class="button" value="Save">
+        <a class="button grey" href="javascript:history.back()">Cancel</a>
     </section>
+  
+    <section class="inline-fields">
+          {{ field "DottedIds" "dotted_ids" .tag.DottedIds }}
+    {{ field "Name" "name" .tag.Name }}
+    {{ field "ParentID" "parent_id" .tag.ParentID }}
+    {{ field "Sort" "sort" .tag.Sort }}
+{{ select "Status" "status" .tag.Status .tag.StatusOptions }}    {{ field "Summary" "summary" .tag.Summary }}
+    {{ field "URL" "url" .tag.URL }}
+
+    </section>
+    
 </form>
-</div>

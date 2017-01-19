@@ -1,58 +1,70 @@
 package [[ .fragmenta_resource ]]actions
 
 import (
+	"net/http"
 
-	"github.com/fragmenta/router"
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"[[ .fragmenta_app_path ]]/[[ .fragmenta_resources ]]"
-    "[[ .fragmenta_app_path ]]/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
+	"github.com/fragmenta/fragmenta-cms/src/[[ .fragmenta_resources ]]"
 )
 
-// HandleCreateShow serves the create form via GET for [[ .fragmenta_resources ]]
-func HandleCreateShow(context router.Context) error {
+// HandleCreateShow serves the create form via GET for [[ .fragmenta_resources ]].
+func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
+
+	[[ .fragmenta_resource ]] := [[ .fragmenta_resources ]].New()
 
 	// Authorise
-	err := authorise.Path(context)
+	err := can.Create([[ .fragmenta_resource ]], session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)	
+		return server.NotAuthorizedError(err)
 	}
 
 	// Render the template
-	view := view.New(context)
-	[[ .fragmenta_resource ]] := [[ .fragmenta_resources ]].New()
+	view := view.NewRenderer(w, r)
 	view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
-    return view.Render()
+	return view.Render()
 }
 
 // HandleCreate handles the POST of the create form for [[ .fragmenta_resources ]]
-func HandleCreate(context router.Context) error {
+func HandleCreate(w http.ResponseWriter, r *http.Request) error {
+
+	[[ .fragmenta_resource ]] := [[ .fragmenta_resources ]].New()
+
+	// Check the authenticity token
+	err := session.CheckAuthenticity(w, r)
+	if err != nil {
+		return err
+	}
 
 	// Authorise
-	err := authorise.Path(context)
-    if err != nil {
-		return router.NotAuthorizedError(err)	
-    }
+	err = can.Create([[ .fragmenta_resource ]], session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
+	}
 
 	// Setup context
-	params, err := context.Params()
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	id, err := [[ .fragmenta_resources ]].Create(params.Map())
+	// Validate the params, removing any we don't accept
+	[[ .fragmenta_resource ]]Params := [[ .fragmenta_resource ]].ValidateParams(params.Map(), [[ .fragmenta_resources ]].AllowedParams())
+
+	id, err := [[ .fragmenta_resource ]].Create([[ .fragmenta_resource ]]Params)
 	if err != nil {
-        return router.InternalError(err)
+		return server.InternalError(err)
 	}
-    
-    // Log creation
-    context.Logf("#info Created [[ .fragmenta_resource ]] id,%d", id)
-	
+
 	// Redirect to the new [[ .fragmenta_resource ]]
-	m, err := [[ .fragmenta_resources ]].Find(id)
+	[[ .fragmenta_resource ]], err = [[ .fragmenta_resources ]].Find(id)
 	if err != nil {
-        return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	return router.Redirect(context, m.URLIndex())
+	return server.Redirect(w, r, [[ .fragmenta_resource ]].IndexURL())
 }

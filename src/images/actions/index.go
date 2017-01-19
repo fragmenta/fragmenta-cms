@@ -1,74 +1,63 @@
 package imageactions
 
 import (
-	"strings"
+	"net/http"
 
-	"github.com/fragmenta/router"
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
-	"github.com/fragmenta/view/helpers"
 
 	"github.com/fragmenta/fragmenta-cms/src/images"
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 )
 
-// Serve a get request at /images
-//
-//
-func HandleIndex(context router.Context) error {
+// HandleIndex displays a list of images.
+func HandleIndex(w http.ResponseWriter, r *http.Request) error {
 
-	// Authorise
-	err := authorise.Path(context)
+	// Authorise list image
+	err := can.List(images.New(), session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotAuthorizedError(err)
 	}
 
-	// Setup context for template
-	view := view.New(context)
+	// Get the params
+	params, err := mux.Params(r)
+	if err != nil {
+		return server.InternalError(err)
+	}
 
 	// Build a query
 	q := images.Query()
 
-	// Show only published (defaults to showing all)
-	// q.Apply(status.WherePublished)
-
 	// Order by required order, or default to id asc
-	switch context.Param("order") {
+	switch params.Get("order") {
 
 	case "1":
-		q.Order("created_at desc")
+		q.Order("created desc")
 
 	case "2":
-		q.Order("updated_at desc")
-
-	case "3":
-		q.Order("name asc")
+		q.Order("updated desc")
 
 	default:
-		q.Order("id desc")
-
+		q.Order("id asc")
 	}
 
-	// Filter if necessary - this assumes name and summary cols
-	filter := context.Param("filter")
+	// Filter if requested
+	filter := params.Get("filter")
 	if len(filter) > 0 {
-		filter = strings.Replace(filter, "&", "", -1)
-		filter = strings.Replace(filter, " ", "", -1)
-		filter = strings.Replace(filter, " ", " & ", -1)
-		q.Where("( to_tsvector(name) || to_tsvector(summary) @@ to_tsquery(?) )", filter)
+		q.Where("name ILIKE ?", filter)
 	}
 
 	// Fetch the images
-	imagesList, err := images.FindAll(q)
+	results, err := images.FindAll(q)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	// Serve template
+	// Render the template
+	view := view.NewRenderer(w, r)
 	view.AddKey("filter", filter)
-	view.AddKey("images", imagesList)
-	// Can we add these programatically?
-	view.AddKey("admin_links", helpers.Link("Create image", images.New().URLCreate()))
-
+	view.AddKey("images", results)
 	return view.Render()
-
 }

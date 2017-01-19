@@ -1,77 +1,79 @@
 package app
 
 import (
-	"github.com/fragmenta/fragmenta-cms/src/posts/actions"
-	"github.com/fragmenta/router"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server/log"
 
+	// Resource Actions
+	"github.com/fragmenta/fragmenta-cms/src/images/actions"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/pages/actions"
+	"github.com/fragmenta/fragmenta-cms/src/posts/actions"
 	"github.com/fragmenta/fragmenta-cms/src/tags/actions"
 	"github.com/fragmenta/fragmenta-cms/src/users/actions"
 )
 
-// Define routes for this app
-func setupRoutes(r *router.Router) {
+// SetupRoutes creates a new router and adds the routes for this app to it.
+func SetupRoutes() *mux.Mux {
+
+	router := mux.New()
+	mux.SetDefault(router)
 
 	// Set the default file handler
-	r.FileHandler = fileHandler
-	r.ErrorHandler = errHandler
-
-	// Add a files route to handle static images under files
-	// - nginx deals with this in production - perhaps only do this in dev?
-	r.Add("/files/{path:.*}", fileHandler)
-	r.Add("/favicon.ico", fileHandler)
+	router.FileHandler = fileHandler
+	router.ErrorHandler = errHandler
 
 	// Add the home page route
-	r.Add("/", pageactions.HandleHome)
+	router.Get("/", homeHandler)
 
-	r.Add("/blog", postactions.HandleBlog)
-	r.Add("/posts", postactions.HandleIndex)
-	r.Add("/posts/create", postactions.HandleCreateShow)
-	r.Add("/posts/create", postactions.HandleCreate).Post()
-	r.Add("/posts/{id:[0-9]+}/update", postactions.HandleUpdateShow)
-	r.Add("/posts/{id:[0-9]+}/update", postactions.HandleUpdate).Post()
-	r.Add("/posts/{id:[0-9]+}/destroy", postactions.HandleDestroy).Post()
-	r.Add("/posts/{id:[0-9]+}", postactions.HandleShow)
+	// Add a route to handle static files
+	router.Add("/favicon.ico", fileHandler)
+	router.Add("/files/{path:.*}", fileHandler)
 
-	// Standard REST handlers for tags
-	r.Add("/tags", tagactions.HandleIndex)
-	r.Add("/tags/create", tagactions.HandleCreateShow)
-	r.Add("/tags/create", tagactions.HandleCreate).Post()
-	r.Add("/tags/{id:[0-9]+}/update", tagactions.HandleUpdateShow)
-	r.Add("/tags/{id:[0-9]+}/update", tagactions.HandleUpdate).Post()
-	r.Add("/tags/{id:[0-9]+}/destroy", tagactions.HandleDestroy).Post()
-	r.Add("/tags/{id:[0-9]+}", tagactions.HandleShow)
+	// Resource Routes
+	router.Get("/pages", pageactions.HandleIndex)
+	router.Get("/pages/create", pageactions.HandleCreateShow)
+	router.Post("/pages/create", pageactions.HandleCreate)
+	router.Get("/pages/{id:[0-9]+}/update", pageactions.HandleUpdateShow)
+	router.Post("/pages/{id:[0-9]+}/update", pageactions.HandleUpdate)
+	router.Post("/pages/{id:[0-9]+}/destroy", pageactions.HandleDestroy)
+	router.Get("/pages/{id:[0-9]+}", pageactions.HandleShow)
+	router.Get("/images", imageactions.HandleIndex)
+	router.Get("/images/create", imageactions.HandleCreateShow)
+	router.Post("/images/create", imageactions.HandleCreate)
+	router.Get("/images/{id:[0-9]+}/update", imageactions.HandleUpdateShow)
+	router.Post("/images/{id:[0-9]+}/update", imageactions.HandleUpdate)
+	router.Post("/images/{id:[0-9]+}/destroy", imageactions.HandleDestroy)
+	router.Get("/images/{id:[0-9]+}", imageactions.HandleShow)
+	router.Get("/posts", postactions.HandleIndex)
+	router.Get("/posts/create", postactions.HandleCreateShow)
+	router.Post("/posts/create", postactions.HandleCreate)
+	router.Get("/posts/{id:[0-9]+}/update", postactions.HandleUpdateShow)
+	router.Post("/posts/{id:[0-9]+}/update", postactions.HandleUpdate)
+	router.Post("/posts/{id:[0-9]+}/destroy", postactions.HandleDestroy)
+	router.Get("/posts/{id:[0-9]+}", postactions.HandleShow)
+	router.Get("/tags", tagactions.HandleIndex)
+	router.Get("/tags/create", tagactions.HandleCreateShow)
+	router.Post("/tags/create", tagactions.HandleCreate)
+	router.Get("/tags/{id:[0-9]+}/update", tagactions.HandleUpdateShow)
+	router.Post("/tags/{id:[0-9]+}/update", tagactions.HandleUpdate)
+	router.Post("/tags/{id:[0-9]+}/destroy", tagactions.HandleDestroy)
+	router.Get("/tags/{id:[0-9]+}", tagactions.HandleShow)
 
-	// Standard REST handlers for users
-	r.Add("/users", useractions.HandleIndex)
-	r.Add("/users/create", useractions.HandleCreateShow)
-	r.Add("/users/create", useractions.HandleCreate).Post()
-	r.Add("/users/{id:[0-9]+}/update", useractions.HandleUpdateShow)
-	r.Add("/users/{id:[0-9]+}/update", useractions.HandleUpdate).Post()
-	r.Add("/users/{id:[0-9]+}/destroy", useractions.HandleDestroy).Post()
-	r.Add("/users/{id:[0-9]+}", useractions.HandleShow)
-	r.Add("/users/login", useractions.HandleLoginShow)
-	r.Add("/users/login", useractions.HandleLogin).Post()
-	r.Add("/users/logout", useractions.HandleLogout).Post()
-	r.Add("/users/password", useractions.HandlePasswordReset).Post()
-	r.Add("/users/password/reset", useractions.HandlePasswordResetShow)
-	r.Add("/users/password/reset", useractions.HandlePasswordResetSend).Post()
-	r.Add("/users/password/sent", useractions.HandlePasswordResetSentShow)
+	router.Get("/users", useractions.HandleIndex)
+	router.Get("/users/create", useractions.HandleCreateShow)
+	router.Post("/users/create", useractions.HandleCreate)
+	router.Get("/users/login", useractions.HandleLoginShow)
+	router.Post("/users/login", useractions.HandleLogin)
+	router.Post("/users/logout", useractions.HandleLogout)
+	router.Get("/users/{id:\\d+}/update", useractions.HandleUpdateShow)
+	router.Post("/users/{id:\\d+}/update", useractions.HandleUpdate).Post()
+	router.Post("/users/{id:\\d+}/destroy", useractions.HandleDestroy).Post()
+	router.Get("/users/{id:\\d+}", useractions.HandleShow)
 
-	// Standard REST handlers for pages
-	r.Add("/pages", pageactions.HandleIndex)
-	r.Add("/pages/create", pageactions.HandleCreateShow)
-	r.Add("/pages/create", pageactions.HandleCreate).Post()
-	r.Add("/pages/{id:[0-9]+}/update", pageactions.HandleUpdateShow)
-	r.Add("/pages/{id:[0-9]+}/update", pageactions.HandleUpdate).Post()
-	r.Add("/pages/{id:[0-9]+}/destroy", pageactions.HandleDestroy).Post()
-	r.Add("/pages/{id:[0-9]+}", pageactions.HandleShow)
+	// Add middleware
+	router.AddMiddleware(log.Middleware)
+	router.AddMiddleware(session.Middleware)
 
-	// Setup for an empty website
-	r.Add("/fragmenta/setup", pageactions.HandleShowSetup)
-	r.Add("/fragmenta/setup", pageactions.HandleSetup).Post()
-
-	// Final wildcard route for pages
-	r.Add("/{path:[a-z0-9]+}", pageactions.HandleShowPath)
-
+	return router
 }

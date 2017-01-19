@@ -1,42 +1,41 @@
 package useractions
 
 import (
-	"fmt"
+	"net/http"
 
-	"github.com/fragmenta/router"
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-cms/src/images"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
-// HandleShow serve a get request at /users/1
-func HandleShow(context router.Context) error {
+// HandleShow displays a single user.
+func HandleShow(w http.ResponseWriter, r *http.Request) error {
+
+	// Get the user params for id
+	params, err := mux.Params(r)
+	if err != nil {
+		return server.InternalError(err)
+	}
 
 	// Find the user
-	user, err := users.Find(context.ParamInt("id"))
+	user, err := users.Find(params.GetInt(users.KeyName))
 	if err != nil {
-		context.Logf("#error parsing user id: %s", err)
-		return router.NotFoundError(err)
+		return server.NotFoundError(err)
 	}
 
-	userMeta := fmt.Sprintf("%s – %s", user.Name, user.Summary)
-
-	// Set up view
-	view := view.New(context)
-
-	// Find the first image which matches this user
-	image, err := images.Find(user.ImageID)
-	if err == nil {
-		// only add image key if we have one
-		view.AddKey("image", image)
+	// Authorise access
+	err = can.Show(user, session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
 	}
 
-	// Render the Template
+	// Render the template
+	view := view.NewRenderer(w, r)
+	view.CacheKey(user.CacheKey())
 	view.AddKey("user", user)
-	view.AddKey("meta_title", userMeta)
-	view.AddKey("meta_desc", userMeta)
-	view.AddKey("meta_keywords", user.Keywords())
 	return view.Render()
-
 }

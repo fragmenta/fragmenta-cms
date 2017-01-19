@@ -1,59 +1,73 @@
 package useractions
 
 import (
-	"github.com/fragmenta/router"
+	"fmt"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
-// GET users/create
-func HandleCreateShow(context router.Context) error {
+// HandleCreateShow serves the create form via GET for users.
+func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
+
+	user := users.New()
+
+	fmt.Printf("USER:%v\n", session.CurrentUser(w, r))
 
 	// Authorise
-	err := authorise.Path(context)
+	err := can.Create(user, session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotAuthorizedError(err)
 	}
 
-	// Setup
-	view := view.New(context)
-	user := users.New()
+	// Render the template
+	view := view.NewRenderer(w, r)
 	view.AddKey("user", user)
-
-	// Serve
 	return view.Render()
 }
 
-// POST users/create
-func HandleCreate(context router.Context) error {
+// HandleCreate handles the POST of the create form for users
+func HandleCreate(w http.ResponseWriter, r *http.Request) error {
+
+	user := users.New()
+
+	// Check the authenticity token
+	err := session.CheckAuthenticity(w, r)
+	if err != nil {
+		return err
+	}
 
 	// Authorise
-	err := authorise.Path(context)
+	err = can.Create(user, session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotAuthorizedError(err)
 	}
 
 	// Setup context
-	params, err := context.Params()
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	// We should check for duplicates in here
-	id, err := users.Create(params.Map())
+	// Validate the params, removing any we don't accept
+	userParams := user.ValidateParams(params.Map(), users.AllowedParams())
+
+	id, err := user.Create(userParams)
 	if err != nil {
-		return router.InternalError(err, "Error", "Sorry, an error occurred creating the user record.")
-	} else {
-		context.Logf("#info Created user id,%d", id)
+		return server.InternalError(err)
 	}
 
 	// Redirect to the new user
-	p, err := users.Find(id)
+	user, err = users.Find(id)
 	if err != nil {
-		return router.InternalError(err, "Error", "Sorry, an error occurred finding the new user record.")
+		return server.InternalError(err)
 	}
 
-	return router.Redirect(context, p.URLIndex())
+	return server.Redirect(w, r, user.IndexURL())
 }

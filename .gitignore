@@ -1,8 +1,7 @@
 .DS_Store
-/bin
-/log
-/secrets
-/db
+log/*
+secrets/*
+db/backup/*
 /public/files
 .idea/
 

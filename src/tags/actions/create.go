@@ -1,69 +1,70 @@
 package tagactions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/tags"
 )
 
-// HandleCreateShow serves GET tags/create
-func HandleCreateShow(context router.Context) error {
+// HandleCreateShow serves the create form via GET for tags.
+func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
+
+	tag := tags.New()
 
 	// Authorise
-	err := authorise.Path(context)
+	err := can.Create(tag, session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotAuthorizedError(err)
 	}
 
-	// Setup
-	view := view.New(context)
-	tag := tags.New()
+	// Render the template
+	view := view.NewRenderer(w, r)
 	view.AddKey("tag", tag)
-
-	// Serve
 	return view.Render()
 }
 
-// HandleCreate responds to POST tags/create
-func HandleCreate(context router.Context) error {
+// HandleCreate handles the POST of the create form for tags
+func HandleCreate(w http.ResponseWriter, r *http.Request) error {
+
+	tag := tags.New()
+
+	// Check the authenticity token
+	err := session.CheckAuthenticity(w, r)
+	if err != nil {
+		return err
+	}
 
 	// Authorise
-	err := authorise.Path(context)
+	err = can.Create(tag, session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotAuthorizedError(err)
 	}
 
 	// Setup context
-	params, err := context.Params()
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	id, err := tags.Create(params.Map())
-	if err != nil {
-		context.Logf("#info Failed to create tag %v", params)
-		return router.InternalError(err)
-	}
+	// Validate the params, removing any we don't accept
+	tagParams := tag.ValidateParams(params.Map(), tags.AllowedParams())
 
-	// Log creation
-	context.Logf("#info Created tag id,%d", id)
+	id, err := tag.Create(tagParams)
+	if err != nil {
+		return server.InternalError(err)
+	}
 
 	// Redirect to the new tag
-	tag, err := tags.Find(id)
+	tag, err = tags.Find(id)
 	if err != nil {
-		context.Logf("#error Error creating tag,%s", err)
+		return server.InternalError(err)
 	}
 
-	// Always regenerate dotted ids - we fetch all tags first to avoid db calls
-	q := tags.Query().Select("select id,parent_id from tags").Order("id asc")
-	tagsList, err := tags.FindAll(q)
-	if err == nil {
-		dottedParams := map[string]string{}
-		dottedParams["dotted_ids"] = tag.CalculateDottedIds(tagsList)
-		tags.Query().Where("id=?", tag.Id).Update(dottedParams)
-	}
-
-	return router.Redirect(context, tag.URLIndex())
+	return server.Redirect(w, r, tag.IndexURL())
 }

@@ -1,31 +1,41 @@
 package tagactions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/tags"
 )
 
-// HandleShow serves a get request at /tags/1
-func HandleShow(context router.Context) error {
+// HandleShow displays a single tag.
+func HandleShow(w http.ResponseWriter, r *http.Request) error {
 
-	// Find the resource
-	id := context.ParamInt("id")
-	tag, err := tags.Find(id)
+	// Fetch the  params
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.NotFoundError(err)
+		return server.InternalError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, tag)
+	// Find the tag
+	tag, err := tags.Find(params.GetInt(tags.KeyName))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotFoundError(err)
 	}
 
-	// Serve template
-	view := view.New(context)
+	// Authorise access
+	err = can.Show(tag, session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
+	}
+
+	// Render the template
+	view := view.NewRenderer(w, r)
+	view.CacheKey(tag.CacheKey())
 	view.AddKey("tag", tag)
 	return view.Render()
 }

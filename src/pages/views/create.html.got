@@ -1,4 +1,4 @@
-<section class="padded">
-<h1>Create Page</h1>
+<article>
+<h1>Create Pages</h1>
 {{ template "pages/views/form.html.got" . }}
-</section>
+</article>

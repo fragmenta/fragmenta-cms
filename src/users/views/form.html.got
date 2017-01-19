@@ -1,37 +1,16 @@
-<div class="row users_form">
-<form method="post" enctype="multipart/form-data" class="resource-update-form">
+<form method="post" class="resource-update-form users-form">
 
-  <section class="inline-fields">
-  {{ select "Status" "status" .user.Status .user.StatusOptions }}
-  {{ select "Role" "role" .user.Role .user.RoleOptions }}
-  {{ field "Email" "email" .user.Email }}
-  {{ field "Password" "password" "" "password" "type=password" }}
-  {{ field "Name" "name" .user.Name }}
-  {{ field "Title" "title" .user.Title }}
-  </section>
+    <section class="actions">
+        <input type="submit" class="button" value="Save">
+        <a class="button grey" href="javascript:history.back()">Cancel</a>
+    </section>
+  
+    <section class="inline-fields">
+        {{ select "Status" "status" .user.Status .user.StatusOptions }}
+        {{ select "Role" "role" .user.Role .user.RoleOptions }}
+        {{ field "Name" "name" .user.Name }}
+        {{ field "Email" "email" .user.Email }}
+        {{ field "Password" "password" "" "password" "type=password" }}
+    </section>
     
-  <section class="field clear">
-    <label>Profile Image</label>
-    <input id="image" type="file" name="image">
-  </section>
-
-  <section class="page-content">
-    <label>Profile</label>
-    {{ template "lib/editable/views/editable-toolbar.html.got"}}
-    <textarea name="summary" class="content-textarea" id="profile-content-textarea">{{.user.Summary}}</textarea>
-    <div contenteditable class="content-editable padded-content-editable" id="profile-content-editable">{{html .user.Summary}}</div>
-  </section>
-
-  <section class="page-content">
-    <label>Text</label>
-    {{ template "lib/editable/views/editable-toolbar.html.got"}}
-    <textarea name="text" class="content-textarea" id="user-content-textarea">{{.user.Text}}</textarea>
-    <div contenteditable class="content-editable padded-content-editable" id="user-content-editable">{{html .user.Text}}</div>
-  </section>
-
-  <section class="actions">
-    <input type="submit" class="button" value="Save">
-  </section>
-
 </form>
-</div>

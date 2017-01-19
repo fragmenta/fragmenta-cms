@@ -1,7 +1,0 @@
-{{ if .current_user.Admin }}
-<section class="admin-bar-actions">
-<a class="button small" href="{{ .page.URLUpdate }}">Edit Page</a>
-</section>
-{{ end }}
-
-{{ html .page.Text }}

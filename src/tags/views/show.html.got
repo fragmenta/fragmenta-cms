@@ -1,13 +1,7 @@
-<section class="padded">
+<article>
 <h1>{{ .tag.Name }}</h1>
 <div class="text">
-    {{ if .tag.Parent }}
-	   <p>Parent: <a href="/tags/{{.tag.Parent.Id}}/update">{{.tag.Parent.Name}}</a></p>
-    {{ end }}
-  <p>Name: {{ .tag.Name }}</p>
-	<p>Status: {{ .tag.StatusDisplay }}</p>
-	<p>Summary: {{ .tag.Summary }}</p>
-  <p>Parents: {{ .tag.DottedIds }}</p>
-	<p>Url: {{ .tag.Url }}</p>
+    	<p>Name: {{ .tag.Name }}</p>
+
 </div>
-</section>
+</article>

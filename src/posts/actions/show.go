@@ -1,32 +1,41 @@
 package postactions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/posts"
 )
 
-// HandleShow displays a single post
-func HandleShow(context router.Context) error {
+// HandleShow displays a single post.
+func HandleShow(w http.ResponseWriter, r *http.Request) error {
 
-	// Find the post
-	post, err := posts.Find(context.ParamInt("id"))
+	// Fetch the  params
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	// Authorise access only if not published
-	if !post.IsPublished() {
-		err = authorise.Resource(context, post)
-		if err != nil {
-			return router.NotAuthorizedError(err)
-		}
+	// Find the post
+	post, err := posts.Find(params.GetInt(posts.KeyName))
+	if err != nil {
+		return server.NotFoundError(err)
+	}
+
+	// Authorise access
+	err = can.Show(post, session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
 	}
 
 	// Render the template
-	view := view.New(context)
+	view := view.NewRenderer(w, r)
+	view.CacheKey(post.CacheKey())
 	view.AddKey("post", post)
 	return view.Render()
 }

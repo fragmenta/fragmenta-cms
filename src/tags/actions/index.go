@@ -1,74 +1,63 @@
 package tagactions
 
 import (
-	"fmt"
-	"strings"
+	"net/http"
 
-	"github.com/fragmenta/router"
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/tags"
 )
 
-// UpdateAllDottedIds is not required any more?
-func UpdateAllDottedIds() error {
+// HandleIndex displays a list of tags.
+func HandleIndex(w http.ResponseWriter, r *http.Request) error {
 
-	// Regenerate dotted ids - we fetch all tags first to avoid db calls
-	q := tags.Query().Select("select id,parent_id from tags").Order("id asc")
-	tagsList, err := tags.FindAll(q)
-	if err == nil {
-		for _, tag := range tagsList {
-			params := map[string]string{
-				"dotted_ids": tag.CalculateDottedIds(tagsList),
-			}
-			fmt.Printf("\n%d -> %s\n", tag.Id, params["dotted_ids"])
-			err = tags.Query().Where("id=?", tag.Id).Update(params)
-		}
-
-	} else {
-		fmt.Printf("%s", err)
-		return err
-	}
-
-	return nil
-}
-
-// HandleIndex serves a get request at /tags
-func HandleIndex(context router.Context) error {
-
-	// Authorise
-	err := authorise.Path(context)
+	// Authorise list tag
+	err := can.List(tags.New(), session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotAuthorizedError(err)
 	}
 
-	//UpdateAllDottedIds()
+	// Get the params
+	params, err := mux.Params(r)
+	if err != nil {
+		return server.InternalError(err)
+	}
 
-	// Setup context for template
-	view := view.New(context)
+	// Build a query
+	q := tags.Query()
+
+	// Order by required order, or default to id asc
+	switch params.Get("order") {
+
+	case "1":
+		q.Order("created desc")
+
+	case "2":
+		q.Order("updated desc")
+
+	default:
+		q.Order("id asc")
+	}
+
+	// Filter if requested
+	filter := params.Get("filter")
+	if len(filter) > 0 {
+		q.Where("name ILIKE ?", filter)
+	}
 
 	// Fetch the tags
-	q := tags.RootTags().Order("name asc")
-
-	// Filter if necessary
-	filter := context.Param("filter")
-	if len(filter) > 0 {
-		filter = strings.Replace(filter, "&", "", -1)
-		filter = strings.Replace(filter, " ", "", -1)
-		filter = strings.Replace(filter, " ", " & ", -1)
-		q.Where("(to_tsvector(name) || to_tsvector(summary) @@ to_tsquery(?))", filter)
-	}
-
-	tagList, err := tags.FindAll(q)
+	results, err := tags.FindAll(q)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	// Serve template
+	// Render the template
+	view := view.NewRenderer(w, r)
 	view.AddKey("filter", filter)
-	view.AddKey("tags", tagList)
-
+	view.AddKey("tags", results)
 	return view.Render()
-
 }

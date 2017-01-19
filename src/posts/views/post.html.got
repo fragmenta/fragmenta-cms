@@ -1,7 +1,0 @@
-<section class="post">
-<h2><a href="{{.post.URLShow}}">{{ .post.Name }}</a></h2>
-<div class="post-text">
-{{ sanitize .post.Text }}
-</div>
-</section>
-<a class="post-read-more" href="{{.post.URLShow}}">Read More</a>

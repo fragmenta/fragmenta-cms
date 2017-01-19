@@ -1,86 +1,67 @@
 package mail
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/fragmenta/view"
-	"github.com/sendgrid/sendgrid-go"
 )
 
-// TODO - instead of package variables, use New() mailer and put the variables in the mailer?
-// Try to be consistent about use of pkg variables
+// TODO - add more mail services, at present only sendgrid is supported
+// Usage:
+// email := mail.New(recipient)
+// email.Subject = "blah"
+// email.Body = blah
+// mail.Send(email,context)
 
-// The Mail service user (must be set before first sending)
-var user string
-
-// The Mail service secret key/password (must be set before first sending)
-var secret string
-
-var from string
-
-// Setup sets the user and secret for use in sending mail (possibly later we should have a config etc)
-func Setup(u string, s string, f string) {
-	user = u
-	secret = s
-	from = f
+// Sender is the interface for our adapters for mail services.
+type Sender interface {
+	Send(email *Email) error
 }
 
-// Send sends mail
-func Send(recipients []string, subject string, template string, context map[string]interface{}) error {
+// Context defines a simple list of string:value pairs for mail templates.
+type Context map[string]interface{}
 
-	// At present we use sendgrid, we may later allow many mail services to be used
-	//	sg := sendgrid.NewSendGridClient(user, secret)
-	sg := sendgrid.NewSendGridClientWithApiKey(secret)
+// Production should be set to true in production environment.
+var Production = false
 
-	message := sendgrid.NewMail()
-	message.SetFrom(from)
-	message.AddTos(recipients)
-	message.SetSubject(subject)
+// Service is the mail adapter to send with and should be set on startup.
+var Service Sender
 
-	// Hack for now, consider options TODO
-	if context["reply_to"] != nil {
-		replyTo := context["reply_to"].(string)
-		message.SetReplyTo(replyTo)
+// Send the email using our default adapter and optional context.
+func Send(email *Email, context Context) error {
+	// If we have a template, render the email in that template
+	if email.Body == "" && email.Template != "" {
+		var err error
+		email.Body, err = RenderTemplate(email, context)
+		if err != nil {
+			return err
+		}
 	}
 
-	// Load the template, and substitute using context
-	// We should possibly set layout from caller too?
-	view := view.New(&renderContext{})
-	view.Template(template)
+	// If dev just log and return, don't send messages
+	if !Production {
+		fmt.Printf("#debug mail sent:%s\n", email)
+		return nil
+	}
+
+	return Service.Send(email)
+}
+
+// RenderTemplate renders the email into its template with context.
+func RenderTemplate(email *Email, context Context) (string, error) {
+	if email.Template == "" || context == nil {
+		return "", errors.New("mail: missing template or context")
+	}
+
+	view := view.NewWithPath("", nil)
+	view.Layout(email.Layout)
+	view.Template(email.Template)
 	view.Context(context)
-
-	// We have a panic: runtime error: invalid memory address or nil pointer dereference
-	// because of reloading templates on the fly I think
-	// github.com/fragmenta/view/parser/template.html.go:90
-	html, err := view.RenderString()
+	body, err := view.RenderToStringWithLayout()
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	// For debug, print message
-	//fmt.Printf("SENDING MAIL:\n%s", html)
-
-	message.SetHTML(html)
-
-	return sg.Send(message)
-}
-
-// SendOne sends email to ONE recipient only
-func SendOne(recipient string, subject string, template string, context map[string]interface{}) error {
-	return Send([]string{recipient}, subject, template, context)
-}
-
-// This is a dummy internal render context which doesn't provide any info - we explicitly set our info
-// TODO: Perhaps find a more elegant solution?
-
-// RenderContext provides an empty context for rendering mail, we have no preferred path
-type renderContext struct {
-}
-
-// Path returns an empty path
-func (m *renderContext) Path() string {
-	return ""
-}
-
-// RenderContext returns a nil context
-func (m *renderContext) RenderContext() map[string]interface{} {
-	return nil
+	return body, nil
 }

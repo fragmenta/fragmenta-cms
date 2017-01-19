@@ -1,17 +1,15 @@
-{{ if not .user }}
-<tr>
-    <td>Status</td>
-    <td>Name</td>
-    <td>Email</td>
-    <td>Role</td>
-    <td>Actions</td>
-</tr>
+{{ if not .user.ID }}
+    <tr class="data-table-head">
+        <td>Id</td>
+        <td>Updated</td>
+        <td>Status</td>
+        <td>Actions</td>
+    </tr>
 {{ else }}
-<tr class="{{if odd .i }}odd{{end}}">
-    <td><a href="/users/{{.user.Id}}">{{ .user.StatusDisplay }}</a></td>
-    <td>{{ .user.Name }}</td>
-    <td>{{ .user.Email }}</td>
-    <td>{{ .user.RoleDisplay }}</td>
-    <td><a href="/users/{{.user.Id}}/update">Edit</a></td>
-</tr>
+    <tr {{ if odd .i }}class="odd"{{end}}>
+        <td>{{ .user.ID }}</td>
+        <td>{{ time .user.UpdatedAt }}</td>
+        <td>{{ .user.StatusDisplay }}</td>
+        <td><a href="{{ .user.UpdateURL }}">Edit User</a></td>
+    </tr>
 {{ end }}

@@ -1,90 +1,79 @@
 package useractions
 
 import (
-	"fmt"
+	"net/http"
 
-	"github.com/fragmenta/router"
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-cms/src/images"
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
-// HandleUpdateShow serves a get request at /users/1/update (show form to update)
-func HandleUpdateShow(context router.Context) error {
-	// Setup context for template
-	view := view.New(context)
+// HandleUpdateShow renders the form to update a user.
+func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 
-	user, err := users.Find(context.ParamInt("id"))
+	// Get the user params for id
+	params, err := mux.Params(r)
 	if err != nil {
-		context.Logf("#error Error finding user %s", err)
-		return router.NotFoundError(err)
+		return server.InternalError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, user)
+	// Find the user
+	user, err := users.Find(params.GetInt(users.KeyName))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotFoundError(err)
 	}
 
+	// Authorise update user
+	err = can.Update(user, session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
+	}
+
+	// Render the template
+	view := view.NewRenderer(w, r)
 	view.AddKey("user", user)
-	//	view.AddKey("admin_links", helpers.Link("Destroy User", url.Destroy(user), "method=post"))
-
 	return view.Render()
 }
 
-// HandleUpdate or PUT /users/1/update
-func HandleUpdate(context router.Context) error {
+// HandleUpdate handles the POST of the form to update a user
+func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
+
+	// Get the user params for id
+	params, err := mux.Params(r)
+	if err != nil {
+		return server.InternalError(err)
+	}
 
 	// Find the user
-	id := context.ParamInt("id")
-	user, err := users.Find(id)
+	user, err := users.Find(params.GetInt(users.KeyName))
 	if err != nil {
-		context.Logf("#error Error finding user %s", err)
-		return router.NotFoundError(err)
+		return server.NotFoundError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, user)
+	// Check the authenticity token
+	err = session.CheckAuthenticity(w, r)
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return err
 	}
 
-	// We expect only one image, what about replacing the existing when updating?
-	// At present we just create a new image
-	files, err := context.ParamFiles("image")
+	// Authorise update user
+	err = can.Update(user, session.CurrentUser(w, r))
 	if err != nil {
-		return router.InternalError(err)
+		return server.NotAuthorizedError(err)
 	}
 
-	// Get the params
-	params, err := context.Params()
+	// Validate the params, removing any we don't accept
+	userParams := user.ValidateParams(params.Map(), users.AllowedParams())
+
+	err = user.Update(userParams)
 	if err != nil {
-		return router.InternalError(err)
-	}
-
-	var imageID int64
-
-	if len(files) > 0 {
-		fileHandle := files[0]
-
-		// Create an image (saving the image representation on disk)
-		imageParams := map[string]string{"name": user.Name, "status": "100"}
-		imageID, err = images.Create(imageParams, fileHandle)
-		if err != nil {
-			return router.InternalError(err)
-		}
-
-		params.Set("image_id", fmt.Sprintf("%d", imageID))
-		delete(params, "image")
-	}
-
-	err = user.Update(params.Map())
-	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
 	// Redirect to user
-	return router.Redirect(context, user.URLShow())
+	return server.Redirect(w, r, user.ShowURL())
 }

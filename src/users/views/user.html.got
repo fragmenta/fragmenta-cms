@@ -1,7 +1,0 @@
-<div class="bio">
-  <a href="{{ .user.URLShow }}">
-  <img src="/{{ .image.SmallPath }}">
-  <h4>{{ .user.Name }}</h4>
-  <h5>{{ .user.Summary }}</h5>
-  </a>
-</div>

@@ -1,24 +1,15 @@
-{{ if not .tag.Id }}
-<tr>
-    <td>Name</td>
-    <td>Url</td>
-    <td>Id</td>
-    <td>Dotted Ids</td>
-    <td>Actions</td>
-</tr>
+{{ if not .tag.ID }}
+    <tr class="data-table-head">
+        <td>Id</td>
+        <td>Updated</td>
+        <td>Status</td>
+        <td>Actions</td>
+    </tr>
 {{ else }}
-<tr class="level_{{ .tag.Level }} {{if odd .i}}odd{{end}}">
-    <td>{{ .tag.Name }}</td>
-    <td>{{ .tag.Url }}</td>
-    <td>{{ .tag.Id }}</td>
-    <td>{{ .tag.DottedIds }}</td>
-    <td><a href="{{.tag.URLUpdate}}">Edit</a></td>
-    {{ $0 := . }}
-    {{ $i := add .i 1 }}
-    {{ range $j,$m := .tag.Children }}
-      {{ set $0 "i" (add $i $j)}}
-      {{ set $0 "tag" $m }}
-      {{ template "tags/views/row.html.got" $0 }}
-    {{ end }}
-</tr>
+    <tr {{ if odd .i }}class="odd"{{end}}>
+        <td>{{ .tag.ID }}</td>
+        <td>{{ time .tag.UpdatedAt }}</td>
+        <td>{{ .tag.StatusDisplay }}</td>
+        <td><a href="{{ .tag.UpdateURL }}">Edit Tags</a></td>
+    </tr>
 {{ end }}

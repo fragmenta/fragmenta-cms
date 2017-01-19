@@ -1,0 +1,4 @@
+<section class="padded">
+<h1>{{.title}}</h1>
+<p>A bare-bones app template</p>
+</section>

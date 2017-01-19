@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    
+    <header>
+    </header>
+  
+    <article>
+    {{ .content }}
+    </article>
+
+    <footer>
+    <p>Any problems with this email? Reply to let us know.</p>
+    </footer>
+
+</body>
+</html>

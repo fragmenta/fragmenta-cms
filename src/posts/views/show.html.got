@@ -1,11 +1,7 @@
-{{ if .current_user.Admin }}
-<section class="admin-bar-actions">
-<a class="button small" href="{{ .post.URLUpdate }}">Edit Post</a>
-</section>
-{{ end }}
-
-<section class="narrow">
+<article>
+<h1>{{ .post.Name }}</h1>
 <div class="text">
-{{ sanitize .post.Text }}
+    	<p>Name: {{ .post.Name }}</p>
+
 </div>
-</section>
+</article>

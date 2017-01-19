@@ -1,71 +1,70 @@
 package postactions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/posts"
-	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
-// HandleCreateShow serves the create form via GET for posts
-func HandleCreateShow(context router.Context) error {
+// HandleCreateShow serves the create form via GET for posts.
+func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
+
+	post := posts.New()
 
 	// Authorise
-	err := authorise.Path(context)
+	err := can.Create(post, session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
-	}
-
-	// Find users for author details
-	users, err := users.FindAll(users.Admins())
-	if err != nil {
-		return router.NotFoundError(err)
+		return server.NotAuthorizedError(err)
 	}
 
 	// Render the template
-	view := view.New(context)
-	post := posts.New()
-
-	user := authorise.CurrentUser(context)
-	if user != nil {
-		post.AuthorId = user.Id
-	}
-
+	view := view.NewRenderer(w, r)
 	view.AddKey("post", post)
-	view.AddKey("users", users)
 	return view.Render()
 }
 
 // HandleCreate handles the POST of the create form for posts
-func HandleCreate(context router.Context) error {
+func HandleCreate(w http.ResponseWriter, r *http.Request) error {
+
+	post := posts.New()
+
+	// Check the authenticity token
+	err := session.CheckAuthenticity(w, r)
+	if err != nil {
+		return err
+	}
 
 	// Authorise
-	err := authorise.Path(context)
+	err = can.Create(post, session.CurrentUser(w, r))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotAuthorizedError(err)
 	}
 
 	// Setup context
-	params, err := context.Params()
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	id, err := posts.Create(params.Map())
-	if err != nil {
-		return router.InternalError(err)
-	}
+	// Validate the params, removing any we don't accept
+	postParams := post.ValidateParams(params.Map(), posts.AllowedParams())
 
-	// Log creation
-	context.Logf("#info Created post id,%d", id)
+	id, err := post.Create(postParams)
+	if err != nil {
+		return server.InternalError(err)
+	}
 
 	// Redirect to the new post
-	m, err := posts.Find(id)
+	post, err = posts.Find(id)
 	if err != nil {
-		return router.InternalError(err)
+		return server.InternalError(err)
 	}
 
-	return router.Redirect(context, m.URLIndex())
+	return server.Redirect(w, r, post.IndexURL())
 }

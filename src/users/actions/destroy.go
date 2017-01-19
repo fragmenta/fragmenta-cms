@@ -1,30 +1,47 @@
 package useractions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
+
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
-// POST /users/1/destroy
-func HandleDestroy(context router.Context) error {
+// HandleDestroy responds to /users/n/destroy by deleting the user.
+func HandleDestroy(w http.ResponseWriter, r *http.Request) error {
 
-	// Set the user on the context for checking
-	user, err := users.Find(context.ParamInt("id"))
+	// Get the user params for id
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.NotFoundError(err)
+		return server.InternalError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, user)
+	// Find the user
+	user, err := users.Find(params.GetInt(users.KeyName))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotFoundError(err)
+	}
+
+	// Check the authenticity token
+	err = session.CheckAuthenticity(w, r)
+	if err != nil {
+		return err
+	}
+
+	// Authorise destroy user
+	err = can.Destroy(user, session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
 	}
 
 	// Destroy the user
 	user.Destroy()
 
 	// Redirect to users root
-	return router.Redirect(context, user.URLIndex())
+	return server.Redirect(w, r, user.IndexURL())
+
 }

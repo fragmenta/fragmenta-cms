@@ -1,30 +1,47 @@
 package pageactions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
 
-	"github.com/fragmenta/fragmenta-cms/src/lib/authorise"
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
+
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/pages"
 )
 
-// POST /pages/1/destroy
-func HandleDestroy(context router.Context) error {
+// HandleDestroy responds to /pages/n/destroy by deleting the page.
+func HandleDestroy(w http.ResponseWriter, r *http.Request) error {
 
-	// Set the page on the context for checking
-	page, err := pages.Find(context.ParamInt("id"))
+	// Fetch the  params
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.NotFoundError(err)
+		return server.InternalError(err)
 	}
 
-	// Authorise
-	err = authorise.Resource(context, page)
+	// Find the page
+	page, err := pages.Find(params.GetInt(pages.KeyName))
 	if err != nil {
-		return router.NotAuthorizedError(err)
+		return server.NotFoundError(err)
+	}
+
+	// Check the authenticity token
+	err = session.CheckAuthenticity(w, r)
+	if err != nil {
+		return err
+	}
+
+	// Authorise destroy page
+	err = can.Destroy(page, session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
 	}
 
 	// Destroy the page
 	page.Destroy()
 
 	// Redirect to pages root
-	return router.Redirect(context, page.URLIndex())
+	return server.Redirect(w, r, page.IndexURL())
+
 }

@@ -1,20 +1,16 @@
-<div class="row images_form">
-<form method="post" class="resource-update-form">
-    
-    
-    {{ select "Status" "status" .image.Status .image.StatusOptions }}
-    {{ field "Name" "name" .image.Name }}
-    {{ field "Sort" "sort" .image.Sort }}
-  
-  
-  
+<form method="post" class="resource-update-form images-form">
+
     <section class="actions">
         <input type="submit" class="button" value="Save">
-        {{ if gt .image.Id 0 }}
-         <a class="button red" href="/images/{{.image.Id}}/destroy" {{ if .redirect }} data-redirect="{{.redirect}}#images" {{ end }} method="delete">Delete</a>
-        {{ end }}
+        <a class="button grey" href="javascript:history.back()">Cancel</a>
+    </section>
+  
+    <section class="inline-fields">
+          {{ field "AuthorID" "author_id" .image.AuthorID }}
+    {{ field "Name" "name" .image.Name }}
+    {{ field "Path" "path" .image.Path }}
+    {{ field "Sort" "sort" .image.Sort }}
+{{ select "Status" "status" .image.Status .image.StatusOptions }}
     </section>
     
-    
 </form>
-</div>

@@ -1,0 +1,7 @@
+router.Get("/[[ .fragmenta_resources ]]", [[ .fragmenta_resource ]]actions.HandleIndex)
+router.Get("/[[ .fragmenta_resources ]]/create", [[ .fragmenta_resource ]]actions.HandleCreateShow)
+router.Post("/[[ .fragmenta_resources ]]/create", [[ .fragmenta_resource ]]actions.HandleCreate)
+router.Get("/[[ .fragmenta_resources ]]/{id:[0-9]+}/update", [[ .fragmenta_resource ]]actions.HandleUpdateShow)
+router.Post("/[[ .fragmenta_resources ]]/{id:[0-9]+}/update", [[ .fragmenta_resource ]]actions.HandleUpdate)
+router.Post("/[[ .fragmenta_resources ]]/{id:[0-9]+}/destroy", [[ .fragmenta_resource ]]actions.HandleDestroy)
+router.Get("/[[ .fragmenta_resources ]]/{id:[0-9]+}", [[ .fragmenta_resource ]]actions.HandleShow)

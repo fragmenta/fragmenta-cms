@@ -1,30 +1,41 @@
 package [[ .fragmenta_resource ]]actions
 
 import (
-	"github.com/fragmenta/router"
+	"net/http"
+
+	"github.com/fragmenta/auth/can"
+	"github.com/fragmenta/mux"
+	"github.com/fragmenta/server"
 	"github.com/fragmenta/view"
 
-	"[[ .fragmenta_app_path ]]/[[ .fragmenta_resources ]]"
-    "[[ .fragmenta_app_path ]]/lib/authorise"
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
+	"github.com/fragmenta/fragmenta-cms/src/[[ .fragmenta_resources ]]"
 )
 
-// HandleShow displays a single [[ .fragmenta_resource ]]
-func HandleShow(context router.Context) error {
+// HandleShow displays a single [[ .fragmenta_resource ]].
+func HandleShow(w http.ResponseWriter, r *http.Request) error {
 
-	// Find the [[ .fragmenta_resource ]]
-	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(context.ParamInt("id"))
+	// Fetch the  params
+	params, err := mux.Params(r)
 	if err != nil {
-		return router.InternalError(err)		
+		return server.InternalError(err)
+	}
+	
+	// Find the [[ .fragmenta_resource ]]
+	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(params.GetInt([[ .fragmenta_resources ]].KeyName))
+	if err != nil {
+		return server.NotFoundError(err)
 	}
 
 	// Authorise access
-	err = authorise.Resource(context,[[ .fragmenta_resource ]]) 
-    if err != nil {
-		return router.NotAuthorizedError(err)	
-    }
+	err = can.Show([[ .fragmenta_resource ]], session.CurrentUser(w, r))
+	if err != nil {
+		return server.NotAuthorizedError(err)
+	}
 
 	// Render the template
-	view := view.New(context)
-    view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
-    return view.Render()
+	view := view.NewRenderer(w, r)
+	view.CacheKey([[ .fragmenta_resource ]].CacheKey())
+	view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
+	return view.Render()
 }

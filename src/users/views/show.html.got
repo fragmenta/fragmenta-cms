@@ -1,15 +1,7 @@
-<section class="padded">
-   <div class="section user_profile">
-        <div class="row">
-            <div class="three columns">
-              {{ template "users/views/user.html.got" . }}
-            </div>
-            <div class="nine columns bio_text">
-               {{ html .user.Summary }}
-            </div>
-        </div>
-    </div>
-    <div class="section">
-         {{ html .user.Text }}
-    </div>
-</section>
+<article>
+<h1>{{ .user.Name }}</h1>
+<div class="text">
+    	<p>Name: {{ .user.Name }}</p>
+
+</div>
+</article>

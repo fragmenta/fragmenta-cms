@@ -1,19 +1,15 @@
-{{ if not .page.Id }}
-<tr>
-    <td>Status</td>
-    <td>Url</td>
-    <td>Name</td>
-    <td>Summary</td>
-    <td>Updated</td>
-    <td>Actions</td>
-</tr>
+{{ if not .page.ID }}
+    <tr class="data-table-head">
+        <td>Id</td>
+        <td>Updated</td>
+        <td>Status</td>
+        <td>Actions</td>
+    </tr>
 {{ else }}
-<tr class="{{ if odd .i }}odd{{end}}">
-    <td>{{ .page.StatusDisplay }}</td>
-    <td><a href="{{.page.Url}}">{{.page.Url}}</a></td>
-    <td><a href="{{.page.Url}}">{{ .page.Name }}</a></td>
-    <td>{{ .page.Summary }}</td>
-    <td>{{ time .page.UpdatedAt }}</td>
-    <td><a href="{{.page.URLUpdate}}">Edit</a></td>
-</tr>
+    <tr {{ if odd .i }}class="odd"{{end}}>
+        <td>{{ .page.ID }}</td>
+        <td>{{ time .page.UpdatedAt }}</td>
+        <td>{{ .page.StatusDisplay }}</td>
+        <td><a href="{{ .page.UpdateURL }}">Edit Pages</a></td>
+    </tr>
 {{ end }}

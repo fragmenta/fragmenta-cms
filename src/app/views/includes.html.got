@@ -1,8 +1,4 @@
 {{ style "normalize.min" }}
-{{ style "skeleton.min" }}
-{{ style "highlight.min" }}
 {{ style "app" }}
 
-{{ script "dom.min" }}
-{{ script "highlight.min" }}
 {{ script "app" }}

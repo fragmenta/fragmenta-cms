@@ -1,6 +1,6 @@
 <section class="narrow">
 <h1>Login</h1>
-<form action="/users/login" method="post">
+<form action="/users/login" method="post" class="user-login-form">
  
     {{ field "Email" "email" "" "text" }}
     {{ field "Password" "password" "" "password" "type=password" }}
