@@ -64,11 +64,10 @@ func HandleShowPath(w http.ResponseWriter, r *http.Request) error {
 		return server.NotFoundError(err)
 	}
 
-	u := session.CurrentUser(w, r)
-
 	// Authorise access IF the page is not published
+	user := session.CurrentUser(w, r)
 	if !page.IsPublished() {
-		err = can.Show(page, u)
+		err = can.Show(page, user)
 		if err != nil {
 			return server.NotAuthorizedError(err)
 		}
@@ -78,7 +77,7 @@ func HandleShowPath(w http.ResponseWriter, r *http.Request) error {
 	view := view.NewRenderer(w, r)
 	view.CacheKey(page.CacheKey())
 	view.AddKey("page", page)
-	view.AddKey("currentUser", u)
+	view.AddKey("currentUser", user)
 	//	view.Template(page.Template)
 	view.Template("pages/views/templates/show.html.got")
 	return view.Render()

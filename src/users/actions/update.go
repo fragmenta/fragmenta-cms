@@ -28,13 +28,15 @@ func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise update user
-	err = can.Update(user, session.CurrentUser(w, r))
+	currentUser := session.CurrentUser(w, r)
+	err = can.Update(user, currentUser)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
 
 	// Render the template
 	view := view.NewRenderer(w, r)
+	view.AddKey("currentUser", currentUser)
 	view.AddKey("user", user)
 	return view.Render()
 }
@@ -61,7 +63,7 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise update user
-	err = can.Update(user, session.CurrentUser(w, r))
+	err = can.Update(user, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

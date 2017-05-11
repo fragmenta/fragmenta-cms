@@ -28,7 +28,8 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise access
-	err = can.Show(image, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Show(image, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

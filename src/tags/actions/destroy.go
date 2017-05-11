@@ -33,7 +33,8 @@ func HandleDestroy(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise destroy tag
-	err = can.Destroy(tag, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Destroy(tag, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

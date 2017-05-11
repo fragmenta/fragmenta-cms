@@ -16,7 +16,8 @@ import (
 func HandleIndex(w http.ResponseWriter, r *http.Request) error {
 
 	// Authorise list image
-	err := can.List(images.New(), session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err := can.List(images.New(), user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

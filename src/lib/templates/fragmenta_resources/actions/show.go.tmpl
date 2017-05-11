@@ -28,13 +28,15 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise access
-	err = can.Show([[ .fragmenta_resource ]], session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Show([[ .fragmenta_resource ]], user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
 
 	// Render the template
 	view := view.NewRenderer(w, r)
+	view.AddKey("currentUser", user)
 	view.CacheKey([[ .fragmenta_resource ]].CacheKey())
 	view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
 	return view.Render()

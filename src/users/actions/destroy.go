@@ -33,7 +33,8 @@ func HandleDestroy(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise destroy user
-	err = can.Destroy(user, session.CurrentUser(w, r))
+	currentUser := session.CurrentUser(w, r)
+	err = can.Destroy(user, currentUser)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

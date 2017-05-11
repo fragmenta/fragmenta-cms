@@ -18,7 +18,8 @@ func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
 	image := images.New()
 
 	// Authorise
-	err := can.Create(image, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err := can.Create(image, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
@@ -41,7 +42,8 @@ func HandleCreate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise
-	err = can.Create(image, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Create(image, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

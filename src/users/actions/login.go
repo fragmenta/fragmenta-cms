@@ -18,7 +18,8 @@ import (
 func HandleLoginShow(w http.ResponseWriter, r *http.Request) error {
 
 	// Check they're not logged in already.
-	if !session.CurrentUser(w, r).Anon() {
+	currentUser := session.CurrentUser(w, r)
+	if !currentUser.Anon() {
 		return server.Redirect(w, r, "/?warn=already_logged_in")
 	}
 
@@ -49,7 +50,8 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Check they're not logged in already if so redirect.
-	if !session.CurrentUser(w, r).Anon() {
+	currentUser := session.CurrentUser(w, r)
+	if !currentUser.Anon() {
 		return server.Redirect(w, r, "/?warn=already_logged_in")
 	}
 

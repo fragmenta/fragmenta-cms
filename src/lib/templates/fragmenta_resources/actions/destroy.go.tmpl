@@ -33,7 +33,8 @@ func HandleDestroy(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise destroy [[ .fragmenta_resource ]]
-	err = can.Destroy([[ .fragmenta_resource ]], session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Destroy([[ .fragmenta_resource ]], user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

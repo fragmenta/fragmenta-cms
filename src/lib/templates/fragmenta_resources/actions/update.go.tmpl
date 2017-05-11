@@ -28,13 +28,15 @@ func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise update [[ .fragmenta_resource ]]
-	err = can.Update([[ .fragmenta_resource ]], session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Update([[ .fragmenta_resource ]], user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
 
 	// Render the template
 	view := view.NewRenderer(w, r)
+	view.AddKey("currentUser", user)
 	view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
 	return view.Render()
 }
@@ -61,7 +63,7 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise update [[ .fragmenta_resource ]]
-	err = can.Update([[ .fragmenta_resource ]], session.CurrentUser(w, r))
+	err = can.Update([[ .fragmenta_resource ]], user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

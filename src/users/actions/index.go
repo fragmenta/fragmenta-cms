@@ -16,7 +16,8 @@ import (
 func HandleIndex(w http.ResponseWriter, r *http.Request) error {
 
 	// Authorise list user
-	err := can.List(users.New(), session.CurrentUser(w, r))
+	currentUser := session.CurrentUser(w, r)
+	err := can.List(users.New(), currentUser)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
@@ -61,6 +62,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) error {
 
 	// Render the template
 	view := view.NewRenderer(w, r)
+	view.AddKey("currentUser", currentUser)
 	view.AddKey("filter", filter)
 	view.AddKey("users", results)
 	return view.Render()

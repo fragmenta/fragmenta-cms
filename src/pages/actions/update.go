@@ -29,7 +29,8 @@ func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise update page
-	err = can.Update(page, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Update(page, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
@@ -44,7 +45,7 @@ func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 	view := view.NewRenderer(w, r)
 	view.AddKey("page", page)
 	view.AddKey("authors", authors)
-	view.AddKey("currentUser", session.CurrentUser(w, r))
+	view.AddKey("currentUser", user)
 	return view.Render()
 }
 
@@ -70,7 +71,8 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise update page
-	err = can.Update(page, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Update(page, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

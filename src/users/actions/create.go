@@ -18,16 +18,18 @@ func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
 
 	user := users.New()
 
-	fmt.Printf("USER:%v\n", session.CurrentUser(w, r))
+	fmt.Printf("USER:%v\n", user)
 
 	// Authorise
-	err := can.Create(user, session.CurrentUser(w, r))
+	currentUser := session.CurrentUser(w, r)
+	err := can.Create(user, currentUser)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
 
 	// Render the template
 	view := view.NewRenderer(w, r)
+	view.AddKey("currentUser", currentUser)
 	view.AddKey("user", user)
 	return view.Render()
 }
@@ -44,7 +46,8 @@ func HandleCreate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise
-	err = can.Create(user, session.CurrentUser(w, r))
+	currentUser := session.CurrentUser(w, r)
+	err = can.Create(user, currentUser)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

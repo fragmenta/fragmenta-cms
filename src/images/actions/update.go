@@ -28,7 +28,8 @@ func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise update image
-	err = can.Update(image, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Update(image, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
@@ -61,7 +62,8 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise update image
-	err = can.Update(image, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Update(image, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

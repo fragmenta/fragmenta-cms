@@ -33,7 +33,8 @@ func HandleDestroy(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise destroy image
-	err = can.Destroy(image, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Destroy(image, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

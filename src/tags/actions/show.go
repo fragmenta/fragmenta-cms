@@ -28,7 +28,8 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise access
-	err = can.Show(tag, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Show(tag, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
@@ -36,6 +37,7 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 	// Render the template
 	view := view.NewRenderer(w, r)
 	view.CacheKey(tag.CacheKey())
+	view.AddKey("currentUser", user)
 	view.AddKey("tag", tag)
 	return view.Render()
 }
