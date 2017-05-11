@@ -43,6 +43,8 @@ func SetupRoutes() *mux.Mux {
 	router.Post("/pages/{id:[0-9]+}/update", pageactions.HandleUpdate)
 	router.Post("/pages/{id:[0-9]+}/destroy", pageactions.HandleDestroy)
 	router.Get("/pages/{id:[0-9]+}", pageactions.HandleShow)
+	router.Get("/fragmenta/setup", pageactions.HandleSetupShow)
+	router.Post("/fragmenta/setup", pageactions.HandleSetup)
 
 	router.Get("/images", imageactions.HandleIndex)
 	router.Get("/images/create", imageactions.HandleCreateShow)

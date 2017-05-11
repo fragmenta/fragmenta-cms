@@ -115,3 +115,12 @@ func Published() *query.Query {
 func (u *User) SelectName() string {
 	return u.Name
 }
+
+// Count returns a count of users
+func Count() int64 {
+	c, err := Query().Count()
+	if err != nil {
+		return 0
+	}
+	return c
+}
