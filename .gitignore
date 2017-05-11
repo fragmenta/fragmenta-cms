@@ -1,12 +1,11 @@
 .DS_Store
+.idea/
+
+bin/fragmenta-server*
 log/*
 secrets/*
 db/backup/*
-/public/files
-.idea/
 
 # ignore compiled app group
-/public/assets/*/app-*
-
-# ignore fragmenta.eu analytics file 
-src/app/assets/scripts/eu-google-analytics.js
+public/assets/*/app-*
+public/files
