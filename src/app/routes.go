@@ -33,6 +33,7 @@ func SetupRoutes() *mux.Mux {
 	// Add a route to handle static files
 	router.Add("/favicon.ico", fileHandler)
 	router.Add("/files/{path:.*}", fileHandler)
+	router.Add("/assets/{path:.*}", fileHandler)
 
 	// Resource Routes
 	router.Get("/pages", pageactions.HandleIndex)

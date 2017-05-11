@@ -95,7 +95,7 @@ func SetupAssets() {
 
 	// Load asset details from json file on each run
 	err := appAssets.Load()
-	if err != nil {
+	if err != nil || !config.Production() {
 		// Compile assets for the first time
 		log.Info(log.V{"msg": "Compiling Asssets"})
 
