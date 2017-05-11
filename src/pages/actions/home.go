@@ -31,6 +31,6 @@ func HandleShowHome(w http.ResponseWriter, r *http.Request) error {
 	view := view.NewWithPath(r.URL.Path, w)
 	view.AddKey("title", "Fragmenta app")
 	view.AddKey("page", page)
-	view.Template("pages/views/home.html.got")
+	view.Template("pages/views/templates/show.html.got")
 	return view.Render()
 }

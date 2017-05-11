@@ -27,10 +27,9 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 		return server.NotFoundError(err)
 	}
 
-	u := session.CurrentUser(w, r)
-
 	// Authorise access
-	err = can.Show(page, u)
+	user := session.CurrentUser(w, r)
+	err = can.Show(page, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
@@ -39,7 +38,8 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 	view := view.NewRenderer(w, r)
 	view.CacheKey(page.CacheKey())
 	view.AddKey("page", page)
-	view.AddKey("currentUser", u)
+	view.AddKey("currentUser", user)
+	view.Template(page.Template)
 	return view.Render()
 }
 
@@ -53,7 +53,7 @@ func HandleShowPath(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Find the page
-	page, err := pages.Find(params.GetInt(pages.KeyName))
+	page, err := pages.FindFirst("url=?", "/"+params.Get("path"))
 	if err != nil {
 
 		// If no pages or users exist, redirect to set up page
@@ -79,6 +79,8 @@ func HandleShowPath(w http.ResponseWriter, r *http.Request) error {
 	view.CacheKey(page.CacheKey())
 	view.AddKey("page", page)
 	view.AddKey("currentUser", u)
+	//	view.Template(page.Template)
+	view.Template("pages/views/templates/show.html.got")
 	return view.Render()
 }
 

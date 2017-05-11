@@ -1,15 +1,15 @@
 {{ if not .[[ .fragmenta_resource ]].ID }}
     <tr class="data-table-head">
         <td>Id</td>
-        <td>Updated</td>
         <td>Status</td>
+        <td>Updated</td>
         <td>Actions</td>
     </tr>
 {{ else }}
     <tr {{ if odd .i }}class="odd"{{end}}>
         <td>{{ .[[ .fragmenta_resource ]].ID }}</td>
-        <td>{{ time .[[ .fragmenta_resource ]].UpdatedAt }}</td>
         <td>{{ .[[ .fragmenta_resource ]].StatusDisplay }}</td>
-        <td><a href="{{ .[[ .fragmenta_resource ]].UpdateURL }}">Edit [[ .Fragmenta_Resources ]]</a></td>
+        <td>{{ time .[[ .fragmenta_resource ]].UpdatedAt }}</td>
+        <td><a href="{{ .[[ .fragmenta_resource ]].UpdateURL }}">Edit</a></td>
     </tr>
 {{ end }}

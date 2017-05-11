@@ -18,7 +18,8 @@ func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
 	page := pages.New()
 
 	// Authorise
-	err := can.Create(page, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err := can.Create(page, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
@@ -26,6 +27,7 @@ func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
 	// Render the template
 	view := view.NewRenderer(w, r)
 	view.AddKey("page", page)
+	view.AddKey("currentUser", user)
 	return view.Render()
 }
 
@@ -41,7 +43,8 @@ func HandleCreate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Authorise
-	err = can.Create(page, session.CurrentUser(w, r))
+	user := session.CurrentUser(w, r)
+	err = can.Create(page, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}

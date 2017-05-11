@@ -1,10 +1,5 @@
-<p><a href="http://fragmenta.eu">Made with Fragmenta</a></p>
+<p><a href="https://fragmenta.eu">Made with Fragmenta</a></p>
 <ul class="inline">
         <li><a href="/about">About Us</a></li>
         <li><a href="/privacy">Privacy</a></li>
-        {{ if .currentUser.Anon }}
-            <li><a href="/users/login">Login</a></li>
-        {{ else }}
-        <li><a href="/users/logout" method="post">Logout</a></li>
-        {{ end }}
 </ul>

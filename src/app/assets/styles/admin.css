@@ -34,6 +34,11 @@ input[type="button"] {
     min-width: 4em;
 }
 
+a.button {
+    display: inline-block;
+    text-align: center;
+}
+
 .button:hover,
 button:hover,
 input[type="submit"]:hover,

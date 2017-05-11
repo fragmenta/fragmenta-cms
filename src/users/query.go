@@ -20,7 +20,7 @@ const (
 
 // AllowedParams returns an array of allowed param keys for Update and Create.
 func AllowedParams() []string {
-	return []string{"name", "summary", "email", "status", "role", "password", "text", "title", "image_id"}
+	return []string{"name", "summary", "email", "status", "role", "password_hash", "text", "title", "image_id"}
 }
 
 // NewWithColumns creates a new user instance and fills it with data from the database cols provided.
@@ -109,4 +109,9 @@ func Where(format string, args ...interface{}) *query.Query {
 // Published returns a query for all users with status >= published.
 func Published() *query.Query {
 	return Query().Where("status>=?", status.Published)
+}
+
+// SelectName returns a string representation of the user for select options
+func (u *User) SelectName() string {
+	return u.Name
 }

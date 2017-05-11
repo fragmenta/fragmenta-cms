@@ -59,8 +59,10 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) error {
 		return server.NotFoundError(err)
 	}
 
-	// Fetch the first user
 	email := params.Get("email")
+	password := params.Get("password")
+
+	// Fetch the first user by email
 	user, err := users.FindFirst("email=?", email)
 	if err != nil {
 		log.Info(log.V{"msg": "login failed", "email": email, "status": http.StatusNotFound})
@@ -68,7 +70,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Check password against the stored password
-	password := params.Get("password")
+	log.Info(log.V{"pass": password, "hash": user.PasswordHash})
 	err = auth.CheckPassword(password, user.PasswordHash)
 	if err != nil {
 		log.Info(log.V{"msg": "login failed", "email": email, "user_id": user.ID, "status": http.StatusUnauthorized})
