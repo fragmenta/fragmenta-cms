@@ -1,124 +1,97 @@
 /* Editable.js styling */
 
-
 .toolbar {
-  list-style: none;
-  min-height: 4rem;
-  padding: 0;
-  margin: 0;
-  
-  border-top: 2px solid #ccc;
-  border-bottom: 2px solid #ccc;
+    list-style: none;
+    min-height: 3rem;
+    padding: 0;
+    margin: 0;
 }
-
 
 .toolbar li {
-  padding: 0;
-  margin: 0;
-  float: left;
-  position: relative;
+    padding: 0;
+    margin: 0;
+    float: left;
+    position: relative;
 }
-
 
 .toolbar li a {
-  margin: 0;
-  width: 4rem;
-  height: 4rem;
-  line-height: 4rem;
-  display: block;
-  text-align: center;
-  margin-top: -1px;
-  overflow: hidden;
-  top: 0;
-  background-color: #fff;
-  
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  border-right:1px solid #eee;
+    margin: 0;
+    width: 3rem;
+    height: 3rem;
+    line-height: 3rem;
+    display: block;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    top: 0;
+    margin: -1px -1px 0 0;
+    background-color: #fff;
+    color: #555;
+    border: 1px solid #ccc;
 }
-
 
 .toolbar li.right {
-  float: right;
-  border-left: 1px solid #ccc;
+    float: right;
+    border-left: 1px solid #ccc;
 }
 
-
-.toolbar li:first-child {
-}
-
+.toolbar li:first-child {}
 
 .toolbar li a:hover {
-  background-color: #dedede;
+    background-color: #dedede;
 }
-
 
 .toolbar li.clear {
-  clear: both;
+    clear: both;
 }
-
 
 .toolbar .button-blockquote {
-  font-size: 2em;
-  min-width: 4rem;
-  position: relative;
-  top: 0.28em;
+    font-size: 1.3em;
+    position: relative;
+    top: 0.28em;
 }
 
-
-.toolbar .button-ol {
-  font-size: 0.6em;
-  line-height: 1.3em;
-  top: 0.6rem;
-  position: relative;
-  display: block;
-}
-
-
+.toolbar .button-ol,
 .toolbar .button-ul {
-  font-size: 0.6em;
-  line-height: 1.3em;
-  top: 0.6rem;
-  position: relative;
-  display: block;
+    font-size: 0.6em;
+    line-height: 1rem;
+    top: 0.5rem;
+    position: relative;
+    display: block;
 }
-
 
 .toolbar .button-code {
-  font-size: 0.7em;
-  font-family: monospace;
+    font-size: 0.7em;
+    font-family: monospace;
 }
 
+.toolbar .button-html {
+    letter-spacing: 0.2em;
+}
 
 .content-editable {
-  border-bottom: 2px solid #ccc;
-  margin-top: -0.3rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  z-index: 2;
-  position: relative;
+    clear: both;
+    border: 1px solid #ccc;
+    padding: 0.1rem 1rem;
+    margin: 0rem 0rem 2rem 0rem;
+    z-index: 2;
+    position: relative;
+    top: -1px;
+    min-height: 3em;
 }
-
 
 .content-editable:focus {
-  outline: 0;
+    outline: 0;
 }
-
-
-.padded-content-editable {
-  padding: 1rem;
-  background-color: #fff;
-}
-
-
 
 .content-textarea {
-  width: 100%;
-  min-height: 50em;
-  background-color: #222;
-  color: #ddd;
-  font: 14px/1.5em 'Consolas',  'Monaco',  'Lucida Console',  'Liberation Mono',  'Mono',  'Courier New',  monospace;
-  padding: 2rem;
-  border-radius: 0;
+    clear: both;
+    top: -1px;
+    width: 100%;
+    min-height: 50em;
+    background-color: #222;
+    color: #ddd;
+    font: 14px/1.5em 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'Mono', 'Courier New', monospace;
+    padding: 2rem;
+    border-radius: 0;
 }
-

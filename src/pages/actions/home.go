@@ -23,7 +23,7 @@ func HandleShowHome(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Home fetches the first page with the url '/' and uses it for the home page of the site
-	page, err := pages.FindFirst("path='/'")
+	page, err := pages.FindFirst("url=?", "/")
 	if err != nil {
 		return server.NotFoundError(nil)
 	}
