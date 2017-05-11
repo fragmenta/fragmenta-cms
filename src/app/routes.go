@@ -28,7 +28,7 @@ func SetupRoutes() *mux.Mux {
 	router.AddMiddleware(session.Middleware)
 
 	// Add the home page route
-	router.Get("/", homeHandler)
+	router.Get("/", pageactions.HandleShowHome)
 
 	// Add a route to handle static files
 	router.Add("/favicon.ico", fileHandler)
