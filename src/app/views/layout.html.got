@@ -6,14 +6,15 @@
 </head>
 <body>
     
-    <header>
-    {{ template "app/views/header.html.got" . }}
-    </header>
-  
-    <article>
     {{ if .warning }}
         <div class="warning">{{.warning}}</div>
     {{ end }}
+  
+    <header>
+    {{ template "app/views/header.html.got" . }}
+    </header>
+
+    <article>
     {{ .content }}
     </article>
 

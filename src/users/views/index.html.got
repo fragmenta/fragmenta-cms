@@ -1,4 +1,4 @@
-<article>
+<section>
 <h1>Users</h1>
 
 <div class="row">
@@ -19,4 +19,4 @@
     {{ end }}
 </table>
 </div>
-</article>
+</section>

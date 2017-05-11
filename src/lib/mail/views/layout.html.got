@@ -7,9 +7,9 @@
     <header>
     </header>
   
-    <article>
+    <section>
     {{ .content }}
-    </article>
+    </section>
 
     <footer>
     <p>Any problems with this email? Reply to let us know.</p>
