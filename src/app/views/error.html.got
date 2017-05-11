@@ -9,7 +9,7 @@
       Error:{{.error}}
       </code></pre>
       {{ end }}
-      {{ if .current_user.Anon }}
+      {{ if .currentUser.Anon }}
       <p><a href="/users/login" class="button">Login</a></p>   
       {{ end }}
 </section>

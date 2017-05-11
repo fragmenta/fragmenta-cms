@@ -27,8 +27,10 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 		return server.NotFoundError(err)
 	}
 
+	u := session.CurrentUser(w, r)
+
 	// Authorise access
-	err = can.Show(page, session.CurrentUser(w, r))
+	err = can.Show(page, u)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
@@ -37,5 +39,51 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 	view := view.NewRenderer(w, r)
 	view.CacheKey(page.CacheKey())
 	view.AddKey("page", page)
+	view.AddKey("currentUser", u)
 	return view.Render()
+}
+
+// HandleShowPath serves requests to a custom page url
+func HandleShowPath(w http.ResponseWriter, r *http.Request) error {
+
+	// Fetch the  params
+	params, err := mux.Params(r)
+	if err != nil {
+		return server.InternalError(err)
+	}
+
+	// Find the page
+	page, err := pages.Find(params.GetInt(pages.KeyName))
+	if err != nil {
+
+		// If no pages or users exist, redirect to set up page
+		if missingUsersAndPages() {
+			return server.Redirect(w, r, "/fragmenta/setup")
+		}
+
+		return server.NotFoundError(err)
+	}
+
+	u := session.CurrentUser(w, r)
+
+	// Authorise access IF the page is not published
+	if !page.IsPublished() {
+		err = can.Show(page, u)
+		if err != nil {
+			return server.NotAuthorizedError(err)
+		}
+	}
+
+	// Render the template
+	view := view.NewRenderer(w, r)
+	view.CacheKey(page.CacheKey())
+	view.AddKey("page", page)
+	view.AddKey("currentUser", u)
+	return view.Render()
+}
+
+func missingUsersAndPages() bool {
+
+	// Check if there are zero pages and zero users.
+	return false
 }

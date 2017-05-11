@@ -3,7 +3,6 @@ package session
 import (
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/fragmenta/auth"
 	"github.com/fragmenta/mux"
@@ -46,23 +45,6 @@ func CurrentUser(w http.ResponseWriter, r *http.Request) *users.User {
 	}
 
 	return user
-}
-
-// shouldSetToken returns true if this request requires a token set.
-func shouldSetToken(r *http.Request) bool {
-
-	// No tokens on anything but GET requests
-	if r.Method != http.MethodGet {
-		return false
-	}
-
-	// No tokens on non-html resources
-	if strings.HasPrefix(r.URL.Path, "/files") ||
-		strings.HasPrefix(r.URL.Path, "/assets") {
-		return false
-	}
-
-	return true
 }
 
 // clearSession clears the request session cookie entirely.

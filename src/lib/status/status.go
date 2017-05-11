@@ -18,6 +18,11 @@ type ResourceStatus struct {
 	Status int64
 }
 
+// IsPublished returns true if this resource is published
+func (r *ResourceStatus) IsPublished() bool {
+	return r.Status == Published
+}
+
 // WherePublished modifies the given query to select status greater than published.
 // Note this selects >= Published.
 func WherePublished(q *query.Query) *query.Query {

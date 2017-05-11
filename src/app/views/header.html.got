@@ -1,4 +1,4 @@
-{{ if .current_user.Admin }}
+{{ if .currentUser.Admin }}
   {{ template "app/views/admin.html.got" . }}
 {{ end }}
 <nav>

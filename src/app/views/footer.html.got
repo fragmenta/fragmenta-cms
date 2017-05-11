@@ -2,7 +2,7 @@
 <ul class="inline">
         <li><a href="/about">About Us</a></li>
         <li><a href="/privacy">Privacy</a></li>
-        {{ if .current_user.Anon }}
+        {{ if .currentUser.Anon }}
             <li><a href="/users/login">Login</a></li>
         {{ else }}
         <li><a href="/users/logout" method="post">Logout</a></li>

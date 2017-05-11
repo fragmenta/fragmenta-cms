@@ -3,6 +3,7 @@ package session
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/fragmenta/auth"
 	"github.com/fragmenta/server/log"
@@ -34,4 +35,21 @@ func Middleware(h http.HandlerFunc) http.HandlerFunc {
 		h(w, r)
 	}
 
+}
+
+// shouldSetToken returns true if this request requires a token set.
+func shouldSetToken(r *http.Request) bool {
+
+	// No tokens on anything but GET requests
+	if r.Method != http.MethodGet {
+		return false
+	}
+
+	// No tokens on non-html resources
+	if strings.HasPrefix(r.URL.Path, "/files") ||
+		strings.HasPrefix(r.URL.Path, "/assets") {
+		return false
+	}
+
+	return true
 }

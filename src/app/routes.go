@@ -23,6 +23,10 @@ func SetupRoutes() *mux.Mux {
 	router.FileHandler = fileHandler
 	router.ErrorHandler = errHandler
 
+	// Add middleware
+	router.AddMiddleware(log.Middleware)
+	router.AddMiddleware(session.Middleware)
+
 	// Add the home page route
 	router.Get("/", homeHandler)
 
@@ -38,6 +42,7 @@ func SetupRoutes() *mux.Mux {
 	router.Post("/pages/{id:[0-9]+}/update", pageactions.HandleUpdate)
 	router.Post("/pages/{id:[0-9]+}/destroy", pageactions.HandleDestroy)
 	router.Get("/pages/{id:[0-9]+}", pageactions.HandleShow)
+
 	router.Get("/images", imageactions.HandleIndex)
 	router.Get("/images/create", imageactions.HandleCreateShow)
 	router.Post("/images/create", imageactions.HandleCreate)
@@ -45,6 +50,7 @@ func SetupRoutes() *mux.Mux {
 	router.Post("/images/{id:[0-9]+}/update", imageactions.HandleUpdate)
 	router.Post("/images/{id:[0-9]+}/destroy", imageactions.HandleDestroy)
 	router.Get("/images/{id:[0-9]+}", imageactions.HandleShow)
+
 	router.Get("/posts", postactions.HandleIndex)
 	router.Get("/posts/create", postactions.HandleCreateShow)
 	router.Post("/posts/create", postactions.HandleCreate)
@@ -52,6 +58,7 @@ func SetupRoutes() *mux.Mux {
 	router.Post("/posts/{id:[0-9]+}/update", postactions.HandleUpdate)
 	router.Post("/posts/{id:[0-9]+}/destroy", postactions.HandleDestroy)
 	router.Get("/posts/{id:[0-9]+}", postactions.HandleShow)
+
 	router.Get("/tags", tagactions.HandleIndex)
 	router.Get("/tags/create", tagactions.HandleCreateShow)
 	router.Post("/tags/create", tagactions.HandleCreate)
@@ -66,14 +73,13 @@ func SetupRoutes() *mux.Mux {
 	router.Get("/users/login", useractions.HandleLoginShow)
 	router.Post("/users/login", useractions.HandleLogin)
 	router.Post("/users/logout", useractions.HandleLogout)
-	router.Get("/users/{id:\\d+}/update", useractions.HandleUpdateShow)
-	router.Post("/users/{id:\\d+}/update", useractions.HandleUpdate).Post()
-	router.Post("/users/{id:\\d+}/destroy", useractions.HandleDestroy).Post()
-	router.Get("/users/{id:\\d+}", useractions.HandleShow)
+	router.Get("/users/{id:[0-9]+}/update", useractions.HandleUpdateShow)
+	router.Post("/users/{id:[0-9]+}/update", useractions.HandleUpdate)
+	router.Post("/users/{id:[0-9]+}/destroy", useractions.HandleDestroy)
+	router.Get("/users/{id:[0-9]+}", useractions.HandleShow)
 
-	// Add middleware
-	router.AddMiddleware(log.Middleware)
-	router.AddMiddleware(session.Middleware)
+	// Add catch-all for custom page routes - this must be evaluated last.
+	router.Get("/{path:.+}", pageactions.HandleShowPath)
 
 	return router
 }

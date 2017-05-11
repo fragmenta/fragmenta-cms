@@ -24,7 +24,7 @@ func AllowedParams() []string {
 }
 
 // NewWithColumns creates a new [[ .fragmenta_resource ]] instance and fills it with data from the database cols provided.
-func NewWithColumns(cols map[string]interface{}) *[[ .Fragmenta_Resources ]] {
+func NewWithColumns(cols map[string]interface{}) *[[ .Fragmenta_Resource ]] {
 
 	[[ .fragmenta_resource ]] := New()
 	[[ .fragmenta_resource ]].ID = resource.ValidateInt(cols["id"])
@@ -37,8 +37,8 @@ func NewWithColumns(cols map[string]interface{}) *[[ .Fragmenta_Resources ]] {
 }
 
 // New creates and initialises a new [[ .fragmenta_resource ]] instance.
-func New() *[[ .Fragmenta_Resources ]] {
-	[[ .fragmenta_resource ]] := &[[ .Fragmenta_Resources ]]{}
+func New() *[[ .Fragmenta_Resource ]] {
+	[[ .fragmenta_resource ]] := &[[ .Fragmenta_Resource ]]{}
 	[[ .fragmenta_resource ]].CreatedAt = time.Now()
 	[[ .fragmenta_resource ]].UpdatedAt = time.Now()
 	[[ .fragmenta_resource ]].TableName = TableName
@@ -49,7 +49,7 @@ func New() *[[ .Fragmenta_Resources ]] {
 
 // FindFirst fetches a single [[ .fragmenta_resource ]] record from the database using
 // a where query with the format and args provided.
-func FindFirst(format string, args ...interface{}) (*[[ .Fragmenta_Resources ]], error) {
+func FindFirst(format string, args ...interface{}) (*[[ .Fragmenta_Resource ]], error) {
 	result, err := Query().Where(format, args...).FirstResult()
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func FindFirst(format string, args ...interface{}) (*[[ .Fragmenta_Resources ]],
 }
 
 // Find fetches a single [[ .fragmenta_resource ]] record from the database by id.
-func Find(id int64) (*[[ .Fragmenta_Resources ]], error) {
+func Find(id int64) (*[[ .Fragmenta_Resource ]], error) {
 	result, err := Query().Where("id=?", id).FirstResult()
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func Find(id int64) (*[[ .Fragmenta_Resources ]], error) {
 }
 
 // FindAll fetches all [[ .fragmenta_resource ]] records matching this query from the database.
-func FindAll(q *query.Query) ([]*[[ .Fragmenta_Resources ]], error) {
+func FindAll(q *query.Query) ([]*[[ .Fragmenta_Resource ]], error) {
 
 	// Fetch query.Results from query
 	results, err := q.Results()
@@ -76,7 +76,7 @@ func FindAll(q *query.Query) ([]*[[ .Fragmenta_Resources ]], error) {
 	}
 
 	// Return an array of [[ .fragmenta_resources ]] constructed from the results
-	var [[ .fragmenta_resources ]] []*[[ .Fragmenta_Resources ]]
+	var [[ .fragmenta_resources ]] []*[[ .Fragmenta_Resource ]]
 	for _, cols := range results {
 		p := NewWithColumns(cols)
 		[[ .fragmenta_resources ]] = append([[ .fragmenta_resources ]], p)
