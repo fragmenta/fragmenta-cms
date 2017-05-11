@@ -1,5 +1,6 @@
 @font-face {
-    font-family: Lato src: url(/assets/fonts/lato.ttf);
+    font-family: Lato;
+    src: url(/assets/fonts/lato.ttf);
 }
 
 body {
@@ -41,10 +42,6 @@ h2 {
 h2 b {
     color: #888;
 }
-
-h3 {}
-
-h4 {}
 
 h5 {
     font-size: 1.4rem;
@@ -108,12 +105,16 @@ ul.inline li,
 nav ul li {
     display: inline-block;
     white-space: nowrap;
-    padding: 0 2rem;
     margin: 0 0 0.2rem 0;
+    padding: 0 1rem;
+}
+
+nav ul li a {
+    display: block;
 }
 
 header a {
-    line-height: 4rem;
+    line-height: 2rem;
     color: #fff;
 }
 
@@ -141,6 +142,7 @@ footer {
 
 nav {
     clear: both;
+    font-size: 0.75em;
     font-weight: 300;
 }
 
