@@ -149,14 +149,13 @@ footer {
     text-align: center;
     padding: 1rem 0;
     margin: 3rem 0 0 0;
-    border-top: 1px solid #f1e42a;
-    border-bottom: 2px solid #f49a18;
 }
 
 nav {
     clear: both;
-    font-size: 0.75em;
+    font-size: 0.8em;
     font-weight: 300;
+    padding: 0.2rem 0;
 }
 
 nav.admin {
@@ -172,7 +171,6 @@ article {
 section {
     clear: both;
     display: block;
-    padding: 1rem 2rem;
     margin: 1rem auto;
 }
 
@@ -190,6 +188,11 @@ section.feature h3,
 section.feature h4,
 section.feature h5 {
     color: #fff;
+}
+
+section.feature h5 {
+    font-size: 0.9rem;
+    margin: 0.2rem 1rem 0.5rem 1rem;
 }
 
 section.padded {

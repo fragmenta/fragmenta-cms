@@ -21,17 +21,18 @@ input[type="submit"],
 input[type="reset"],
 input[type="button"] {
     color: #fff;
-    background-color: #519eee;
+    background-color: #05afe7;
     border: none;
-    font-size: 1em;
+    font-size: .95em;
     font-weight: 300;
-    line-height: 1.8em;
     padding: 0.2rem 0.9rem;
     cursor: pointer;
     display: inline-block;
     border-radius: 0.2rem;
     margin: 2rem 2rem 0 0;
     min-width: 4em;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
 }
 
 a.button {
@@ -57,10 +58,9 @@ input[type="button"]:hover {
 }
 
 .button.small {
-    height: 3rem;
-    line-height: 3rem;
-    font-size: 0.9em;
-    padding: 0rem 1rem;
+    font-size: 0.7em;
+    line-height: 1.5rem;
+    padding: 0.1rem 0.5rem;
     margin: 0;
 }
 
@@ -144,7 +144,7 @@ section.admin-bar-actions {
     top: 0;
     right: 0;
     margin: 0;
-    padding: 0.4rem 1rem;
+    padding: 0.05rem 1rem;
 }
 
 
