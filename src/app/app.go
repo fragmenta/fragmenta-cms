@@ -1,7 +1,9 @@
 package app
 
 import (
+	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/fragmenta/assets"
@@ -106,13 +108,6 @@ func SetupAssets() {
 		}
 	}
 
-	// Set up helpers which are aware of fingerprinted assets
-	// These behave differently depending on the compile flag above
-	// when compile is set to no, they use precompiled assets
-	// otherwise they serve all files in a group separately
-	view.Helpers["style"] = appAssets.StyleLink
-	view.Helpers["script"] = appAssets.ScriptLink
-
 }
 
 // SetupView sets up the view package by loadind templates.
@@ -120,13 +115,52 @@ func SetupView() {
 	defer log.Time(time.Now(), log.V{"msg": "Finished loading templates"})
 
 	view.Production = config.Production()
-	err := view.LoadTemplates()
+
+	// Start with default source path
+	paths := []string{"src"}
+
+	// Add a theme path if we have one
+	theme := config.Get("theme")
+	if theme != "" {
+		log.Log(log.V{"msg": "loading templates for theme", "theme": theme})
+		themePath := fmt.Sprintf("themes/%s/src", theme)
+		paths = append(paths, themePath)
+	}
+
+	err := view.LoadTemplatesAtPaths(paths, helperFuncs())
 	if err != nil {
-		//	server.Fatalf("Error reading templates %s", err)
 		log.Fatal(log.V{"msg": "unable to read templates", "error": err})
 		os.Exit(1)
 	}
 
+}
+
+// helperFuncs returns a setr of helper functions for view templates
+func helperFuncs() map[string]interface{} {
+
+	helpers := view.DefaultHelpers()
+
+	// Set up helpers which are aware of fingerprinted assets
+	// These behave differently depending on the compile flag above
+	// when compile is set to no, they use precompiled assets
+	// otherwise they serve all files in a group separately
+	helpers["style"] = appAssets.StyleLink
+	helpers["script"] = appAssets.ScriptLink
+
+	// Get the server config for the root_url
+	rootURL := config.Get("root_url")
+
+	// If running locally use localhost instead
+	host, err := os.Hostname()
+	if err == nil && strings.HasSuffix(host, ".local") {
+		rootURL = "http://localhost:3000"
+	}
+
+	helpers["root_url"] = func() string {
+		return rootURL
+	}
+
+	return helpers
 }
 
 // SetupDatabase sets up the db with query given our server config.

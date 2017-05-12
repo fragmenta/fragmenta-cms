@@ -3,12 +3,8 @@
 {{ end }}
 <nav>
   <ul>
-    <li><a href="http://fragmenta.eu">Fragmenta</a></li>
-    <li><a href="http://fragmenta.eu/install">Install</a></li>
-    <li><a href="http://fragmenta.eu/develop">Develop</a></li>
-    <li><a href="http://fragmenta.eu/docs">Docs</a></li>
-    <li><a href="http://fragmenta.eu/blog">Blog</a></li>
-    <li><a href="https://github.com/fragmenta">Github</a></li>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
   </ul>
 </nav>
   
