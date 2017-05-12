@@ -2,7 +2,7 @@
 <a href="{{.ShowURL}}">
 <h3>{{ .Name }}</h3>
 <div class="text">
-{{ html .Summary }}
+{{ sanitize .Summary }}
 </a>
 </div>
 </div>

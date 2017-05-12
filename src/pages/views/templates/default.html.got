@@ -1,1 +1,3 @@
-{{ html .page.Text }}
+<section class="padded">
+{{ sanitize .page.Text }}
+</section>

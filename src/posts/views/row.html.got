@@ -1,15 +1,13 @@
 {{ if not .post.ID }}
     <tr class="data-table-head">
-        <td>Id</td>
-        <td>Updated</td>
         <td>Status</td>
+        <td>Name</td>
         <td>Actions</td>
     </tr>
 {{ else }}
     <tr {{ if odd .i }}class="odd"{{end}}>
-        <td>{{ .post.ID }}</td>
-        <td>{{ time .post.UpdatedAt }}</td>
         <td>{{ .post.StatusDisplay }}</td>
+        <td><a href="{{.post.ShowURL}}">{{ .post.Name }}</a></td>
         <td><a href="{{ .post.UpdateURL }}">Edit</a></td>
     </tr>
 {{ end }}

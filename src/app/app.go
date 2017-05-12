@@ -58,6 +58,27 @@ func Setup() {
 
 }
 
+// SetupDatabase sets up the db with query given our server config.
+func SetupDatabase() {
+	defer log.Time(time.Now(), log.V{"msg": "Finished opening database", "db": config.Get("db"), "user": config.Get("db_user")})
+
+	options := map[string]string{
+		"adapter":  config.Get("db_adapter"),
+		"user":     config.Get("db_user"),
+		"password": config.Get("db_pass"),
+		"db":       config.Get("db"),
+	}
+
+	// Ask query to open the database
+	err := query.OpenDatabase(options)
+
+	if err != nil {
+		log.Fatal(log.V{"msg": "unable to read database", "db": config.Get("db"), "error": err})
+		os.Exit(1)
+	}
+
+}
+
 // SetupLog sets up logging
 func SetupLog() error {
 
@@ -161,25 +182,4 @@ func helperFuncs() map[string]interface{} {
 	}
 
 	return helpers
-}
-
-// SetupDatabase sets up the db with query given our server config.
-func SetupDatabase() {
-	defer log.Time(time.Now(), log.V{"msg": "Finished opening database", "db": config.Get("db"), "user": config.Get("db_user")})
-
-	options := map[string]string{
-		"adapter":  config.Get("db_adapter"),
-		"user":     config.Get("db_user"),
-		"password": config.Get("db_pass"),
-		"db":       config.Get("db"),
-	}
-
-	// Ask query to open the database
-	err := query.OpenDatabase(options)
-
-	if err != nil {
-		log.Fatal(log.V{"msg": "unable to read database", "db": config.Get("db"), "error": err})
-		os.Exit(1)
-	}
-
 }
