@@ -2,5 +2,6 @@
 <a class="button small" href="/posts/{{.post.ID}}/update">Edit Post</a>
 </section>
 <section class="padded narrow">
+<h1>{{ sanitize .post.Name }}</h1>
 {{ sanitize .post.Text }}
 </section>

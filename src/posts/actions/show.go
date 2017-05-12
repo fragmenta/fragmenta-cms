@@ -29,9 +29,12 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 
 	// Authorise access
 	user := session.CurrentUser(w, r)
-	err = can.Show(post, user)
-	if err != nil {
-		return server.NotAuthorizedError(err)
+
+	if !post.IsPublished() {
+		err = can.Show(post, user)
+		if err != nil {
+			return server.NotAuthorizedError(err)
+		}
 	}
 
 	// Render the template
