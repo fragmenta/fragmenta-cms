@@ -7,8 +7,8 @@ import (
 	"github.com/fragmenta/server/log"
 	"github.com/fragmenta/view"
 
-	"github.com/kennygrant/daintydomains/src/pages"
-	"github.com/kennygrant/daintydomains/src/users"
+	"github.com/fragmenta/fragmenta-cms/src/pages"
+	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
 // HandleShowHome serves our home page with a simple template.
