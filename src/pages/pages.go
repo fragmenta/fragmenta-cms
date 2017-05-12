@@ -23,3 +23,11 @@ type Page struct {
 	Text     string
 	URL      string
 }
+
+// ShowTemplate returns the default template if none is set, or the template selected
+func (p *Page) ShowTemplate() string {
+	if p.Template == "" {
+		return "pages/views/templates/default.html.got"
+	}
+	return p.Template
+}

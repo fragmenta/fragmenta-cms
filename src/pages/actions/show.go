@@ -39,7 +39,7 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 	view.CacheKey(page.CacheKey())
 	view.AddKey("page", page)
 	view.AddKey("currentUser", user)
-	view.Template(page.Template)
+	view.Template(page.ShowTemplate())
 	return view.Render()
 }
 
@@ -72,6 +72,6 @@ func HandleShowPath(w http.ResponseWriter, r *http.Request) error {
 	view.CacheKey(page.CacheKey())
 	view.AddKey("page", page)
 	view.AddKey("currentUser", user)
-	view.Template(page.Template)
+	view.Template(page.ShowTemplate())
 	return view.Render()
 }
