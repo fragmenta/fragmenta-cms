@@ -23,21 +23,29 @@ input[type="button"] {
     color: #fff;
     background-color: #05afe7;
     border: none;
-    font-size: .95em;
     font-weight: 300;
-    padding: 0.2rem 0.9rem;
+    font-style: normal;
+    padding: 0.15rem 0.9rem;
     cursor: pointer;
     display: inline-block;
     border-radius: 0.2rem;
     margin: 2rem 2rem 0 0;
     min-width: 4em;
+    height: 2.2rem;
+    line-height: 2.2rem;
     text-transform: uppercase;
     letter-spacing: 0.05rem;
+    box-sizing: border-box;
+    font: 0.9em/1.6em "Lato", "Roboto", "Helvetica Neue", Arial, sans-serif;
 }
+
+
+/* make link buttons look like inputs */
 
 a.button {
     display: inline-block;
     text-align: center;
+    padding-top: 0.16rem;
 }
 
 .button:hover,
@@ -104,6 +112,7 @@ section.inline-fields {
 
 .wide-fields .field {
     clear: both;
+    margin-right: 1em;
 }
 
 .wide-fields input {
