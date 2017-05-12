@@ -17,7 +17,7 @@ func TestSetup(t *testing.T) {
 }
 
 // Test Create method
-func TestCreatePages(t *testing.T) {
+func TestCreatePage(t *testing.T) {
 	pageParams := map[string]string{
 		"name":   testName,
 		"status": "100",
@@ -40,7 +40,7 @@ func TestCreatePages(t *testing.T) {
 }
 
 // Test Index (List) method
-func TestListPages(t *testing.T) {
+func TestListPage(t *testing.T) {
 
 	// Get all pages (we should have at least one)
 	results, err := FindAll(Query())
@@ -55,9 +55,9 @@ func TestListPages(t *testing.T) {
 }
 
 // Test Update method
-func TestUpdatePages(t *testing.T) {
+func TestUpdatePage(t *testing.T) {
 
-	// Get the last page (created in TestCreatePages above)
+	// Get the last page (created in TestCreatePage above)
 	page, err := FindFirst("name=?", testName)
 	if err != nil {
 		t.Fatalf("pages: Update no page found :%s", err)
@@ -104,7 +104,7 @@ func TestQuery(t *testing.T) {
 }
 
 // Test Destroy method
-func TestDestroyPages(t *testing.T) {
+func TestDestroyPage(t *testing.T) {
 
 	results, err := FindAll(Query())
 	if err != nil || len(results) == 0 {

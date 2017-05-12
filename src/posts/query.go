@@ -24,7 +24,7 @@ func AllowedParams() []string {
 }
 
 // NewWithColumns creates a new post instance and fills it with data from the database cols provided.
-func NewWithColumns(cols map[string]interface{}) *Posts {
+func NewWithColumns(cols map[string]interface{}) *Post {
 
 	post := New()
 	post.ID = resource.ValidateInt(cols["id"])
@@ -43,8 +43,8 @@ func NewWithColumns(cols map[string]interface{}) *Posts {
 }
 
 // New creates and initialises a new post instance.
-func New() *Posts {
-	post := &Posts{}
+func New() *Post {
+	post := &Post{}
 	post.CreatedAt = time.Now()
 	post.UpdatedAt = time.Now()
 	post.TableName = TableName
@@ -56,7 +56,7 @@ func New() *Posts {
 
 // FindFirst fetches a single post record from the database using
 // a where query with the format and args provided.
-func FindFirst(format string, args ...interface{}) (*Posts, error) {
+func FindFirst(format string, args ...interface{}) (*Post, error) {
 	result, err := Query().Where(format, args...).FirstResult()
 	if err != nil {
 		return nil, err
@@ -65,7 +65,7 @@ func FindFirst(format string, args ...interface{}) (*Posts, error) {
 }
 
 // Find fetches a single post record from the database by id.
-func Find(id int64) (*Posts, error) {
+func Find(id int64) (*Post, error) {
 	result, err := Query().Where("id=?", id).FirstResult()
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func Find(id int64) (*Posts, error) {
 }
 
 // FindAll fetches all post records matching this query from the database.
-func FindAll(q *query.Query) ([]*Posts, error) {
+func FindAll(q *query.Query) ([]*Post, error) {
 
 	// Fetch query.Results from query
 	results, err := q.Results()
@@ -83,7 +83,7 @@ func FindAll(q *query.Query) ([]*Posts, error) {
 	}
 
 	// Return an array of posts constructed from the results
-	var posts []*Posts
+	var posts []*Post
 	for _, cols := range results {
 		p := NewWithColumns(cols)
 		posts = append(posts, p)

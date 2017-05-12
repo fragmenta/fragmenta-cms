@@ -17,7 +17,7 @@ func TestSetup(t *testing.T) {
 }
 
 // Test Create method
-func TestCreateImages(t *testing.T) {
+func TestCreateImage(t *testing.T) {
 	imageParams := map[string]string{
 		"name":   testName,
 		"status": "100",
@@ -40,7 +40,7 @@ func TestCreateImages(t *testing.T) {
 }
 
 // Test Index (List) method
-func TestListImages(t *testing.T) {
+func TestListImage(t *testing.T) {
 
 	// Get all images (we should have at least one)
 	results, err := FindAll(Query())
@@ -55,9 +55,9 @@ func TestListImages(t *testing.T) {
 }
 
 // Test Update method
-func TestUpdateImages(t *testing.T) {
+func TestUpdateImage(t *testing.T) {
 
-	// Get the last image (created in TestCreateImages above)
+	// Get the last image (created in TestCreateImage above)
 	image, err := FindFirst("name=?", testName)
 	if err != nil {
 		t.Fatalf("images: Update no image found :%s", err)
@@ -104,7 +104,7 @@ func TestQuery(t *testing.T) {
 }
 
 // Test Destroy method
-func TestDestroyImages(t *testing.T) {
+func TestDestroyImage(t *testing.T) {
 
 	results, err := FindAll(Query())
 	if err != nil || len(results) == 0 {

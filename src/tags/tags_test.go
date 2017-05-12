@@ -17,7 +17,7 @@ func TestSetup(t *testing.T) {
 }
 
 // Test Create method
-func TestCreateTags(t *testing.T) {
+func TestCreateTag(t *testing.T) {
 	tagParams := map[string]string{
 		"name":   testName,
 		"status": "100",
@@ -40,7 +40,7 @@ func TestCreateTags(t *testing.T) {
 }
 
 // Test Index (List) method
-func TestListTags(t *testing.T) {
+func TestListTag(t *testing.T) {
 
 	// Get all tags (we should have at least one)
 	results, err := FindAll(Query())
@@ -55,9 +55,9 @@ func TestListTags(t *testing.T) {
 }
 
 // Test Update method
-func TestUpdateTags(t *testing.T) {
+func TestUpdateTag(t *testing.T) {
 
-	// Get the last tag (created in TestCreateTags above)
+	// Get the last tag (created in TestCreateTag above)
 	tag, err := FindFirst("name=?", testName)
 	if err != nil {
 		t.Errorf("tags: Update no tag found :%s", err)
@@ -104,7 +104,7 @@ func TestQuery(t *testing.T) {
 }
 
 // Test Destroy method
-func TestDestroyTags(t *testing.T) {
+func TestDestroyTag(t *testing.T) {
 
 	results, err := FindAll(Query())
 	if err != nil || len(results) == 0 {

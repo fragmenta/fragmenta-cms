@@ -6,8 +6,8 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
-// Images handles saving and retreiving images from the database
-type Images struct {
+// Image handles saving and retreiving images from the database
+type Image struct {
 	// resource.Base defines behaviour and fields shared between all resources
 	resource.Base
 

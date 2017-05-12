@@ -9,7 +9,7 @@
     <tr {{ if odd .i }}class="odd"{{end}}>
         <td>{{ .post.ID }}</td>
         <td>{{ time .post.UpdatedAt }}</td>
-        <td>{{ .post.StatusDisplay }}</td>
+        <td>{{ .post.StatusDisplay }}{{.post.StatusOptions}}</td>
         <td><a href="{{ .post.UpdateURL }}">Edit</a></td>
     </tr>
 {{ end }}

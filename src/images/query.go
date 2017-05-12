@@ -24,7 +24,7 @@ func AllowedParams() []string {
 }
 
 // NewWithColumns creates a new image instance and fills it with data from the database cols provided.
-func NewWithColumns(cols map[string]interface{}) *Images {
+func NewWithColumns(cols map[string]interface{}) *Image {
 
 	image := New()
 	image.ID = resource.ValidateInt(cols["id"])
@@ -41,8 +41,8 @@ func NewWithColumns(cols map[string]interface{}) *Images {
 }
 
 // New creates and initialises a new image instance.
-func New() *Images {
-	image := &Images{}
+func New() *Image {
+	image := &Image{}
 	image.CreatedAt = time.Now()
 	image.UpdatedAt = time.Now()
 	image.TableName = TableName
@@ -53,7 +53,7 @@ func New() *Images {
 
 // FindFirst fetches a single image record from the database using
 // a where query with the format and args provided.
-func FindFirst(format string, args ...interface{}) (*Images, error) {
+func FindFirst(format string, args ...interface{}) (*Image, error) {
 	result, err := Query().Where(format, args...).FirstResult()
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func FindFirst(format string, args ...interface{}) (*Images, error) {
 }
 
 // Find fetches a single image record from the database by id.
-func Find(id int64) (*Images, error) {
+func Find(id int64) (*Image, error) {
 	result, err := Query().Where("id=?", id).FirstResult()
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func Find(id int64) (*Images, error) {
 }
 
 // FindAll fetches all image records matching this query from the database.
-func FindAll(q *query.Query) ([]*Images, error) {
+func FindAll(q *query.Query) ([]*Image, error) {
 
 	// Fetch query.Results from query
 	results, err := q.Results()
@@ -80,7 +80,7 @@ func FindAll(q *query.Query) ([]*Images, error) {
 	}
 
 	// Return an array of images constructed from the results
-	var images []*Images
+	var images []*Image
 	for _, cols := range results {
 		p := NewWithColumns(cols)
 		images = append(images, p)

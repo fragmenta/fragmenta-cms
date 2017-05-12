@@ -6,8 +6,8 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
-// Tags handles saving and retreiving tags from the database
-type Tags struct {
+// Tag handles saving and retreiving tags from the database
+type Tag struct {
 	// resource.Base defines behaviour and fields shared between all resources
 	resource.Base
 

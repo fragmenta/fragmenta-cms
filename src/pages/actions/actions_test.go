@@ -56,7 +56,7 @@ func TestSetup(t *testing.T) {
 }
 
 // Test GET /pages/create
-func TestShowCreatePages(t *testing.T) {
+func TestShowCreatePage(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/pages/create", nil)
@@ -85,7 +85,7 @@ func TestShowCreatePages(t *testing.T) {
 }
 
 // Test POST /pages/create
-func TestCreatePages(t *testing.T) {
+func TestCreatePage(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[0])
@@ -113,18 +113,18 @@ func TestCreatePages(t *testing.T) {
 	}
 
 	// Check the page name is in now value names[1]
-	allPages, err := pages.FindAll(pages.Query().Order("id desc"))
-	if err != nil || len(allPages) == 0 {
+	allPage, err := pages.FindAll(pages.Query().Order("id desc"))
+	if err != nil || len(allPage) == 0 {
 		t.Fatalf("pageactions: error finding created page %s", err)
 	}
-	newPages := allPages[0]
-	if newPages.ID != 1 || newPages.Name != names[0] {
-		t.Fatalf("pageactions: error with created page values: %v %s", newPages.ID, newPages.Name)
+	newPage := allPage[0]
+	if newPage.ID != 1 || newPage.Name != names[0] {
+		t.Fatalf("pageactions: error with created page values: %v %s", newPage.ID, newPage.Name)
 	}
 }
 
 // Test GET /pages
-func TestListPages(t *testing.T) {
+func TestListPage(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/pages", nil)
@@ -153,7 +153,7 @@ func TestListPages(t *testing.T) {
 }
 
 // Test of GET /pages/1
-func TestShowPages(t *testing.T) {
+func TestShowPage(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/pages/1", nil)
@@ -181,7 +181,7 @@ func TestShowPages(t *testing.T) {
 }
 
 // Test GET /pages/123/update
-func TestShowUpdatePages(t *testing.T) {
+func TestShowUpdatePage(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/pages/1/update", nil)
@@ -210,7 +210,7 @@ func TestShowUpdatePages(t *testing.T) {
 }
 
 // Test POST /pages/123/update
-func TestUpdatePages(t *testing.T) {
+func TestUpdatePage(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[1])
@@ -229,12 +229,12 @@ func TestUpdatePages(t *testing.T) {
 	// Run the handler to update the page
 	err = HandleUpdate(w, r)
 	if err != nil {
-		t.Fatalf("pageactions: error handling HandleUpdatePages %s", err)
+		t.Fatalf("pageactions: error handling HandleUpdatePage %s", err)
 	}
 
 	// Test we get a redirect after update (to the page concerned)
 	if w.Code != http.StatusFound {
-		t.Fatalf("pageactions: unexpected response code for HandleUpdatePages expected:%d got:%d", http.StatusFound, w.Code)
+		t.Fatalf("pageactions: unexpected response code for HandleUpdatePage expected:%d got:%d", http.StatusFound, w.Code)
 	}
 
 	// Check the page name is in now value names[1]
@@ -249,7 +249,7 @@ func TestUpdatePages(t *testing.T) {
 }
 
 // Test of POST /pages/123/destroy
-func TestDeletePages(t *testing.T) {
+func TestDeletePage(t *testing.T) {
 
 	body := strings.NewReader(``)
 

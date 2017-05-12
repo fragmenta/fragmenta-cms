@@ -6,8 +6,8 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
-// Pages handles saving and retreiving pages from the database
-type Pages struct {
+// Page handles saving and retreiving pages from the database
+type Page struct {
 	// resource.Base defines behaviour and fields shared between all resources
 	resource.Base
 

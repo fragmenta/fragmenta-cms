@@ -17,7 +17,7 @@ func TestSetup(t *testing.T) {
 }
 
 // Test Create method
-func TestCreatePosts(t *testing.T) {
+func TestCreatePost(t *testing.T) {
 	postParams := map[string]string{
 		"name":   testName,
 		"status": "100",
@@ -40,7 +40,7 @@ func TestCreatePosts(t *testing.T) {
 }
 
 // Test Index (List) method
-func TestListPosts(t *testing.T) {
+func TestListPost(t *testing.T) {
 
 	// Get all posts (we should have at least one)
 	results, err := FindAll(Query())
@@ -55,9 +55,9 @@ func TestListPosts(t *testing.T) {
 }
 
 // Test Update method
-func TestUpdatePosts(t *testing.T) {
+func TestUpdatePost(t *testing.T) {
 
-	// Get the last post (created in TestCreatePosts above)
+	// Get the last post (created in TestCreatePost above)
 	post, err := FindFirst("name=?", testName)
 	if err != nil {
 		t.Fatalf("posts: Update no post found :%s", err)
@@ -104,7 +104,7 @@ func TestQuery(t *testing.T) {
 }
 
 // Test Destroy method
-func TestDestroyPosts(t *testing.T) {
+func TestDestroyPost(t *testing.T) {
 
 	results, err := FindAll(Query())
 	if err != nil || len(results) == 0 {

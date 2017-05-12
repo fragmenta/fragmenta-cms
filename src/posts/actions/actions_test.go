@@ -56,7 +56,7 @@ func TestSetup(t *testing.T) {
 }
 
 // Test GET /posts/create
-func TestShowCreatePosts(t *testing.T) {
+func TestShowCreatePost(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/posts/create", nil)
@@ -85,7 +85,7 @@ func TestShowCreatePosts(t *testing.T) {
 }
 
 // Test POST /posts/create
-func TestCreatePosts(t *testing.T) {
+func TestCreatePost(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[0])
@@ -113,18 +113,18 @@ func TestCreatePosts(t *testing.T) {
 	}
 
 	// Check the post name is in now value names[1]
-	allPosts, err := posts.FindAll(posts.Query().Order("id desc"))
-	if err != nil || len(allPosts) == 0 {
+	allPost, err := posts.FindAll(posts.Query().Order("id desc"))
+	if err != nil || len(allPost) == 0 {
 		t.Fatalf("postactions: error finding created post %s", err)
 	}
-	newPosts := allPosts[0]
-	if newPosts.ID != 1 || newPosts.Name != names[0] {
-		t.Fatalf("postactions: error with created post values: %v %s", newPosts.ID, newPosts.Name)
+	newPost := allPost[0]
+	if newPost.ID != 1 || newPost.Name != names[0] {
+		t.Fatalf("postactions: error with created post values: %v %s", newPost.ID, newPost.Name)
 	}
 }
 
 // Test GET /posts
-func TestListPosts(t *testing.T) {
+func TestListPost(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/posts", nil)
@@ -153,7 +153,7 @@ func TestListPosts(t *testing.T) {
 }
 
 // Test of GET /posts/1
-func TestShowPosts(t *testing.T) {
+func TestShowPost(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/posts/1", nil)
@@ -181,7 +181,7 @@ func TestShowPosts(t *testing.T) {
 }
 
 // Test GET /posts/123/update
-func TestShowUpdatePosts(t *testing.T) {
+func TestShowUpdatePost(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/posts/1/update", nil)
@@ -210,7 +210,7 @@ func TestShowUpdatePosts(t *testing.T) {
 }
 
 // Test POST /posts/123/update
-func TestUpdatePosts(t *testing.T) {
+func TestUpdatePost(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[1])
@@ -229,12 +229,12 @@ func TestUpdatePosts(t *testing.T) {
 	// Run the handler to update the post
 	err = HandleUpdate(w, r)
 	if err != nil {
-		t.Fatalf("postactions: error handling HandleUpdatePosts %s", err)
+		t.Fatalf("postactions: error handling HandleUpdatePost %s", err)
 	}
 
 	// Test we get a redirect after update (to the post concerned)
 	if w.Code != http.StatusFound {
-		t.Fatalf("postactions: unexpected response code for HandleUpdatePosts expected:%d got:%d", http.StatusFound, w.Code)
+		t.Fatalf("postactions: unexpected response code for HandleUpdatePost expected:%d got:%d", http.StatusFound, w.Code)
 	}
 
 	// Check the post name is in now value names[1]
@@ -249,7 +249,7 @@ func TestUpdatePosts(t *testing.T) {
 }
 
 // Test of POST /posts/123/destroy
-func TestDeletePosts(t *testing.T) {
+func TestDeletePost(t *testing.T) {
 
 	body := strings.NewReader(``)
 

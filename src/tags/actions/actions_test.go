@@ -56,7 +56,7 @@ func TestSetup(t *testing.T) {
 }
 
 // Test GET /tags/create
-func TestShowCreateTags(t *testing.T) {
+func TestShowCreateTag(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/tags/create", nil)
@@ -85,7 +85,7 @@ func TestShowCreateTags(t *testing.T) {
 }
 
 // Test POST /tags/create
-func TestCreateTags(t *testing.T) {
+func TestCreateTag(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[0])
@@ -113,19 +113,19 @@ func TestCreateTags(t *testing.T) {
 	}
 
 	// Check the tag name is in now value names[1]
-	allTags, err := tags.FindAll(tags.Query().Order("id desc"))
-	if err != nil || len(allTags) == 0 {
+	allTag, err := tags.FindAll(tags.Query().Order("id desc"))
+	if err != nil || len(allTag) == 0 {
 		t.Fatalf("tagactions: error finding created tag %s", err)
 	}
 
-	newTags := allTags[0]
-	if newTags.ID != 1 || newTags.Name != names[0] {
-		t.Errorf("tagactions: error with created tag values: %v %s", newTags.ID, newTags.Name)
+	newTag := allTag[0]
+	if newTag.ID != 1 || newTag.Name != names[0] {
+		t.Errorf("tagactions: error with created tag values: %v %s", newTag.ID, newTag.Name)
 	}
 }
 
 // Test GET /tags
-func TestListTags(t *testing.T) {
+func TestListTag(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/tags", nil)
@@ -154,7 +154,7 @@ func TestListTags(t *testing.T) {
 }
 
 // Test of GET /tags/1
-func TestShowTags(t *testing.T) {
+func TestShowTag(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/tags/1", nil)
@@ -182,7 +182,7 @@ func TestShowTags(t *testing.T) {
 }
 
 // Test GET /tags/123/update
-func TestShowUpdateTags(t *testing.T) {
+func TestShowUpdateTag(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/tags/1/update", nil)
@@ -211,7 +211,7 @@ func TestShowUpdateTags(t *testing.T) {
 }
 
 // Test POST /tags/123/update
-func TestUpdateTags(t *testing.T) {
+func TestUpdateTag(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[1])
@@ -230,12 +230,12 @@ func TestUpdateTags(t *testing.T) {
 	// Run the handler to update the tag
 	err = HandleUpdate(w, r)
 	if err != nil {
-		t.Errorf("tagactions: error handling HandleUpdateTags %s", err)
+		t.Errorf("tagactions: error handling HandleUpdateTag %s", err)
 	}
 
 	// Test we get a redirect after update (to the tag concerned)
 	if w.Code != http.StatusFound {
-		t.Errorf("tagactions: unexpected response code for HandleUpdateTags expected:%d got:%d", http.StatusFound, w.Code)
+		t.Errorf("tagactions: unexpected response code for HandleUpdateTag expected:%d got:%d", http.StatusFound, w.Code)
 	}
 
 	// Check the tag name is in now value names[1]
@@ -250,7 +250,7 @@ func TestUpdateTags(t *testing.T) {
 }
 
 // Test of POST /tags/123/destroy
-func TestDeleteTags(t *testing.T) {
+func TestDeleteTag(t *testing.T) {
 
 	body := strings.NewReader(``)
 

@@ -56,7 +56,7 @@ func TestSetup(t *testing.T) {
 }
 
 // Test GET /images/create
-func TestShowCreateImages(t *testing.T) {
+func TestShowCreateImage(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/images/create", nil)
@@ -85,7 +85,7 @@ func TestShowCreateImages(t *testing.T) {
 }
 
 // Test POST /images/create
-func TestCreateImages(t *testing.T) {
+func TestCreateImage(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[0])
@@ -113,18 +113,18 @@ func TestCreateImages(t *testing.T) {
 	}
 
 	// Check the image name is in now value names[1]
-	allImages, err := images.FindAll(images.Query().Order("id desc"))
-	if err != nil || len(allImages) == 0 {
+	allImage, err := images.FindAll(images.Query().Order("id desc"))
+	if err != nil || len(allImage) == 0 {
 		t.Fatalf("imageactions: error finding created image %s", err)
 	}
-	newImages := allImages[0]
-	if newImages.ID != 1 || newImages.Name != names[0] {
-		t.Fatalf("imageactions: error with created image values: %v %s", newImages.ID, newImages.Name)
+	newImage := allImage[0]
+	if newImage.ID != 1 || newImage.Name != names[0] {
+		t.Fatalf("imageactions: error with created image values: %v %s", newImage.ID, newImage.Name)
 	}
 }
 
 // Test GET /images
-func TestListImages(t *testing.T) {
+func TestListImage(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/images", nil)
@@ -153,7 +153,7 @@ func TestListImages(t *testing.T) {
 }
 
 // Test of GET /images/1
-func TestShowImages(t *testing.T) {
+func TestShowImage(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/images/1", nil)
@@ -181,7 +181,7 @@ func TestShowImages(t *testing.T) {
 }
 
 // Test GET /images/123/update
-func TestShowUpdateImages(t *testing.T) {
+func TestShowUpdateImage(t *testing.T) {
 
 	// Setup request and recorder
 	r := httptest.NewRequest("GET", "/images/1/update", nil)
@@ -210,7 +210,7 @@ func TestShowUpdateImages(t *testing.T) {
 }
 
 // Test POST /images/123/update
-func TestUpdateImages(t *testing.T) {
+func TestUpdateImage(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[1])
@@ -229,12 +229,12 @@ func TestUpdateImages(t *testing.T) {
 	// Run the handler to update the image
 	err = HandleUpdate(w, r)
 	if err != nil {
-		t.Fatalf("imageactions: error handling HandleUpdateImages %s", err)
+		t.Fatalf("imageactions: error handling HandleUpdateImage %s", err)
 	}
 
 	// Test we get a redirect after update (to the image concerned)
 	if w.Code != http.StatusFound {
-		t.Fatalf("imageactions: unexpected response code for HandleUpdateImages expected:%d got:%d", http.StatusFound, w.Code)
+		t.Fatalf("imageactions: unexpected response code for HandleUpdateImage expected:%d got:%d", http.StatusFound, w.Code)
 	}
 
 	// Check the image name is in now value names[1]
@@ -249,7 +249,7 @@ func TestUpdateImages(t *testing.T) {
 }
 
 // Test of POST /images/123/destroy
-func TestDeleteImages(t *testing.T) {
+func TestDeleteImage(t *testing.T) {
 
 	body := strings.NewReader(``)
 

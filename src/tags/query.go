@@ -24,7 +24,7 @@ func AllowedParams() []string {
 }
 
 // NewWithColumns creates a new tag instance and fills it with data from the database cols provided.
-func NewWithColumns(cols map[string]interface{}) *Tags {
+func NewWithColumns(cols map[string]interface{}) *Tag {
 
 	tag := New()
 	tag.ID = resource.ValidateInt(cols["id"])
@@ -43,8 +43,8 @@ func NewWithColumns(cols map[string]interface{}) *Tags {
 }
 
 // New creates and initialises a new tag instance.
-func New() *Tags {
-	tag := &Tags{}
+func New() *Tag {
+	tag := &Tag{}
 	tag.CreatedAt = time.Now()
 	tag.UpdatedAt = time.Now()
 	tag.TableName = TableName
@@ -55,7 +55,7 @@ func New() *Tags {
 
 // FindFirst fetches a single tag record from the database using
 // a where query with the format and args provided.
-func FindFirst(format string, args ...interface{}) (*Tags, error) {
+func FindFirst(format string, args ...interface{}) (*Tag, error) {
 	result, err := Query().Where(format, args...).FirstResult()
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func FindFirst(format string, args ...interface{}) (*Tags, error) {
 }
 
 // Find fetches a single tag record from the database by id.
-func Find(id int64) (*Tags, error) {
+func Find(id int64) (*Tag, error) {
 	result, err := Query().Where("id=?", id).FirstResult()
 	if err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func Find(id int64) (*Tags, error) {
 }
 
 // FindAll fetches all tag records matching this query from the database.
-func FindAll(q *query.Query) ([]*Tags, error) {
+func FindAll(q *query.Query) ([]*Tag, error) {
 
 	// Fetch query.Results from query
 	results, err := q.Results()
@@ -82,7 +82,7 @@ func FindAll(q *query.Query) ([]*Tags, error) {
 	}
 
 	// Return an array of tags constructed from the results
-	var tags []*Tags
+	var tags []*Tag
 	for _, cols := range results {
 		p := NewWithColumns(cols)
 		tags = append(tags, p)

@@ -24,7 +24,7 @@ func AllowedParams() []string {
 }
 
 // NewWithColumns creates a new page instance and fills it with data from the database cols provided.
-func NewWithColumns(cols map[string]interface{}) *Pages {
+func NewWithColumns(cols map[string]interface{}) *Page {
 
 	page := New()
 	page.ID = resource.ValidateInt(cols["id"])
@@ -44,8 +44,8 @@ func NewWithColumns(cols map[string]interface{}) *Pages {
 }
 
 // New creates and initialises a new page instance.
-func New() *Pages {
-	page := &Pages{}
+func New() *Page {
+	page := &Page{}
 	page.CreatedAt = time.Now()
 	page.UpdatedAt = time.Now()
 	page.TableName = TableName
@@ -57,7 +57,7 @@ func New() *Pages {
 
 // FindFirst fetches a single page record from the database using
 // a where query with the format and args provided.
-func FindFirst(format string, args ...interface{}) (*Pages, error) {
+func FindFirst(format string, args ...interface{}) (*Page, error) {
 	result, err := Query().Where(format, args...).FirstResult()
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func FindFirst(format string, args ...interface{}) (*Pages, error) {
 }
 
 // Find fetches a single page record from the database by id.
-func Find(id int64) (*Pages, error) {
+func Find(id int64) (*Page, error) {
 	result, err := Query().Where("id=?", id).FirstResult()
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func Find(id int64) (*Pages, error) {
 }
 
 // FindAll fetches all page records matching this query from the database.
-func FindAll(q *query.Query) ([]*Pages, error) {
+func FindAll(q *query.Query) ([]*Page, error) {
 
 	// Fetch query.Results from query
 	results, err := q.Results()
@@ -84,7 +84,7 @@ func FindAll(q *query.Query) ([]*Pages, error) {
 	}
 
 	// Return an array of pages constructed from the results
-	var pages []*Pages
+	var pages []*Page
 	for _, cols := range results {
 		p := NewWithColumns(cols)
 		pages = append(pages, p)

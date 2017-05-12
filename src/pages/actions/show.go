@@ -55,12 +55,6 @@ func HandleShowPath(w http.ResponseWriter, r *http.Request) error {
 	// Find the page
 	page, err := pages.FindFirst("url=?", "/"+params.Get("path"))
 	if err != nil {
-
-		// If no pages or users exist, redirect to set up page
-		if missingUsersAndPages() {
-			return server.Redirect(w, r, "/fragmenta/setup")
-		}
-
 		return server.NotFoundError(err)
 	}
 
@@ -80,10 +74,4 @@ func HandleShowPath(w http.ResponseWriter, r *http.Request) error {
 	view.AddKey("currentUser", user)
 	view.Template(page.Template)
 	return view.Render()
-}
-
-func missingUsersAndPages() bool {
-
-	// Check if there are zero pages and zero users.
-	return false
 }
