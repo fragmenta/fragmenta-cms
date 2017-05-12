@@ -1,7 +1,3 @@
 <section>
-<h1>{{ .post.Name }}</h1>
-<div class="text">
-    	<p>Name: {{ .post.Name }}</p>
-
-</div>
+{{ html .post.Text }}
 </section>
