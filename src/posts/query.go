@@ -50,6 +50,7 @@ func New() *Posts {
 	post.TableName = TableName
 	post.KeyName = KeyName
 	post.Status = status.Draft
+	post.Template = "posts/views/templates/default.html.got"
 	return post
 }
 

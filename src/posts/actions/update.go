@@ -10,6 +10,7 @@ import (
 
 	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/posts"
+	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
 // HandleUpdateShow renders the form to update a post.
@@ -34,10 +35,17 @@ func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 		return server.NotAuthorizedError(err)
 	}
 
+	// Fetch the users
+	authors, err := users.FindAll(users.Where("role=?", users.Admin))
+	if err != nil {
+		return server.InternalError(err)
+	}
+
 	// Render the template
 	view := view.NewRenderer(w, r)
 	view.AddKey("currentUser", user)
 	view.AddKey("post", post)
+	view.AddKey("authors", authors)
 	return view.Render()
 }
 

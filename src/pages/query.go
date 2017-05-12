@@ -51,6 +51,7 @@ func New() *Pages {
 	page.TableName = TableName
 	page.KeyName = KeyName
 	page.Status = status.Draft
+	page.Template = "pages/views/templates/default.html.got"
 	return page
 }
 

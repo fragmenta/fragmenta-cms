@@ -39,5 +39,6 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 	view.CacheKey(post.CacheKey())
 	view.AddKey("currentUser", user)
 	view.AddKey("post", post)
+	view.Template("posts/views/templates/default.html.go")
 	return view.Render()
 }

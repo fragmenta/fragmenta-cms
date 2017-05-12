@@ -10,6 +10,7 @@ import (
 
 	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/pages"
+	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
 // HandleCreateShow serves the create form via GET for pages.
@@ -24,9 +25,16 @@ func HandleCreateShow(w http.ResponseWriter, r *http.Request) error {
 		return server.NotAuthorizedError(err)
 	}
 
+	// Fetch the users
+	authors, err := users.FindAll(users.Where("role=?", users.Admin))
+	if err != nil {
+		return server.InternalError(err)
+	}
+
 	// Render the template
 	view := view.NewRenderer(w, r)
 	view.AddKey("page", page)
+	view.AddKey("authors", authors)
 	view.AddKey("currentUser", user)
 	return view.Render()
 }

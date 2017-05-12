@@ -14,7 +14,7 @@ type Tags struct {
 	// status.ResourceStatus defines a status field and associated behaviour
 	status.ResourceStatus
 
-	DottedIds string
+	DottedIDs string
 	Name      string
 	ParentID  int64
 	Sort      int64

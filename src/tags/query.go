@@ -31,7 +31,7 @@ func NewWithColumns(cols map[string]interface{}) *Tags {
 	tag.CreatedAt = resource.ValidateTime(cols["created_at"])
 	tag.UpdatedAt = resource.ValidateTime(cols["updated_at"])
 	tag.Status = resource.ValidateInt(cols["status"])
-	tag.DottedIds = resource.ValidateString(cols["dotted_ids"])
+	tag.DottedIDs = resource.ValidateString(cols["dotted_ids"])
 	tag.Name = resource.ValidateString(cols["name"])
 	tag.ParentID = resource.ValidateInt(cols["parent_id"])
 	tag.Sort = resource.ValidateInt(cols["sort"])

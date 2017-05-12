@@ -43,14 +43,20 @@ func HandleSetup(w http.ResponseWriter, r *http.Request) error {
 		return server.InternalError(err)
 	}
 
+	// Convert the password param to a password_hash
+	hash, err := auth.HashPassword(params.Get("password"))
+	if err != nil {
+		return server.InternalError(err, "Problem hashing password")
+	}
+
 	// Take the details given and create the first user
 	userParams := map[string]string{
-		"email":    params.Get("email"),
-		"password": params.Get("password"),
-		"name":     nameFromEmail(params.Get("email")),
-		"status":   "100",
-		"role":     "100",
-		"title":    "Administrator",
+		"email":         params.Get("email"),
+		"password_hash": hash,
+		"name":          nameFromEmail(params.Get("email")),
+		"status":        "100",
+		"role":          "100",
+		"title":         "Administrator",
 	}
 
 	user := users.New()

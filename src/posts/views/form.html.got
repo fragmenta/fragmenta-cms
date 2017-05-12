@@ -6,13 +6,24 @@
     </section>
   
     <section class="inline-fields">
-          {{ field "AuthorID" "author_id" .post.AuthorID }}
-    {{ field "Keywords" "keywords" .post.Keywords }}
-    {{ field "Name" "name" .post.Name }}
-{{ select "Status" "status" .post.Status .post.StatusOptions }}    {{ field "Summary" "summary" .post.Summary }}
-    {{ field "Template" "template" .post.Template }}
-    {{ field "Text" "text" .post.Text }}
+     {{ select "Status" "status" .post.Status .post.StatusOptions }}  
+     {{ selectarray "Author" "author_id" .post.AuthorID .authors }}  
+     {{ field "Template" "template" .post.Template }}
+    </section>
+
+    <section class="wide-fields">
+          {{ field "Name" "name" .post.Name }}
+          {{ field "Summary" "summary" .post.Summary }}
+          {{ field "Keywords" "keywords" .post.Keywords }}
+         <div class="field">
+            <label>Post Content</label>
+            {{ template "lib/editable/views/editable-toolbar.html.got" }}
+            <textarea name="text" class="content-textarea">{{.post.Text}}</textarea>
+            <div contenteditable class="content-editable text">{{html .post.Text}}</div>
+        </div>
 
     </section>
     
+
+
 </form>

@@ -6,13 +6,18 @@
     </section>
   
     <section class="inline-fields">
-          {{ field "DottedIds" "dotted_ids" .tag.DottedIds }}
-    {{ field "Name" "name" .tag.Name }}
-    {{ field "ParentID" "parent_id" .tag.ParentID }}
-    {{ field "Sort" "sort" .tag.Sort }}
-{{ select "Status" "status" .tag.Status .tag.StatusOptions }}    {{ field "Summary" "summary" .tag.Summary }}
-    {{ field "URL" "url" .tag.URL }}
+     {{ select "Status" "status" .tag.Status .tag.StatusOptions }} 
+     {{ field "Parent" "parent_id" .tag.ParentID }}
 
+     </section>
+     
+     <section class="inline-fields">
+     {{ field "Name" "name" .tag.Name }}
+     {{ field "Summary" "summary" .tag.Summary }}
+     {{ field "URL" "url" .tag.URL }}
+     {{ field "Sort" "sort" .tag.Sort }}
+     
+   
     </section>
     
 </form>

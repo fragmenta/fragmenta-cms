@@ -10,6 +10,6 @@
         <td>{{ .tag.ID }}</td>
         <td>{{ time .tag.UpdatedAt }}</td>
         <td>{{ .tag.StatusDisplay }}</td>
-        <td><a href="{{ .tag.UpdateURL }}">Edit Tags</a></td>
+        <td><a href="{{ .tag.UpdateURL }}">Edit</a></td>
     </tr>
 {{ end }}

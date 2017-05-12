@@ -3,6 +3,7 @@ package useractions
 import (
 	"net/http"
 
+	"github.com/fragmenta/auth"
 	"github.com/fragmenta/auth/can"
 	"github.com/fragmenta/mux"
 	"github.com/fragmenta/server"
@@ -67,6 +68,13 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
+
+	// Convert the password param to a password_hash
+	hash, err := auth.HashPassword(params.Get("password"))
+	if err != nil {
+		return server.InternalError(err, "Problem hashing password")
+	}
+	params.SetString("password_hash", hash)
 
 	// Validate the params, removing any we don't accept
 	userParams := user.ValidateParams(params.Map(), users.AllowedParams())

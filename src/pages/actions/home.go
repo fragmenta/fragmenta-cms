@@ -7,6 +7,7 @@ import (
 	"github.com/fragmenta/server/log"
 	"github.com/fragmenta/view"
 
+	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/pages"
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
@@ -28,9 +29,12 @@ func HandleShowHome(w http.ResponseWriter, r *http.Request) error {
 		return server.NotFoundError(nil)
 	}
 
+	currentUser := session.CurrentUser(w, r)
+
 	view := view.NewWithPath(r.URL.Path, w)
 	view.AddKey("title", "Fragmenta app")
 	view.AddKey("page", page)
-	view.Template("pages/views/templates/show.html.got")
+	view.AddKey("currentUser", currentUser)
+	view.Template("pages/views/templates/default.html.got")
 	return view.Render()
 }
