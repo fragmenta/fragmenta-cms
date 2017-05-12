@@ -8,8 +8,7 @@
     <section class="inline-fields">
     {{ select "Status" "status" .page.Status .page.StatusOptions }}  
     {{ selectarray "Author" "author_id" .page.AuthorID .authors }}  
-    {{ field "Template" "template" .page.Template }} 
-   
+    {{ selectarray "Template" "template" .page.Template .page.TemplateOptions }} 
     </section>
 
     <section class="wide-fields">

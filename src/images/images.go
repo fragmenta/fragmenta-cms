@@ -18,5 +18,4 @@ type Image struct {
 	Name     string
 	Path     string
 	Sort     int64
-	Status   int64
 }

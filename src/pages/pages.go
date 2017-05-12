@@ -2,6 +2,8 @@
 package pages
 
 import (
+	"github.com/fragmenta/view/helpers"
+
 	"github.com/fragmenta/fragmenta-cms/src/lib/resource"
 	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
@@ -17,7 +19,6 @@ type Page struct {
 	AuthorID int64
 	Keywords string
 	Name     string
-	Status   int64
 	Summary  string
 	Template string
 	Text     string
@@ -30,4 +31,14 @@ func (p *Page) ShowTemplate() string {
 		return "pages/views/templates/default.html.got"
 	}
 	return p.Template
+}
+
+// TemplateOptions provides a set of options for the templates menu
+// ids are indexes into the templates array above
+func (p *Page) TemplateOptions() []helpers.Selectable {
+	var options []helpers.Selectable
+
+	options = append(options, helpers.SelectableOption{Value: "pages/views/templates/default.html.got", Name: "Default"})
+
+	return options
 }

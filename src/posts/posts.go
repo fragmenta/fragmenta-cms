@@ -2,6 +2,8 @@
 package posts
 
 import (
+	"github.com/fragmenta/view/helpers"
+
 	"github.com/fragmenta/fragmenta-cms/src/lib/resource"
 	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
@@ -17,17 +19,25 @@ type Post struct {
 	AuthorID int64
 	Keywords string
 	Name     string
-	Status   int64
 	Summary  string
 	Template string
 	Text     string
 }
 
-func (p *Post) StatusDisplay() string {
-	for _, o := range p.StatusOptions() {
-		if o.Id == p.Status {
-			return o.Name
-		}
+// ShowTemplate returns the default template if none is set, or the template selected
+func (p *Post) ShowTemplate() string {
+	if p.Template == "" {
+		return "posts/views/templates/default.html.got"
 	}
-	return ""
+	return p.Template
+}
+
+// TemplateOptions provides a set of options for the templates menu
+// ids are indexes into the templates array above
+func (p *Post) TemplateOptions() []helpers.Selectable {
+	var options []helpers.Selectable
+
+	options = append(options, helpers.SelectableOption{Value: "posts/views/templates/default.html.got", Name: "Default"})
+
+	return options
 }

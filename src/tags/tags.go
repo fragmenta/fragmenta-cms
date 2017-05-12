@@ -18,7 +18,6 @@ type Tag struct {
 	Name      string
 	ParentID  int64
 	Sort      int64
-	Status    int64
 	Summary   string
 	URL       string
 }
