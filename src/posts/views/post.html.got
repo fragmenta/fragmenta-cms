@@ -1,0 +1,8 @@
+<div class="post">
+<a href="{{.ShowURL}}">
+<h3>{{ .Name }}</h3>
+<div class="text">
+{{ html .Summary }}
+</a>
+</div>
+</div>

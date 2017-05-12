@@ -25,6 +25,11 @@ type Page struct {
 	URL      string
 }
 
+// ShowURL returns our canonical url for showing the page
+func (p *Page) ShowURL() string {
+	return p.URL
+}
+
 // ShowTemplate returns the default template if none is set, or the template selected
 func (p *Page) ShowTemplate() string {
 	if p.Template == "" {

@@ -2,6 +2,7 @@
 package posts
 
 import (
+	"fmt"
 	"github.com/fragmenta/view/helpers"
 
 	"github.com/fragmenta/fragmenta-cms/src/lib/resource"
@@ -22,6 +23,11 @@ type Post struct {
 	Summary  string
 	Template string
 	Text     string
+}
+
+// ShowURL returns our canonical url for showing the post, including slug
+func (p *Post) ShowURL() string {
+	return fmt.Sprintf("/blog/%d-%s", p.ID, p.ToSlug(p.Name))
 }
 
 // ShowTemplate returns the default template if none is set, or the template selected

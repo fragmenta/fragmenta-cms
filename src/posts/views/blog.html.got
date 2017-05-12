@@ -1,0 +1,6 @@
+<section class="narrow">
+<h1>Blog</h1>
+</section>
+{{ range .posts }}
+       {{ template "posts/views/post.html.got" . }}
+{{ end }}

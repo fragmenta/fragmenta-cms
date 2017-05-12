@@ -61,6 +61,8 @@ func SetupRoutes() *mux.Mux {
 	router.Post("/posts/{id:[0-9]+}/update", postactions.HandleUpdate)
 	router.Post("/posts/{id:[0-9]+}/destroy", postactions.HandleDestroy)
 	router.Get("/posts/{id:[0-9]+}", postactions.HandleShow)
+	router.Get("/blog", postactions.HandleShowBlog)
+	router.Get("/blog/{id:[0-9]+}", postactions.HandleShow)
 
 	router.Get("/tags", tagactions.HandleIndex)
 	router.Get("/tags/create", tagactions.HandleCreateShow)
