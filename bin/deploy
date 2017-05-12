@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Upload to this destination
-SERVER="example.com"
+SERVER="" # example.com or IP
 
 # Let the user know
 echo "Uploading to $SERVER...";
@@ -9,7 +9,7 @@ echo "Uploading to $SERVER...";
 # Upload files using rsync
 rsync -rlhzv --update -e ssh --exclude='.*' \
 "$GOPATH/src/github.com/fragmenta/fragmenta-cms" \
-"core@$SERVER:/srv/www/fragmenta-cms"
+"core@$SERVER:/srv/fragmenta"
 
 # Restart the service on server
 ssh -t core@$SERVER /bin/bash <<'EOT'
