@@ -1,9 +1,0 @@
-/* Migrate older cms user columns over to new naming scheme for consistency */
-alter table users add column password_hash text;
-alter table users add column password_reset_token text;
-alter table users add column password_reset_at timestamp;
-update users set password_hash=encrypted_password;
-
-/* drop unused columns */
-
-/*alter table users drop column encrypted_password; */
