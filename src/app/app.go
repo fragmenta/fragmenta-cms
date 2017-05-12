@@ -127,9 +127,12 @@ func SetupAssets() {
 	// Init the pkg global for use in ServeAssets
 	appAssets = assets.New(assetsCompiled)
 
-	// Load asset details from json file on each run
-	err := appAssets.Load()
-	if err != nil || !config.Production() {
+	// Load assets in production, always compile if in dev
+	load := true
+	if config.Production() {
+		load = (appAssets.Load() != nil)
+	}
+	if load {
 		// Compile assets for the first time
 		log.Info(log.V{"msg": "Compiling Asssets"})
 
