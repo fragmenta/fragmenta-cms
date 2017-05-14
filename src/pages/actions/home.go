@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/fragmenta/server"
+	"github.com/fragmenta/server/config"
 	"github.com/fragmenta/server/log"
 	"github.com/fragmenta/view"
 
@@ -35,6 +36,9 @@ func HandleShowHome(w http.ResponseWriter, r *http.Request) error {
 	view.AddKey("title", "Fragmenta app")
 	view.AddKey("page", page)
 	view.AddKey("currentUser", currentUser)
+	view.AddKey("meta_title", config.Get("meta_title"))
+	view.AddKey("meta_desc", config.Get("meta_desc"))
+	view.AddKey("meta_keywords", config.Get("meta_keywords"))
 	view.Template("pages/views/templates/default.html.got")
 	return view.Render()
 }

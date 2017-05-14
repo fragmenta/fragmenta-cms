@@ -42,6 +42,9 @@ func HandleShow(w http.ResponseWriter, r *http.Request) error {
 	view.CacheKey(post.CacheKey())
 	view.AddKey("currentUser", user)
 	view.AddKey("post", post)
+	view.AddKey("meta_title", post.Name)
+	view.AddKey("meta_keywords", post.Keywords)
+	view.AddKey("meta_desc", post.Summary)
 	view.Template("posts/views/templates/default.html.got")
 	return view.Render()
 }
