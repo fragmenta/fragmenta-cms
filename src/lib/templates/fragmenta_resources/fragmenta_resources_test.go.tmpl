@@ -17,7 +17,7 @@ func TestSetup(t *testing.T) {
 }
 
 // Test Create method
-func TestCreate[[ .Fragmenta_Resources ]](t *testing.T) {
+func TestCreate[[ .Fragmenta_Resource ]](t *testing.T) {
 	[[ .fragmenta_resource ]]Params := map[string]string{
 			"name":      testName,
 			"status":    "100",
@@ -55,9 +55,9 @@ func TestList[[ .Fragmenta_Resources ]](t *testing.T) {
 }
 
 // Test Update method
-func TestUpdate[[ .Fragmenta_Resources ]](t *testing.T) {
+func TestUpdate[[ .Fragmenta_Resource ]](t *testing.T) {
 
-	// Get the last [[ .fragmenta_resource ]] (created in TestCreate[[ .Fragmenta_Resources ]] above)
+	// Get the last [[ .fragmenta_resource ]] (created in TestCreate[[ .Fragmenta_Resource ]] above)
 	[[ .fragmenta_resource ]], err := FindFirst("name=?", testName)
 	if err != nil {
 		t.Fatalf("[[ .fragmenta_resources ]]: Update no [[ .fragmenta_resource ]] found :%s", err)
@@ -104,7 +104,7 @@ func TestQuery(t *testing.T) {
 }
 
 // Test Destroy method
-func TestDestroy[[ .Fragmenta_Resources ]](t *testing.T) {
+func TestDestroy[[ .Fragmenta_Resource ]](t *testing.T) {
 
 	results, err := FindAll(Query())
 	if err != nil || len(results) == 0 {
