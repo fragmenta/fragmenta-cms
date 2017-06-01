@@ -70,6 +70,7 @@ input[type="button"]:hover {
     line-height: 1.5rem;
     padding: 0.1rem 0.5rem;
     margin: 0;
+    height: 1.7rem;
 }
 
 .inline-buttons {
