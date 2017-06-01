@@ -9,3 +9,5 @@ db/backup/*
 # ignore compiled app group
 public/assets/*/app-*
 public/files
+
+themes/*
