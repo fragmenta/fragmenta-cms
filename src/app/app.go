@@ -1,8 +1,8 @@
 package app
 
 import (
-	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -141,6 +141,15 @@ func SetupAssets() {
 			log.Fatal(log.V{"a": "unable to compile assets", "error": err})
 			os.Exit(1)
 		}
+		// If we have a theme, load assets from the them as well
+		if themePath() != "" {
+			err = appAssets.Compile(themePath(), "public")
+			if err != nil {
+				log.Fatal(log.V{"a": "unable to compile assets", "error": err})
+				os.Exit(1)
+			}
+		}
+
 	}
 
 }
@@ -155,11 +164,9 @@ func SetupView() {
 	paths := []string{"src"}
 
 	// Add a theme path if we have one
-	theme := config.Get("theme")
-	if theme != "" {
-		log.Log(log.V{"msg": "loading templates for theme", "theme": theme})
-		themePath := fmt.Sprintf("themes/%s/src", theme)
-		paths = append(paths, themePath)
+	if themePath() != "" {
+		log.Log(log.V{"msg": "loading templates for theme", "theme": config.Get("theme")})
+		paths = append(paths, themePath())
 	}
 
 	err := view.LoadTemplatesAtPaths(paths, helperFuncs())
@@ -196,4 +203,12 @@ func helperFuncs() map[string]interface{} {
 	}
 
 	return helpers
+}
+
+// themePath returns the path to the theme src dir (if a theme is chosen)
+func themePath() string {
+	if config.Get("theme") == "" {
+		return ""
+	}
+	return filepath.Join("themes", config.Get("theme"), "src")
 }
