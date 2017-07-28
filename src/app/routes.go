@@ -9,6 +9,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/pages/actions"
 	"github.com/fragmenta/fragmenta-cms/src/posts/actions"
+	"github.com/fragmenta/fragmenta-cms/src/redirects/actions"
 	"github.com/fragmenta/fragmenta-cms/src/tags/actions"
 	"github.com/fragmenta/fragmenta-cms/src/users/actions"
 )
@@ -36,6 +37,15 @@ func SetupRoutes() *mux.Mux {
 	router.Add("/assets/{path:.*}", fileHandler)
 
 	// Resource Routes
+
+	router.Get("/redirects", redirectactions.HandleIndex)
+	router.Get("/redirects/create", redirectactions.HandleCreateShow)
+	router.Post("/redirects/create", redirectactions.HandleCreate)
+	router.Get("/redirects/{id:[0-9]+}/update", redirectactions.HandleUpdateShow)
+	router.Post("/redirects/{id:[0-9]+}/update", redirectactions.HandleUpdate)
+	router.Post("/redirects/{id:[0-9]+}/destroy", redirectactions.HandleDestroy)
+	router.Get("/redirects/{id:[0-9]+}", redirectactions.HandleShow)
+
 	router.Get("/pages", pageactions.HandleIndex)
 	router.Get("/pages/create", pageactions.HandleCreateShow)
 	router.Post("/pages/create", pageactions.HandleCreate)

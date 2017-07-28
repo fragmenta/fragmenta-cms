@@ -1,0 +1,14 @@
+<form method="post" class="resource-update-form redirects-form">
+
+    <section class="actions">
+        <input type="submit" class="button" value="Save">
+        <a class="button grey" href="javascript:history.back()">Cancel</a>
+    </section>
+  
+    <section class="inline-fields">
+          {{ field "NewURL" "new_url" .redirect.NewURL }}
+    {{ field "OldURL" "old_url" .redirect.OldURL }}
+
+    </section>
+    
+</form>

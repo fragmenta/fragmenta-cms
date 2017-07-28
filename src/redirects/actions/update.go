@@ -1,4 +1,4 @@
-package [[ .fragmenta_resource ]]actions
+package redirectactions
 
 import (
 	"net/http"
@@ -9,10 +9,10 @@ import (
 	"github.com/fragmenta/view"
 
 	"github.com/fragmenta/fragmenta-cms/src/lib/session"
-	"github.com/fragmenta/fragmenta-cms/src/[[ .fragmenta_resources ]]"
+	"github.com/fragmenta/fragmenta-cms/src/redirects"
 )
 
-// HandleUpdateShow renders the form to update a [[ .fragmenta_resource ]].
+// HandleUpdateShow renders the form to update a redirect.
 func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 
 	// Fetch the  params
@@ -20,16 +20,16 @@ func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return server.InternalError(err)
 	}
-	
-	// Find the [[ .fragmenta_resource ]]
-	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(params.GetInt([[ .fragmenta_resources ]].KeyName))
+
+	// Find the redirect
+	redirect, err := redirects.Find(params.GetInt(redirects.KeyName))
 	if err != nil {
 		return server.NotFoundError(err)
 	}
 
-	// Authorise update [[ .fragmenta_resource ]]
+	// Authorise update redirect
 	user := session.CurrentUser(w, r)
-	err = can.Update([[ .fragmenta_resource ]], user)
+	err = can.Update(redirect, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
@@ -37,11 +37,11 @@ func HandleUpdateShow(w http.ResponseWriter, r *http.Request) error {
 	// Render the template
 	view := view.NewRenderer(w, r)
 	view.AddKey("currentUser", user)
-	view.AddKey("[[ .fragmenta_resource ]]", [[ .fragmenta_resource ]])
+	view.AddKey("redirect", redirect)
 	return view.Render()
 }
 
-// HandleUpdate handles the POST of the form to update a [[ .fragmenta_resource ]]
+// HandleUpdate handles the POST of the form to update a redirect
 func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 
 	// Fetch the  params
@@ -49,9 +49,9 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return server.InternalError(err)
 	}
-	
-	// Find the [[ .fragmenta_resource ]]
-	[[ .fragmenta_resource ]], err := [[ .fragmenta_resources ]].Find(params.GetInt([[ .fragmenta_resources ]].KeyName))
+
+	// Find the redirect
+	redirect, err := redirects.Find(params.GetInt(redirects.KeyName))
 	if err != nil {
 		return server.NotFoundError(err)
 	}
@@ -62,21 +62,21 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	// Authorise update [[ .fragmenta_resource ]]
+	// Authorise update redirect
 	user := session.CurrentUser(w, r)
-	err = can.Update([[ .fragmenta_resource ]], user)
+	err = can.Update(redirect, user)
 	if err != nil {
 		return server.NotAuthorizedError(err)
 	}
 
 	// Validate the params, removing any we don't accept
-	[[ .fragmenta_resource ]]Params := [[ .fragmenta_resource ]].ValidateParams(params.Map(), [[ .fragmenta_resources ]].AllowedParams())
+	redirectParams := redirect.ValidateParams(params.Map(), redirects.AllowedParams())
 
-	err = [[ .fragmenta_resource ]].Update([[ .fragmenta_resource ]]Params)
+	err = redirect.Update(redirectParams)
 	if err != nil {
 		return server.InternalError(err)
 	}
 
-	// Redirect to [[ .fragmenta_resource ]]
-	return server.Redirect(w, r, [[ .fragmenta_resource ]].ShowURL())
+	// Redirect to redirect
+	return server.Redirect(w, r, redirect.ShowURL())
 }
