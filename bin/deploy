@@ -8,7 +8,7 @@ echo "Uploading to $SERVER...";
 
 # Upload files using rsync
 rsync -rlhzv --update -e ssh --exclude='.*' \
-"$GOPATH/src/github.com/fragmenta/fragmenta-cms" \
+"$GOPATH/src/github.com/fragmenta/fragmenta-cms/" \
 "core@$SERVER:/srv/fragmenta"
 
 # Restart the service on server
