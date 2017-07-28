@@ -10,6 +10,7 @@ import (
 
 	"github.com/fragmenta/fragmenta-cms/src/lib/session"
 	"github.com/fragmenta/fragmenta-cms/src/pages"
+	"github.com/fragmenta/fragmenta-cms/src/redirects"
 )
 
 // HandleShow displays a single page.
@@ -59,9 +60,14 @@ func HandleShowPath(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Find the page
-	page, err := pages.FindFirst("url=?", "/"+params.Get("path"))
+	path := "/" + params.Get("path")
+	page, err := pages.FindFirst("url=?", path)
 	if err != nil {
-		return server.NotFoundError(err)
+		redirect, err := redirects.FindFirst("old_url=?", path)
+		if err != nil {
+			return server.NotFoundError(err)
+		}
+		return server.Redirect(w, r, redirect.NewURL)
 	}
 
 	// Authorise access IF the page is not published

@@ -1,15 +1,15 @@
 {{ if not .redirect.ID }}
     <tr class="data-table-head">
         <td>Id</td>
-        <td>Status</td>
-        <td>Updated</td>
-        <td>Actions</td>
+        <td>Old URL</td>
+        <td>Redirects to</td>
+        <td></td>
     </tr>
 {{ else }}
     <tr {{ if odd .i }}class="odd"{{end}}>
         <td>{{ .redirect.ID }}</td>
-        <td>{{ .redirect.StatusDisplay }}</td>
-        <td>{{ time .redirect.UpdatedAt }}</td>
+        <td>{{ .redirect.OldURL }}</td>
+        <td>{{ .redirect.NewURL }}</td>
         <td><a href="{{ .redirect.UpdateURL }}">Edit</a></td>
     </tr>
 {{ end }}

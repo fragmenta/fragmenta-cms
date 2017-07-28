@@ -15,7 +15,7 @@ const (
 	// KeyName is the primary key value for this resource
 	KeyName = "id"
 	// Order defines the default sort order in sql for this resource
-	Order = "name asc, id desc"
+	Order = "id desc"
 )
 
 // AllowedParams returns an array of allowed param keys for Update and Create.

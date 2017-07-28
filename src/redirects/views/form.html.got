@@ -5,10 +5,9 @@
         <a class="button grey" href="javascript:history.back()">Cancel</a>
     </section>
   
-    <section class="inline-fields">
-          {{ field "NewURL" "new_url" .redirect.NewURL }}
-    {{ field "OldURL" "old_url" .redirect.OldURL }}
-
+    <section class="wide-fields">
+        {{ field "Old URL" "old_url" .redirect.OldURL }}
+        {{ field "Redirects to" "new_url" .redirect.NewURL }}
     </section>
     
 </form>
