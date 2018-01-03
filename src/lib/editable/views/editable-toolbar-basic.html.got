@@ -1,9 +1,0 @@
-<ul class="toolbar content-editable-toolbar">
-            <li><a title="Style as Paragraph" href="#" id="formatblock" data-format="p">P</a></li>
-            <li><a title="Style as Bold" href="#" id="Bold"><b>B</b></a></li>
-            <li><a title="Style as Italic" href="#" id="Italic"><i>I</i></a></li>
-            <li><a title="Insert a link" href="#" id="createLink">∞</a></li>
-            <li class=""><a title="View HTML source" href="#" id="showCode">&lt;&gt;</a></li>
-          
-</ul>
-<div class="clear"></div>

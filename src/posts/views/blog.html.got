@@ -1,6 +1,0 @@
-<section class="padded narrow">
-<h1>Blog</h1>
-{{ range .posts }}
-       {{ template "posts/views/post.html.got" . }}
-{{ end }}
-</section>

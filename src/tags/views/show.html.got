@@ -1,5 +1,0 @@
-<section>
-<h1>{{ .tag.Name }}</h1>
-<p>Parent: {{ .tag.ParentID }}</p>
-<p>Path: {{ .tag.DottedIDs }}</p>
-</section>

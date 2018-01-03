@@ -1,7 +1,0 @@
-Hi {{.name}},<br>
-<br>
-{{.message}}<br>
-<br>
-Thanks,<br>
-<br>
-{{ .from }}<br>

@@ -1,4 +1,0 @@
-<section>
-<h1>{{ .redirect.Name }}</h1>
-<p>Name: {{ .redirect.Name }}</p>
-</section>

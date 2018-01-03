@@ -1,4 +1,0 @@
-{{ style "normalize.min" }}
-{{ style "app" }}
-
-{{ script "app" }}

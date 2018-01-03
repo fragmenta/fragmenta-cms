@@ -1,8 +1,0 @@
-<div class="post">
-<a href="{{.ShowURL}}">
-<h3>{{ .Name }}</h3>
-<div class="text">
-{{ sanitize .Summary }}
-</a>
-</div>
-</div>

@@ -1,4 +1,0 @@
-<section>
-<h1>Create Tags</h1>
-{{ template "tags/views/form.html.got" . }}
-</section>
