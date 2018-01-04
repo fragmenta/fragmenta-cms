@@ -1,4 +1,0 @@
-<section>
-<h1>Create Redirect</h1>
-{{ template "redirects/views/form.html.got" . }}
-</section>

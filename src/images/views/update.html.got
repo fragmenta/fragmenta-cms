@@ -1,4 +1,0 @@
-<section>
-<h1>Update Images</h1>
-{{ template "images/views/form.html.got" . }}
-</section>

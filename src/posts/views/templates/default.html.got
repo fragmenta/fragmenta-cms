@@ -1,6 +1,0 @@
-<section class="admin-bar-actions">
-<a class="button small" href="/posts/{{.post.ID}}/update">Edit Post</a>
-</section>
-<section class="padded narrow">
-{{ sanitize .post.Text }}
-</section>

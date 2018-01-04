@@ -1,7 +1,0 @@
-<section>
-<h1>{{ .image.Name }}</h1>
-<div class="text">
-    	<p>Name: {{ .image.Name }}</p>
-
-</div>
-</section>
