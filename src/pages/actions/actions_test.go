@@ -89,6 +89,7 @@ func TestCreatePage(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[0])
+	form.Add("url", "/foo")
 	body := strings.NewReader(form.Encode())
 
 	r := httptest.NewRequest("POST", "/pages/create", body)
@@ -214,6 +215,7 @@ func TestUpdatePage(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("name", names[1])
+	form.Add("url", "/bar")
 	body := strings.NewReader(form.Encode())
 
 	r := httptest.NewRequest("POST", "/pages/1/update", body)
@@ -242,7 +244,7 @@ func TestUpdatePage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("pageactions: error finding updated page %s", err)
 	}
-	if page.ID != 1 || page.Name != names[1] {
+	if page.ID != 1 || page.Name != names[1] || page.URL != "/bar" {
 		t.Fatalf("pageactions: error with updated page values: %v", page)
 	}
 
