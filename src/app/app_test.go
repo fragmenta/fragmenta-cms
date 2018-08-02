@@ -9,6 +9,7 @@ import (
 	"github.com/fragmenta/auth/can"
 	"github.com/fragmenta/server/config"
 
+	"github.com/fragmenta/fragmenta-cms/src/pages"
 	"github.com/fragmenta/fragmenta-cms/src/users"
 )
 
@@ -46,6 +47,13 @@ func TestRouter(t *testing.T) {
 
 	// Setup our router and handlers
 	router := SetupRoutes()
+
+	// Insert a page at / in the test db
+	pageParams := map[string]string{"url": "/", "name": "test"}
+	_, err = pages.New().Create(pageParams)
+	if err != nil {
+		t.Fatalf("app: failed to create page")
+	}
 
 	// Test serving the route / which should always exist
 	r := httptest.NewRequest("GET", "/", nil)
