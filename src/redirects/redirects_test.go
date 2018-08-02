@@ -7,7 +7,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/lib/resource"
 )
 
-var testName = "foo"
+var testURL = "foo"
 
 func TestSetup(t *testing.T) {
 	err := resource.SetupTestDatabase(2)
@@ -19,8 +19,7 @@ func TestSetup(t *testing.T) {
 // Test Create method
 func TestCreateRedirect(t *testing.T) {
 	redirectParams := map[string]string{
-		"name":   testName,
-		"status": "100",
+		"new_url": testURL,
 	}
 
 	id, err := New().Create(redirectParams)
@@ -33,8 +32,8 @@ func TestCreateRedirect(t *testing.T) {
 		t.Fatalf("redirects: Create redirect find failed")
 	}
 
-	if redirect.Name != testName {
-		t.Fatalf("redirects: Create redirect name failed expected:%s got:%s", testName, redirect.Name)
+	if redirect.NewURL != testURL {
+		t.Fatalf("redirects: Create redirect url failed expected:%s got:%s", testURL, redirect.NewURL)
 	}
 
 }
@@ -58,13 +57,13 @@ func TestListRedirects(t *testing.T) {
 func TestUpdateRedirect(t *testing.T) {
 
 	// Get the last redirect (created in TestCreateRedirect above)
-	redirect, err := FindFirst("name=?", testName)
+	redirect, err := FindFirst("new_url=?", testURL)
 	if err != nil {
 		t.Fatalf("redirects: Update no redirect found :%s", err)
 	}
 
-	name := "bar"
-	redirectParams := map[string]string{"name": name}
+	url := "/bar"
+	redirectParams := map[string]string{"new_url": url}
 	err = redirect.Update(redirectParams)
 	if err != nil {
 		t.Fatalf("redirects: Update redirect failed :%s", err)
@@ -73,11 +72,11 @@ func TestUpdateRedirect(t *testing.T) {
 	// Fetch the redirect again from db
 	redirect, err = Find(redirect.ID)
 	if err != nil {
-		t.Fatalf("redirects: Update redirect fetch failed :%s", redirect.Name)
+		t.Fatalf("redirects: Update redirect fetch failed :%s", redirect.NewURL)
 	}
 
-	if redirect.Name != name {
-		t.Fatalf("redirects: Update redirect failed :%s", redirect.Name)
+	if redirect.NewURL != url {
+		t.Fatalf("redirects: Update redirect failed :%s", redirect.NewURL)
 	}
 
 }
@@ -85,7 +84,7 @@ func TestUpdateRedirect(t *testing.T) {
 // TestQuery tests trying to find published resources
 func TestQuery(t *testing.T) {
 
-	results, err := FindAll(Published())
+	results, err := FindAll(Query())
 	if err != nil {
 		t.Fatalf("redirects: error getting redirects :%s", err)
 	}

@@ -1,4 +1,3 @@
 <section>
-<h1>{{ .redirect.Name }}</h1>
-<p>Name: {{ .redirect.Name }}</p>
+<h3>{{ .redirect.OldURL }} -> {{ .redirect.NewURL }}</h3>
 </section>

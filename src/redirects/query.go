@@ -6,7 +6,6 @@ import (
 	"github.com/fragmenta/query"
 
 	"github.com/fragmenta/fragmenta-cms/src/lib/resource"
-	"github.com/fragmenta/fragmenta-cms/src/lib/status"
 )
 
 const (
@@ -15,12 +14,12 @@ const (
 	// KeyName is the primary key value for this resource
 	KeyName = "id"
 	// Order defines the default sort order in sql for this resource
-	Order = "id desc"
+	Order = "updated_at desc"
 )
 
 // AllowedParams returns an array of allowed param keys for Update and Create.
 func AllowedParams() []string {
-	return []string{"status", "new_url", "old_url"}
+	return []string{"new_url", "old_url"}
 }
 
 // NewWithColumns creates a new redirect instance and fills it with data from the database cols provided.
@@ -30,7 +29,6 @@ func NewWithColumns(cols map[string]interface{}) *Redirect {
 	redirect.ID = resource.ValidateInt(cols["id"])
 	redirect.CreatedAt = resource.ValidateTime(cols["created_at"])
 	redirect.UpdatedAt = resource.ValidateTime(cols["updated_at"])
-	redirect.Status = resource.ValidateInt(cols["status"])
 	redirect.NewURL = resource.ValidateString(cols["new_url"])
 	redirect.OldURL = resource.ValidateString(cols["old_url"])
 
@@ -44,7 +42,6 @@ func New() *Redirect {
 	redirect.UpdatedAt = time.Now()
 	redirect.TableName = TableName
 	redirect.KeyName = KeyName
-	redirect.Status = status.Draft
 	return redirect
 }
 
@@ -94,9 +91,4 @@ func Query() *query.Query {
 // Where returns a new query for redirects with the format and arguments supplied.
 func Where(format string, args ...interface{}) *query.Query {
 	return Query().Where(format, args...)
-}
-
-// Published returns a query for all redirects with status >= published.
-func Published() *query.Query {
-	return Query().Where("status>=?", status.Published)
 }

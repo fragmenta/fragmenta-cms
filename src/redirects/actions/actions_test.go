@@ -15,8 +15,7 @@ import (
 	"github.com/fragmenta/fragmenta-cms/src/redirects"
 )
 
-// names is used to test setting and getting the first string field of the redirect.
-var names = []string{"foo", "bar"}
+var testURLs = []string{"/foo", "/bar"}
 
 // testSetup performs setup for integration tests
 // using the test database, real views, and mock authorisation
@@ -88,7 +87,7 @@ func TestShowCreateRedirect(t *testing.T) {
 func TestCreateRedirect(t *testing.T) {
 
 	form := url.Values{}
-	form.Add("name", names[0])
+	form.Add("new_url", testURLs[0])
 	body := strings.NewReader(form.Encode())
 
 	r := httptest.NewRequest("POST", "/redirects/create", body)
@@ -118,8 +117,8 @@ func TestCreateRedirect(t *testing.T) {
 		t.Fatalf("redirectactions: error finding created redirect %s", err)
 	}
 	newRedirect := allRedirects[0]
-	if newRedirect.ID != 1 || newRedirect.Name != names[0] {
-		t.Fatalf("redirectactions: error with created redirect values: %v %s", newRedirect.ID, newRedirect.Name)
+	if newRedirect.ID != 1 || newRedirect.NewURL != testURLs[0] {
+		t.Fatalf("redirectactions: error with created redirect values: %v %s", newRedirect.ID, newRedirect.NewURL)
 	}
 }
 
@@ -174,8 +173,8 @@ func TestShowRedirect(t *testing.T) {
 	}
 
 	// Test the body for a known pattern
-	pattern := names[0]
-	if !strings.Contains(w.Body.String(), names[0]) {
+	pattern := testURLs[0]
+	if !strings.Contains(w.Body.String(), testURLs[0]) {
 		t.Fatalf("redirectactions: unexpected response for HandleShow expected:%s got:%s", pattern, w.Body.String())
 	}
 }
@@ -213,7 +212,7 @@ func TestShowUpdateRedirect(t *testing.T) {
 func TestUpdateRedirect(t *testing.T) {
 
 	form := url.Values{}
-	form.Add("name", names[1])
+	form.Add("new_url", testURLs[1])
 	body := strings.NewReader(form.Encode())
 
 	r := httptest.NewRequest("POST", "/redirects/1/update", body)
@@ -237,12 +236,12 @@ func TestUpdateRedirect(t *testing.T) {
 		t.Fatalf("redirectactions: unexpected response code for HandleUpdateRedirect expected:%d got:%d", http.StatusFound, w.Code)
 	}
 
-	// Check the redirect name is in now value names[1]
+	// Check the redirect name is in now value testURLs[1]
 	redirect, err := redirects.Find(1)
 	if err != nil {
 		t.Fatalf("redirectactions: error finding updated redirect %s", err)
 	}
-	if redirect.ID != 1 || redirect.Name != names[1] {
+	if redirect.ID != 1 || redirect.NewURL != testURLs[1] {
 		t.Fatalf("redirectactions: error with updated redirect values: %v", redirect)
 	}
 
