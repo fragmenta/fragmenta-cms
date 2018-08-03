@@ -96,41 +96,37 @@ var Editable = (function() {
         }, // End activate
 
         // cleanAlign
-        cleanAlign: function(cmd, el) {
+        cleanAlign: function(cmd, sel) {
 
             switch (cmd) {
                 case "justifyCenter":
-
-                    if (sel.hasClass('align-center')) {
-                        sel.removeClass('align-center');
+                    if (DOM.HasClass(sel, 'align-center')) {
+                        DOM.RemoveClass(sel, 'align-center');
                     } else {
-                        sel.addClass('align-center');
+                        DOM.AddClass(sel, 'align-center');
                     }
-
-                    sel.removeClass('align-left').removeClass('align-right');
-                    sel.removeAttr('style');
+                    DOM.RemoveClass(sel, 'align-left')
+                    DOM.RemoveClass(sel, 'align-right');
+                    sel.removeAttribute('style');
                     break;
                 case "justifyLeft":
-                    if (sel.hasClass('align-left')) {
-                        sel.removeClass('align-left');
+                    if (DOM.HasClass(sel, 'align-left')) {
+                        DOM.RemoveClass(sel, 'align-left');
                     } else {
-                        sel.addClass('align-left');
+                        DOM.AddClass(sel, 'align-left');
                     }
-
-                    sel.removeClass('align-center').removeClass('align-right');
+                    DOM.RemoveClass(sel, 'align-center')
+                    DOM.RemoveClass(sel, 'align-right');
                     sel.removeAttribute('style');
-
-
                     break;
                 case "justifyRight":
-
-                    if (sel.hasClass('align-right')) {
-                        sel.removeClass('align-right');
+                    if (DOM.HasClass(sel, 'align-right')) {
+                        DOM.RemoveClass(sel, 'align-right');
                     } else {
-                        sel.addClass('align-right');
+                        DOM.AddClass(sel, 'align-right');
                     }
-
-                    sel.removeClass('align-center').removeClass('align-left');
+                    DOM.RemoveClass(sel, 'align-center')
+                    DOM.RemoveClass(sel, 'align-left');
                     sel.removeAttribute('style');
                     break;
             }
@@ -162,8 +158,10 @@ var Editable = (function() {
             // Browsers tend to use style attributes to add all sorts of awful stuff to the html
             // No inline styles allowed
             DOM.ForEach(el.querySelectorAll('p, div, b, i, h1, h2, h3, h4, h5, h6'), function(e) { e.removeAttribute('style'); });
-            DOM.ForEach(el.querySelectorAll('span'), function(e) { e.removeAttribute('style');
-                e.removeAttribute('lang'); });
+            DOM.ForEach(el.querySelectorAll('span'), function(e) {
+                e.removeAttribute('style');
+                e.removeAttribute('lang');
+            });
             DOM.ForEach(el.querySelectorAll('font'), function(e) { e.removeAttribute('color'); });
         },
 
@@ -193,8 +191,8 @@ var Editable = (function() {
 
         // The closest parent element which encloses the entire text selection
         getSelectionParentElement: function() {
-            var p = null,
-                sel;
+            var p = null;
+            var sel = null;
             if (window.getSelection) {
                 sel = window.getSelection();
                 if (sel.rangeCount) {
