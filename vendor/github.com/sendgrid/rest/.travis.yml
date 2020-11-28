@@ -1,0 +1,27 @@
+language: go
+go:
+  - 1.7.x
+  - 1.8.x
+  - 1.9.x
+  - 1.10.x
+  - 1.11.x
+  - 1.12.x
+  - 1.13.x
+  - 1.14.x
+  - 1.15.x
+  - tip
+
+script:
+  - make test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  slack:
+    if: branch = main
+    on_pull_requests: false
+    on_success: never
+    on_failure: change
+    rooms:
+      - secure: gthCH2Cha9FJ6pQMNvQ+Af2gHrqYO7tS/5m0mzu4MaOYZxgBxkdAGXBKchv1mLlc/pMKMCMejUdi+43oZCovntOOV41TPo0KUVVXZcetgsMGJm0g9d1fOhn9hlNC+qsbCGQ+zv5zltZ/eQ3nYG9TgLc+vZgDr4cSpMxZTl7GR4+NqvMTBfgLUuruTe4GXQXz7Sqjx/KNZHNlKm0NxMQtfzvKUEfWy3q5mqXhbITckZD+8oP4WEfdUXVzUcwZS7/HKwgEO1cpNKlMhdxfYUpYCdmPNLQVxdvfFYT/0A/G3bAgnWUo4QLQEbrsHMDeIfK5AC0jl0TnMEFoK7bkJdc3bg+U1Z4VsD5pdjApi34Y+G9iHUYFKmeyHhaG6e+bMWAhsXLopbTDTDQ0YqYRzYCDqKmubcLv1eDdcVHju5fBQh15Q1IGm6pYVeMrQTsuMhVWnZmN+vsx9d1xA0Cv1L5V6RLytrFxe6RNNeiDknmaKDKnRpaCzG/9fsRM1Q8R0MLJQwP5sGdvNAoydLwbWgSka1vqwjPtM+b8com+InzbkkUG4NADz1AKxh0I0Z6Y5FukpLgJFfRdiOsRYVh4cHB8gm8b6CL2vblFVL1un5boCmc0DZioL4mY2V8Kj7cB943X14kXM4yiZv5RiFJzJyhxcLzg22qPREsB4BRhSdex4uQ=

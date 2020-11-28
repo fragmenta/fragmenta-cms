@@ -1,0 +1,61 @@
+# github.com/fragmenta/assets v0.0.0-20170106151417-365a66dd5f52
+## explicit
+github.com/fragmenta/assets
+github.com/fragmenta/assets/internal/cssmin
+github.com/fragmenta/assets/internal/jsmin
+# github.com/fragmenta/auth v1.5.6
+## explicit
+github.com/fragmenta/auth
+github.com/fragmenta/auth/can
+# github.com/fragmenta/mux v1.6.7
+## explicit
+github.com/fragmenta/mux
+# github.com/fragmenta/query v1.5.3
+## explicit
+github.com/fragmenta/query
+github.com/fragmenta/query/adapters
+# github.com/fragmenta/server v1.5.9
+## explicit
+github.com/fragmenta/server
+github.com/fragmenta/server/config
+github.com/fragmenta/server/log
+# github.com/fragmenta/view v1.6.2
+## explicit
+github.com/fragmenta/view
+github.com/fragmenta/view/helpers
+github.com/fragmenta/view/parser
+# github.com/go-sql-driver/mysql v1.5.0
+## explicit
+github.com/go-sql-driver/mysql
+# github.com/kennygrant/sanitize v1.2.4
+## explicit
+github.com/kennygrant/sanitize
+# github.com/lib/pq v1.8.0
+## explicit
+github.com/lib/pq
+github.com/lib/pq/oid
+github.com/lib/pq/scram
+# github.com/sendgrid/rest v2.6.2+incompatible
+## explicit
+github.com/sendgrid/rest
+# github.com/sendgrid/sendgrid-go v3.7.2+incompatible
+## explicit
+github.com/sendgrid/sendgrid-go
+github.com/sendgrid/sendgrid-go/helpers/mail
+# golang.org/x/crypto v0.0.0-20201124201722-c8d3bf9c5392
+## explicit
+golang.org/x/crypto/acme
+golang.org/x/crypto/acme/autocert
+golang.org/x/crypto/bcrypt
+golang.org/x/crypto/blowfish
+# golang.org/x/net v0.0.0-20201110031124-69a78807bb2b
+## explicit
+golang.org/x/net/html
+golang.org/x/net/html/atom
+golang.org/x/net/idna
+# golang.org/x/text v0.3.4
+## explicit
+golang.org/x/text/secure/bidirule
+golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
+golang.org/x/text/unicode/norm
